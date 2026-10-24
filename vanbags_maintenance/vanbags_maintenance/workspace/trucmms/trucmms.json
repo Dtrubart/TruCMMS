@@ -1,0 +1,66 @@
+{
+ "creation": "2026-10-23 21:09:34.956376",
+ "modified": "2026-10-23 21:16:55.054061",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "name": "TruCMMS",
+ "label": "TruCMMS",
+ "title": "TruCMMS",
+ "module": "Vanbags Maintenance",
+ "app": "vanbags_maintenance",
+ "type": "Workspace",
+ "public": 1,
+ "is_hidden": 0,
+ "icon": "assets",
+ "sequence_id": 30,
+ "content": "[{\"id\": \"trucmms-heading\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>TruCMMS</b></span>\", \"col\": 12}}, {\"id\": \"trucmms-masters\", \"type\": \"card\", \"data\": {\"card_name\": \"Equipment Management\", \"col\": 12}}]",
+ "roles": [
+  {
+   "role": "VB Maintenance User"
+  },
+  {
+   "role": "VB Maintenance Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "charts": [],
+ "number_cards": [],
+ "quick_lists": [],
+ "custom_blocks": [],
+ "shortcuts": [],
+ "links": [
+  {
+   "type": "Card Break",
+   "label": "Equipment Management",
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Equipment",
+   "link_type": "DocType",
+   "link_to": "VB Equipment",
+   "hidden": 0,
+   "onboard": 0
+  },
+  {
+   "type": "Link",
+   "label": "Equipment Categories",
+   "link_type": "DocType",
+   "link_to": "VB Equipment Category",
+   "hidden": 0,
+   "onboard": 0
+  },
+  {
+   "type": "Link",
+   "label": "Equipment Locations",
+   "link_type": "DocType",
+   "link_to": "VB Equipment Location",
+   "hidden": 0,
+   "onboard": 0
+  }
+ ]
+}

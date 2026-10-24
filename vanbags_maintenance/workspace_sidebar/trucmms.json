@@ -1,0 +1,45 @@
+{
+ "creation": "2026-10-23 21:09:34.956376",
+ "modified": "2026-10-23 21:16:55.054425",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "name": "TruCMMS",
+ "title": "TruCMMS",
+ "app": "vanbags_maintenance",
+ "module": "Vanbags Maintenance",
+ "header_icon": "assets",
+ "standard": 1,
+ "items": [
+  {
+   "type": "Link",
+   "label": "Home",
+   "link_type": "Workspace",
+   "link_to": "TruCMMS",
+   "icon": "home",
+   "child": 0
+  },
+  {
+   "type": "Link",
+   "label": "Equipment",
+   "link_type": "DocType",
+   "link_to": "VB Equipment",
+   "child": 0
+  },
+  {
+   "type": "Link",
+   "label": "Equipment Categories",
+   "link_type": "DocType",
+   "link_to": "VB Equipment Category",
+   "child": 0
+  },
+  {
+   "type": "Link",
+   "label": "Equipment Locations",
+   "link_type": "DocType",
+   "link_to": "VB Equipment Location",
+   "child": 0
+  }
+ ]
+}
