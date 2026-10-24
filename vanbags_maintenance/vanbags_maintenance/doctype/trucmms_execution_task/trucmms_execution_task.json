@@ -1,0 +1,37 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Execution Task",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "task",
+   "label": "Task Performed",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "result",
+   "label": "Result",
+   "fieldtype": "Select",
+   "options": "Completed\nPartial\nBlocked",
+   "default": "Completed",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "findings",
+   "label": "Findings",
+   "fieldtype": "Small Text",
+   "reqd": 1,
+   "in_list_view": 1
+  }
+ ],
+ "field_order": [
+  "task",
+  "result",
+  "findings"
+ ],
+ "istable": 1
+}

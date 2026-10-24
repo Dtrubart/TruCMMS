@@ -1,6 +1,6 @@
 {
  "creation": "2026-10-23 21:09:34.956376",
- "modified": "2026-10-24 19:53:39.525430",
+ "modified": "2026-10-24 20:06:06.788336",
  "owner": "Administrator",
  "modified_by": "Administrator",
  "docstatus": 0,
@@ -58,6 +58,12 @@
    "label": "Maintenance Work Orders",
    "link_type": "DocType",
    "link_to": "TruCMMS Maintenance Work Order"
+  },
+  {
+   "type": "Link",
+   "label": "Work Execution",
+   "link_type": "DocType",
+   "link_to": "TruCMMS Work Execution"
   }
  ]
 }

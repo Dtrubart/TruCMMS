@@ -56,3 +56,8 @@ Native requests are documented in [Requests](docs/REQUESTS.md), including roles,
 ## Maintenance work orders
 
 [Work orders](docs/WORK-ORDERS.md) extend approved requests with scoped authorization and technician assignment. Execution and completion remain subsequent increments.
+
+
+## Technician execution
+
+[Execution](docs/EXECUTION.md) records performed tasks, findings, actual time and private evidence through native Desk forms while preserving authorized work orders and immutable history.

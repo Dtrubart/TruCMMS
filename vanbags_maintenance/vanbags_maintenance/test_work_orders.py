@@ -7,7 +7,7 @@ from vanbags_maintenance import work_orders as wo
 from vanbags_maintenance.test_support import org_context, grant_scope, COMPANY_A, SITE_A2
 
 
-class TestWorkOrders(IntegrationTestCase):
+class WorkOrderCase(IntegrationTestCase):
     def setUp(self):
         super().setUp();frappe.set_user('Administrator');frappe.db.savepoint('wo_case')
         self.token='WO-'+uuid.uuid4().hex[:10]
@@ -34,6 +34,8 @@ class TestWorkOrders(IntegrationTestCase):
         doc=self.authorize();doc.assigned_to=self.users['tech'];doc.save(ignore_version=False)
         return apply_workflow(doc.as_dict(),'Assign')
 
+
+class TestWorkOrders(WorkOrderCase):
     def test_conversion_is_idempotent_and_preserves_context(self):
         doc=self.make();again=wo.from_request(self.request.name)
         self.assertEqual(doc.name,again.name);self.assertEqual(doc.site,self.request.site);self.assertEqual(doc.functional_location,self.location.name);self.assertEqual(doc.maintenance_request,self.request.name)

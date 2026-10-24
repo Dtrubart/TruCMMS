@@ -293,3 +293,8 @@ after_migrate = "vanbags_maintenance.work_orders.setup"
 has_permission["TruCMMS Maintenance Work Order"] = "vanbags_maintenance.work_orders.has_permission"
 permission_query_conditions["TruCMMS Maintenance Work Order"] = "vanbags_maintenance.work_orders.query"
 doc_events["DocShare"]["validate"].append("vanbags_maintenance.work_orders.validate_share")
+
+# Technician execution entries preserve the authorized order unchanged.
+has_permission["TruCMMS Work Execution"] = "vanbags_maintenance.execution.has_permission"
+permission_query_conditions["TruCMMS Work Execution"] = "vanbags_maintenance.execution.query"
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.execution.validate_share")

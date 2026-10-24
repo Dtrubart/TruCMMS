@@ -1,0 +1,117 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Work Execution",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "label": "Work Order",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Work Order",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "technician",
+   "label": "Technician",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "recorded_on",
+   "label": "Recorded On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_start",
+   "label": "Actual Start",
+   "fieldtype": "Datetime",
+   "reqd": 1
+  },
+  {
+   "fieldname": "actual_end",
+   "label": "Actual End",
+   "fieldtype": "Datetime",
+   "reqd": 1
+  },
+  {
+   "fieldname": "actual_minutes",
+   "label": "Actual Minutes",
+   "fieldtype": "Float",
+   "precision": "4",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "findings",
+   "label": "Overall Findings",
+   "fieldtype": "Long Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tasks",
+   "label": "Performed Tasks",
+   "fieldtype": "Table",
+   "options": "TruCMMS Execution Task",
+   "reqd": 1
+  }
+ ],
+ "field_order": [
+  "work_order",
+  "company",
+  "site",
+  "technician",
+  "recorded_on",
+  "actual_start",
+  "actual_end",
+  "actual_minutes",
+  "findings",
+  "tasks"
+ ],
+ "autoname": "format:EXE-{YYYY}-{#####}",
+ "track_changes": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "permissions": [
+  {
+   "role": "TruCMMS Technician",
+   "create": 1,
+   "read": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  }
+ ]
+}
