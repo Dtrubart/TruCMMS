@@ -42,3 +42,7 @@ The isolated Docker configuration and operational instructions are maintained in
 ## License
 
 MIT
+
+## Company and site access
+
+Equipment and functional locations now require Company and Site. Configure both native User Permissions for each maintenance user. Create operational sites as System Manager through TruCMMS → Sites. See [organization and access rules](docs/ORGANIZATION.md) for configuration, compatibility and tested boundaries.

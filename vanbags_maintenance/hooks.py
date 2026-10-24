@@ -263,3 +263,16 @@ required_apps = ["erpnext"]
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+# Native organizational context and least-privilege scope checks.
+after_install = "vanbags_maintenance.organization.setup_company_selection"
+after_migrate = "vanbags_maintenance.organization.setup_company_selection"
+before_tests = "vanbags_maintenance.test_support.prepare_organization"
+has_permission = {dt: "vanbags_maintenance.organization.has_permission" for dt in ("VB Equipment", "VB Equipment Location", "TruCMMS Site")}
+permission_query_conditions = {
+    "VB Equipment": "vanbags_maintenance.organization.equipment_query",
+    "VB Equipment Location": "vanbags_maintenance.organization.location_query",
+    "TruCMMS Site": "vanbags_maintenance.organization.site_query",
+}
+
+doc_events = {"DocShare": {"validate": "vanbags_maintenance.organization.validate_share"}}

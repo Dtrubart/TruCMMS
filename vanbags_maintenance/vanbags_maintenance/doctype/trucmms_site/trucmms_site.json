@@ -1,0 +1,76 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Site",
+ "module": "Vanbags Maintenance",
+ "autoname": "field:site_code",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "title_field": "site_name",
+ "show_title_field_in_link": 1,
+ "search_fields": "site_code,site_name",
+ "field_order": [
+  "site_code",
+  "site_name",
+  "company",
+  "disabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "site_code",
+   "label": "Site Code",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "read_only_depends_on": "eval:!doc.__islocal"
+  },
+  {
+   "fieldname": "site_name",
+   "label": "Site Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Disabled",
+   "fieldtype": "Check",
+   "default": "0"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "VB Maintenance User",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "export": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  }
+ ],
+ "modified": "2026-10-24 13:35:21.388616",
+ "engine": "InnoDB"
+}

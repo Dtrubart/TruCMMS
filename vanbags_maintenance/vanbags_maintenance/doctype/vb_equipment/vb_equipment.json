@@ -7,6 +7,8 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "company",
+  "site",
   "equipment_code",
   "equipment_name",
   "status",
@@ -20,6 +22,23 @@
   "notes"
  ],
  "fields": [
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1,
+   "in_list_view": 1,
+   "link_filters": "[[\"company\", \"=\", \"eval:doc.company\"], [\"disabled\", \"=\", 0]]"
+  },
   {
    "fieldname": "equipment_code",
    "fieldtype": "Data",
@@ -60,9 +79,9 @@
    "fieldname": "location",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Location",
+   "label": "Functional Location",
    "options": "VB Equipment Location",
-   "link_filters": "[[\"disabled\", \"=\", 0]]"
+   "link_filters": "[[\"company\", \"=\", \"eval:doc.company\"], [\"site\", \"=\", \"eval:doc.site\"], [\"disabled\", \"=\", 0]]"
   },
   {
    "fieldname": "manufacturer",
@@ -101,7 +120,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-23 20:13:29.682189",
+ "modified": "2026-10-24 13:35:21.319528",
  "modified_by": "Administrator",
  "module": "Vanbags Maintenance",
  "name": "VB Equipment",

@@ -1,5 +1,6 @@
 import frappe
 from frappe.model.document import Document
+from vanbags_maintenance.organization import validate_context
 
 
 class VBEquipmentLocation(Document):
@@ -18,3 +19,6 @@ class VBEquipmentLocation(Document):
 				"Location Name is required.",
 				title="Missing Location Name",
 			)
+
+	def validate(self):
+		validate_context(self)

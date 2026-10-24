@@ -1,6 +1,7 @@
 import frappe
 import re
 from frappe.model.document import Document
+from vanbags_maintenance.organization import validate_context
 
 
 class VBEquipment(Document):
@@ -20,6 +21,7 @@ class VBEquipment(Document):
 		self.serial_number = (self.serial_number or "").strip()
 
 	def validate(self):
+		validate_context(self)
 		if not self.equipment_code:
 			frappe.throw(
 				"Equipment Code is required.",

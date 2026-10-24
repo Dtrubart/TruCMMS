@@ -1,3 +1,4 @@
+from vanbags_maintenance.test_support import org_context, grant_scope
 # Copyright (c) 2026, Daniel Trujillo and Contributors
 # See license.txt
 
@@ -28,6 +29,7 @@ class IntegrationTestVBEquipmentLocation(IntegrationTestCase):
 					"roles": [{"role": role}],
 				})
 				user.insert(ignore_permissions=True)
+			grant_scope(email)
 		frappe.db.commit()
 
 	def setUp(self):
@@ -41,7 +43,7 @@ class IntegrationTestVBEquipmentLocation(IntegrationTestCase):
 	def test_location_name_trimmed_and_unique(self):
 		name = self._unique("Trimmed")
 		location = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": f"  {name}  ",
 		})
 		location.insert()
@@ -50,14 +52,14 @@ class IntegrationTestVBEquipmentLocation(IntegrationTestCase):
 
 		with self.assertRaises(frappe.DuplicateEntryError):
 			frappe.get_doc({
-				"doctype": "VB Equipment Location",
+				"doctype": "VB Equipment Location", **org_context(),
 				"location_name": name,
 			}).insert()
 
 	def test_location_default_disabled(self):
 		name = self._unique("Default")
 		location = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": name,
 		})
 		location.insert()
@@ -68,7 +70,7 @@ class IntegrationTestVBEquipmentLocation(IntegrationTestCase):
 		frappe.set_user(manager)
 		name = self._unique("MgrCreate")
 		location = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": name,
 		})
 		location.insert()
@@ -77,7 +79,7 @@ class IntegrationTestVBEquipmentLocation(IntegrationTestCase):
 	def test_user_can_read_disabled_location(self):
 		name = self._unique("Disabled")
 		location = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": name,
 			"disabled": 1,
 		})
@@ -90,7 +92,7 @@ class IntegrationTestVBEquipmentLocation(IntegrationTestCase):
 	def test_manager_cannot_delete_location(self):
 		name = self._unique("NoDel")
 		location = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": name,
 		})
 		location.insert()
@@ -103,7 +105,7 @@ class IntegrationTestVBEquipmentLocation(IntegrationTestCase):
 	def test_blank_location_name_rejected(self):
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment Location",
+				"doctype": "VB Equipment Location", **org_context(),
 				"location_name": "   ",
 			}).insert()
 
@@ -112,3 +114,6 @@ class IntegrationTestVBEquipmentLocation(IntegrationTestCase):
 
 	def _unique(self, suffix):
 		return f"TestLoc_{suffix}_{id(self)}"
+
+# Organization fixtures are explicit; avoid ERPNext demo-company fixtures.
+IGNORE_TEST_RECORD_DEPENDENCIES = ["Company", "TruCMMS Site"]

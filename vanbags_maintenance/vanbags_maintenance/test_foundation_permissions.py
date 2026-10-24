@@ -1,3 +1,4 @@
+from vanbags_maintenance.test_support import org_context, grant_scope
 """Exercise native import, export and share enforcement for CMMS masters."""
 import uuid
 import frappe
@@ -16,9 +17,10 @@ class TestFoundationPermissions(IntegrationTestCase):
         for role in ("VB Maintenance User", "VB Maintenance Manager", "System Manager"):
             user = frappe.get_doc({"doctype": "User", "email": self.token.lower()+role.replace(" ", "").lower()+"@example.com", "first_name": "Foundation test", "send_welcome_email": 0, "roles": [{"role": role}]}).insert()
             self.users[role] = user.name
+            if role != "System Manager": grant_scope(user.name)
         category = frappe.get_doc({"doctype": "VB Equipment Category", "category_name": self.token}).insert()
-        location = frappe.get_doc({"doctype": "VB Equipment Location", "location_name": self.token}).insert()
-        equipment = frappe.get_doc({"doctype": "VB Equipment", "equipment_code": self.token, "equipment_name": "Foundation test", "category": category.name, "location": location.name}).insert()
+        location = frappe.get_doc({"doctype": "VB Equipment Location", **org_context(), "location_name": self.token}).insert()
+        equipment = frappe.get_doc({"doctype": "VB Equipment", **org_context(), "equipment_code": self.token, "equipment_name": "Foundation test", "category": category.name, "location": location.name}).insert()
         self.docs = [category, location, equipment]
 
     def tearDown(self):

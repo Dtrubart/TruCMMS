@@ -1,3 +1,4 @@
+from vanbags_maintenance.test_support import org_context, grant_scope
 # Copyright (c) 2026, Daniel Trujillo and Contributors
 # See license.txt
 
@@ -25,7 +26,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "  eq-001  ",
 			"equipment_name": "  Pump A  ",
 			"category": category.name,
@@ -48,7 +49,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "wh-01 ",
 			"equipment_name": "Conveyor",
 			"category": category.name,
@@ -62,13 +63,13 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_name": "Orphan",
 			}).insert()
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "ORPHAN-1",
 				"equipment_name": "Orphan",
 			}).insert()
@@ -85,7 +86,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "BLANK-1",
 				"equipment_name": "   ",
 				"category": category.name,
@@ -103,7 +104,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "INVALID@CODE",
 				"equipment_name": "Bad Code",
 				"category": category.name,
@@ -112,7 +113,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		long_code = "A" * 51
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": long_code,
 				"equipment_name": "Long Code",
 				"category": category.name,
@@ -120,7 +121,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		valid_code = "A" * 50
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": valid_code,
 			"equipment_name": "Max Length",
 			"category": category.name,
@@ -140,7 +141,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		base = f"DUP-{id(self)}"
 		frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": base,
 			"equipment_name": "First",
 			"category": category.name,
@@ -148,7 +149,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.DuplicateEntryError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": base.lower(),
 				"equipment_name": "Duplicate",
 				"category": category.name,
@@ -156,7 +157,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.DuplicateEntryError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": f" {base} ",
 				"equipment_name": "Duplicate",
 				"category": category.name,
@@ -175,7 +176,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "IMM-1",
 			"equipment_name": "Immutable",
 			"category": category.name,
@@ -198,13 +199,13 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		location = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": "EnabledLoc",
 		})
 		location.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "LINK-1",
 			"equipment_name": "Linked",
 			"category": category.name,
@@ -226,7 +227,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		location = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": "DisabledLoc",
 			"disabled": 1,
 		})
@@ -234,7 +235,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "DIS-1",
 				"equipment_name": "Disabled Link",
 				"category": category.name,
@@ -247,7 +248,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		enabled_cat.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "DIS-2",
 			"equipment_name": "Change Disabled",
 			"category": enabled_cat.name,
@@ -269,7 +270,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "HIST-1",
 			"equipment_name": "History",
 			"category": category.name,
@@ -295,7 +296,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "SER-1",
 			"equipment_name": "First",
 			"category": category.name,
@@ -303,7 +304,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		}).insert()
 
 		frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "SER-2",
 			"equipment_name": "Second",
 			"category": category.name,
@@ -324,7 +325,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "STAT-1",
 			"equipment_name": "Status Test",
 			"category": category.name,
@@ -345,7 +346,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		statuses = ["Planned", "Active", "Under Maintenance", "Out of Service", "Retired"]
 		for status in statuses:
 			equipment = frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": f"STAT-{status[:4].upper()}",
 				"equipment_name": f"Status {status}",
 				"category": category.name,
@@ -365,7 +366,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "READ-1",
 			"equipment_name": "Readonly",
 			"category": category.name,
@@ -392,7 +393,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "DATE-1",
 				"equipment_name": "Dates",
 				"category": category.name,
@@ -401,7 +402,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 			}).insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "DATE-2",
 			"equipment_name": "Dates",
 			"category": category.name,
@@ -423,7 +424,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "FUT-1",
 			"equipment_name": "Future",
 			"category": category.name,
@@ -444,7 +445,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "UPERM-1",
 			"equipment_name": "User Perm",
 			"category": category.name,
@@ -463,7 +464,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.PermissionError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "UPERM-2",
 				"equipment_name": "New",
 				"category": category.name,
@@ -483,7 +484,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "MPERM-1",
 			"equipment_name": "Manager Perm",
 			"category": category.name,
@@ -510,7 +511,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "VER-1",
 			"equipment_name": "Version",
 			"category": category.name,
@@ -542,7 +543,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "FAIL-1",
 			"equipment_name": "Original",
 			"category": category.name,
@@ -578,7 +579,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "RENAME-1",
 			"equipment_name": "No Rename",
 			"category": category.name,
@@ -613,7 +614,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.PermissionError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "UDENY-1",
 				"equipment_name": "User Deny",
 				"category": category.name,
@@ -622,7 +623,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		frappe.set_user(manager)
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "UDENY-2",
 			"equipment_name": "User Deny 2",
 			"category": category.name,
@@ -645,13 +646,13 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		location = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": "MgrUpdateLoc",
 		})
 		location.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "CATALOG-LINK",
 			"equipment_name": "Catalog link regression",
 			"category": category.name,
@@ -678,8 +679,8 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 	def test_catalog_label_uniqueness_after_edit(self):
 		for doctype, field in [("VB Equipment Category", "category_name"), ("VB Equipment Location", "location_name")]:
 			with self.subTest(doctype=doctype):
-				first = frappe.get_doc({"doctype": doctype, field: "Stable First"}).insert()
-				second = frappe.get_doc({"doctype": doctype, field: "Stable Second"}).insert()
+				first = frappe.get_doc({"doctype": doctype, **(org_context() if doctype == "VB Equipment Location" else {}), field: "Stable First"}).insert()
+				second = frappe.get_doc({"doctype": doctype, **(org_context() if doctype == "VB Equipment Location" else {}), field: "Stable Second"}).insert()
 				first.set(field, "Edited Unique Label")
 				first.save()
 				second.set(field, "Edited Unique Label")
@@ -701,21 +702,21 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		disabled_loc = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": "DisabledLoc",
 			"disabled": 1,
 		})
 		disabled_loc.insert()
 
 		enabled_loc = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": "EnabledLoc",
 		})
 		enabled_loc.insert()
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "DL-1",
 				"equipment_name": "Disabled Loc",
 				"category": category.name,
@@ -723,7 +724,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 			}).insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "DL-2",
 			"equipment_name": "Change Disabled Loc",
 			"category": category.name,
@@ -746,13 +747,13 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		location = frappe.get_doc({
-			"doctype": "VB Equipment Location",
+			"doctype": "VB Equipment Location", **org_context(),
 			"location_name": "HistLoc",
 		})
 		location.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "HLOC-1",
 			"equipment_name": "History Loc",
 			"category": category.name,
@@ -780,7 +781,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "STAT-INV",
 				"equipment_name": "Invalid Status",
 				"category": category.name,
@@ -788,7 +789,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 			}).insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "STAT-RET",
 			"equipment_name": "Retired",
 			"category": category.name,
@@ -814,7 +815,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "MISS-1",
 				"equipment_name": "Missing Category",
 				"category": "__no-category__",
@@ -822,7 +823,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 
 		with self.assertRaises(frappe.ValidationError):
 			frappe.get_doc({
-				"doctype": "VB Equipment",
+				"doctype": "VB Equipment", **org_context(),
 				"equipment_code": "MISS-2",
 				"equipment_name": "Missing Location",
 				"category": category.name,
@@ -840,7 +841,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "SER-A",
 			"equipment_name": "Serial A",
 			"category": category.name,
@@ -848,7 +849,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		}).insert()
 
 		frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "SER-B",
 			"equipment_name": "Serial B",
 			"category": category.name,
@@ -856,7 +857,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		}).insert()
 
 		frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "SER-C",
 			"equipment_name": "Serial C",
 			"category": category.name,
@@ -864,7 +865,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		}).insert()
 
 		frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "SER-D",
 			"equipment_name": "Serial D",
 			"category": category.name,
@@ -872,7 +873,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		}).insert()
 
 		frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "SER-E",
 			"equipment_name": "Serial E",
 			"category": category.name,
@@ -899,7 +900,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "VER-ACTOR",
 			"equipment_name": "Version Actor",
 			"category": category.name,
@@ -938,7 +939,7 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		category.insert()
 
 		equipment = frappe.get_doc({
-			"doctype": "VB Equipment",
+			"doctype": "VB Equipment", **org_context(),
 			"equipment_code": "ATOMIC-1",
 			"equipment_name": "Atomic",
 			"category": category.name,
@@ -984,6 +985,10 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 					"roles": [{"role": role}],
 				})
 				user.insert(ignore_permissions=True)
+			grant_scope(user.name)
 			return user.name
 		finally:
 			frappe.set_user(prev_user)
+
+# Organization fixtures are explicit; avoid ERPNext demo-company fixtures.
+IGNORE_TEST_RECORD_DEPENDENCIES = ["Company", "TruCMMS Site"]
