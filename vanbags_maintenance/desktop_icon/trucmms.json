@@ -1,6 +1,6 @@
 {
  "creation": "2026-10-23 21:09:34.956376",
- "modified": "2026-10-23 21:16:55.054608",
+ "modified": "2026-10-24 14:21:48.497903",
  "owner": "Administrator",
  "modified_by": "Administrator",
  "docstatus": 0,
@@ -25,6 +25,12 @@
   },
   {
    "role": "System Manager"
+  },
+  {
+   "role": "TruCMMS Requester"
+  },
+  {
+   "role": "TruCMMS Dispatcher"
   }
  ],
  "idx": 30

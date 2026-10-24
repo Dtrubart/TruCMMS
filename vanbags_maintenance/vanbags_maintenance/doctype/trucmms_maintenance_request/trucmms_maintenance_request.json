@@ -1,0 +1,150 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Maintenance Request",
+ "module": "Vanbags Maintenance",
+ "autoname": "MR-.YYYY.-.#####",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "title_field": "subject",
+ "search_fields": "subject,equipment,functional_location",
+ "field_order": [
+  "company",
+  "site",
+  "equipment",
+  "functional_location",
+  "subject",
+  "description",
+  "priority",
+  "status",
+  "dispatcher_notes",
+  "rejection_reason",
+  "requested_by",
+  "submitted_on",
+  "reviewed_by",
+  "reviewed_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "equipment",
+   "label": "Equipment",
+   "fieldtype": "Link",
+   "options": "VB Equipment"
+  },
+  {
+   "fieldname": "functional_location",
+   "label": "Functional Location",
+   "fieldtype": "Link",
+   "options": "VB Equipment Location"
+  },
+  {
+   "fieldname": "subject",
+   "label": "Subject",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "label": "Fault Description",
+   "fieldtype": "Long Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "priority",
+   "label": "Priority",
+   "fieldtype": "Select",
+   "options": "Low\nMedium\nHigh\nCritical",
+   "default": "Medium",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nSubmitted\nUnder Review\nApproved\nRejected",
+   "default": "Draft",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "dispatcher_notes",
+   "label": "Dispatcher Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "rejection_reason",
+   "label": "Rejection Reason",
+   "fieldtype": "Small Text",
+   "description": "Save the reason before selecting Reject."
+  },
+  {
+   "fieldname": "requested_by",
+   "label": "Requested By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "submitted_on",
+   "label": "Sent On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reviewed_by",
+   "label": "Decision By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reviewed_on",
+   "label": "Decision On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Requester",
+   "if_owner": 1,
+   "create": 1,
+   "read": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "write": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "export": 1,
+   "share": 1,
+   "report": 1
+  }
+ ],
+ "modified": "2026-10-24 14:21:48.496775",
+ "engine": "InnoDB",
+ "sort_field": "creation",
+ "sort_order": "DESC"
+}

@@ -69,8 +69,18 @@
    "print": 1,
    "email": 1,
    "report": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1
   }
  ],
- "modified": "2026-10-24 13:35:21.388616",
+ "modified": "2026-10-24 14:21:00.795272",
  "engine": "InnoDB"
 }

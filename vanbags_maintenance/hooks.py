@@ -8,7 +8,7 @@ app_license = "mit"
 fixtures = [
 	{
 		"doctype": "Role",
-		"filters": {"role_name": ["in", ["VB Maintenance User", "VB Maintenance Manager"]]}
+		"filters": {"role_name": ["in", ["VB Maintenance User", "VB Maintenance Manager", "TruCMMS Requester", "TruCMMS Dispatcher"]]}
 	}
 ]
 
@@ -276,3 +276,13 @@ permission_query_conditions = {
 }
 
 doc_events = {"DocShare": {"validate": "vanbags_maintenance.organization.validate_share"}}
+
+# Native requests and evidence access; existing equipment scopes stay unchanged.
+after_install = "vanbags_maintenance.requests.setup"
+after_migrate = "vanbags_maintenance.requests.setup"
+has_permission["TruCMMS Maintenance Request"] = "vanbags_maintenance.requests.has_permission"
+has_permission["File"] = "vanbags_maintenance.requests.file_permission"
+permission_query_conditions["TruCMMS Maintenance Request"] = "vanbags_maintenance.requests.query"
+permission_query_conditions["File"] = "vanbags_maintenance.requests.file_query"
+extend_doctype_class = {"File": ["vanbags_maintenance.requests.RequestFileGuard"]}
+doc_events["DocShare"]["validate"] = ["vanbags_maintenance.organization.validate_share", "vanbags_maintenance.requests.validate_share"]
