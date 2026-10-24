@@ -117,6 +117,16 @@ def setup():
         for state in sorted(target-states):workflow.append('states',{'state':state,'doc_status':'0','allow_edit':wo.SUPERVISOR})
         workflow.save(ignore_permissions=True)
     elif states!=target:frappe.throw('Custom work order workflow requires explicit upgrade review.')
+    # System Manager has the same explicit administrative authority as the
+    # supervisor policy; represent it in native Workflow too, without bypassing it.
+    existing={(r.state,r.action,r.next_state,r.allowed) for r in workflow.transitions}
+    changed=False
+    for row in list(workflow.transitions):
+        key=(row.state,row.action,row.next_state,'System Manager')
+        if row.allowed==wo.SUPERVISOR and key not in existing:
+            workflow.append('transitions',{'state':row.state,'action':row.action,'next_state':row.next_state,'allowed':'System Manager','allow_self_approval':1})
+            existing.add(key);changed=True
+    if changed:workflow.save(ignore_permissions=True)
     frappe.db.sql("update `tabTruCMMS Maintenance Work Order` w join `tabTruCMMS Maintenance Request` r on r.name=w.maintenance_request set w.requester=r.owner where coalesce(w.requester,'')=''")
     frappe.db.sql('update `tabTruCMMS Maintenance Work Order` set execution_cycle=1 where coalesce(execution_cycle,0)=0')
     frappe.db.sql('update `tabTruCMMS Work Execution` set execution_cycle=1 where coalesce(execution_cycle,0)=0')

@@ -121,10 +121,17 @@ class TestLifecycle(WorkOrderCase):
         self.assertEqual(self.order.requester,self.users['requester']);self.assertEqual(self.order.execution_cycle,1)
         self.assertEqual(self.order.assigned_to,self.users['tech'])
         workflow=frappe.get_doc('Workflow','TruCMMS Work Order Workflow')
-        self.assertEqual(len(workflow.states),7);self.assertEqual(len(workflow.transitions),12)
+        self.assertEqual(len(workflow.states),7);self.assertEqual(len(workflow.transitions),21)
 
     def test_reassignment_from_full_desk_document_preserves_datetime_audit(self):
         self.complete();doc=self.action('requester','Request Rework','Specialist required')
         frappe.set_user(self.users['supervisor']);payload=frappe.parse_json(frappe.as_json(doc.as_dict()))
         updated=frappe.get_doc(payload);updated.assigned_to=self.users['other'];updated.save(ignore_version=False)
         self.assertEqual(updated.assigned_to,self.users['other']);self.assertEqual(updated.execution_cycle,2)
+
+    def test_system_manager_administrative_acceptance_uses_native_workflow(self):
+        self.complete();frappe.set_user('Administrator')
+        user=frappe.get_doc('User',self.users['other']);user.append('roles',{'role':'System Manager'});user.save()
+        doc=self.action('other','Accept on Behalf','Administrative acceptance after independent verification')
+        self.assertEqual(doc.status,'Accepted')
+        doc=self.action('other','Close Order','Acceptance verified');self.assertEqual(doc.status,'Closed')
