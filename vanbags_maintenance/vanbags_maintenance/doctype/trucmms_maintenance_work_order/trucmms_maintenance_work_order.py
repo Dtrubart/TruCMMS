@@ -10,11 +10,20 @@ class TruCMMSMaintenanceWorkOrder(Document):
         if self.status not in (None, '', 'Draft'):
             frappe.throw('New work orders must start in Draft.')
         self.status='Draft'
+        self.execution_cycle=1
+        self.requester=frappe.db.get_value('TruCMMS Maintenance Request',self.maintenance_request,'owner')
+        from vanbags_maintenance.lifecycle import AUDIT
+        for field in AUDIT:self.set(field,None)
         for f in policy.AUDIT:self.set(f,None)
 
     def validate(self):
         org.validate_context(self)
         old=self.get_doc_before_save()
+        from vanbags_maintenance import lifecycle
+        if old:
+            lifecycle.validate_change(self,old)
+            if self.status!=old.status and (old.status,self.status) not in (('Draft','Authorized'),('Authorized','Assigned')):
+                return
         for f in ('subject','scope'):self.set(f,(self.get(f) or '').strip())
         if not self.subject or not self.scope:frappe.throw('Subject and scope are required.')
         if self.origin_type!='Maintenance Request':frappe.throw('Unsupported work order origin.')

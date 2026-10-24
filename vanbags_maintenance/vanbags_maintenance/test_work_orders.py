@@ -52,7 +52,7 @@ class TestWorkOrders(WorkOrderCase):
         doc=self.make()
         with self.assertRaises(frappe.ValidationError):apply_workflow(doc.as_dict(),'Authorize')
         doc.status='Assigned';doc.assigned_to=self.users['tech']
-        with self.assertRaises(frappe.ValidationError):doc.save()
+        with self.assertRaises(frappe.PermissionError):doc.save()
 
     def test_authorization_stamps_server_identity_and_freezes_scope(self):
         doc=self.authorize();self.assertEqual(doc.authorized_by,self.users['supervisor']);self.assertTrue(doc.authorized_on)

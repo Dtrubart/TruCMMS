@@ -21,14 +21,32 @@
   "authorized_by",
   "authorized_on",
   "assigned_by",
-  "assigned_on"
+  "assigned_on",
+  "requester",
+  "execution_cycle",
+  "completed_by",
+  "completed_on",
+  "completed_reason",
+  "accepted_by",
+  "accepted_on",
+  "accepted_reason",
+  "closed_by",
+  "closed_on",
+  "closed_reason",
+  "cancelled_by",
+  "cancelled_on",
+  "cancelled_reason",
+  "rework_by",
+  "rework_on",
+  "rework_reason",
+  "acceptance_method"
  ],
  "fields": [
   {
    "fieldname": "status",
    "label": "Status",
    "fieldtype": "Select",
-   "options": "Draft\nAuthorized\nAssigned",
+   "options": "Draft\nAuthorized\nAssigned\nTechnical Completed\nAccepted\nClosed\nCancelled",
    "default": "Draft",
    "read_only": 1,
    "reqd": 1
@@ -136,6 +154,121 @@
    "label": "Assigned On",
    "fieldtype": "Datetime",
    "read_only": 1
+  },
+  {
+   "fieldname": "requester",
+   "label": "Original Requester",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "execution_cycle",
+   "label": "Execution Cycle",
+   "fieldtype": "Int",
+   "default": "1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_by",
+   "label": "Technical Completion By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_on",
+   "label": "Technical Completion On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_reason",
+   "label": "Technical Completion Notes",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accepted_by",
+   "label": "Acceptance By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accepted_on",
+   "label": "Acceptance On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accepted_reason",
+   "label": "Acceptance Notes",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "closed_by",
+   "label": "Final Closure By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "closed_on",
+   "label": "Final Closure On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "closed_reason",
+   "label": "Final Closure Notes",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancelled_by",
+   "label": "Cancellation By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancelled_on",
+   "label": "Cancellation On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancelled_reason",
+   "label": "Cancellation Notes",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rework_by",
+   "label": "Last Rework By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rework_on",
+   "label": "Last Rework On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rework_reason",
+   "label": "Last Rework Notes",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "acceptance_method",
+   "label": "Acceptance Method",
+   "fieldtype": "Data",
+   "read_only": 1
   }
  ],
  "permissions": [
@@ -164,8 +297,13 @@
    "export": 1,
    "share": 1,
    "report": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1
   }
  ],
  "sort_field": "modified",
- "sort_order": "DESC"
+ "sort_order": "DESC",
+ "modified": "2026-10-24 20:28:27.097117"
 }

@@ -48,7 +48,8 @@ def evidence_access(parent,user=None,write=False,existing=False):
     if write:
         if existing:frappe.throw('Recorded execution evidence cannot be changed or deleted.',frappe.PermissionError)
         if parent.technician!=(user or frappe.session.user):frappe.throw('Only the recording technician may append evidence.',frappe.PermissionError)
-        order_for_recording(parent.work_order,user)
+        order=order_for_recording(parent.work_order,user)
+        if (parent.execution_cycle or 1)!=(order.execution_cycle or 1):frappe.throw('Evidence from an earlier execution cycle is frozen.',frappe.PermissionError)
 
 
 def validate_share(doc,method=None):

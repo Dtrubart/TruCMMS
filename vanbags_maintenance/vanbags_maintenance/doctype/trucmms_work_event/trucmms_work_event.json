@@ -1,0 +1,112 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Work Event",
+ "module": "Vanbags Maintenance",
+ "autoname": "format:EVT-{YYYY}-{#####}",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "label": "Work Order",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Work Order",
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "read_only": 1
+  },
+  {
+   "fieldname": "action",
+   "label": "Action",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "from_state",
+   "label": "From State",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "to_state",
+   "label": "To State",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "actor",
+   "label": "Actor",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "occurred_on",
+   "label": "Occurred On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Reason / Summary",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "execution_cycle",
+   "label": "Execution Cycle",
+   "fieldtype": "Int",
+   "read_only": 1
+  }
+ ],
+ "field_order": [
+  "work_order",
+  "company",
+  "site",
+  "action",
+  "from_state",
+  "to_state",
+  "actor",
+  "occurred_on",
+  "reason",
+  "execution_cycle"
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Requester",
+   "read": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC"
+}

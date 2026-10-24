@@ -56,6 +56,8 @@ def check_evidence_parent(parent,user=None,write=False,existing=False):
     if not parent.has_permission("read",user=user):
         frappe.throw("Evidence access requires parent document access.",frappe.PermissionError)
     if write:
+        if parent.doctype=="TruCMMS Maintenance Work Order" and parent.status in ("Technical Completed","Accepted","Closed","Cancelled"):
+            frappe.throw("Completed or cancelled work order evidence is frozen.",frappe.PermissionError)
         if not parent.has_permission("write",user=user):
             frappe.throw("Evidence changes require parent write access.",frappe.PermissionError)
         if parent.status in FINAL:frappe.throw("Final request evidence is read-only.",frappe.PermissionError)
@@ -80,6 +82,7 @@ def file_query(user=None):
 
 
 def validate_file(doc,method=None):
+    if doc.attached_to_doctype=="TruCMMS Work Event":frappe.throw("Attach evidence to execution records instead of audit events.",frappe.PermissionError)
     old=doc.get_doc_before_save()
     if old and old.attached_to_doctype in (REQUEST, "TruCMMS Maintenance Work Order", "TruCMMS Work Execution") and (old.attached_to_doctype,old.attached_to_name)!=(doc.attached_to_doctype,doc.attached_to_name):
         frappe.throw("Request evidence cannot be detached or reassigned.",frappe.PermissionError)
@@ -130,6 +133,7 @@ def setup():
 class RequestFileGuard:
     """Validate before native File methods perform irreversible disk changes."""
     def before_insert(self):
+        if self.attached_to_doctype=="TruCMMS Work Event":frappe.throw("Attach evidence to execution records instead of audit events.",frappe.PermissionError)
         parent=file_request(self)
         if parent:
             check_evidence_parent(parent,write=True,existing=False)

@@ -7,7 +7,7 @@ from vanbags_maintenance import execution as policy
 class TruCMMSWorkExecution(Document):
     def before_insert(self):
         order=policy.order_for_recording(self.work_order, lock=True)
-        self.company=order.company;self.site=order.site
+        self.company=order.company;self.site=order.site;self.execution_cycle=order.execution_cycle or 1
         self.technician=self.owner=frappe.session.user
         self.recorded_on=now_datetime()
 
@@ -20,6 +20,7 @@ class TruCMMSWorkExecution(Document):
         if not self.actual_start or not self.actual_end or end<=start:frappe.throw('Actual end must be after actual start.')
         if end>now_datetime():frappe.throw('Actual execution cannot be recorded in the future.')
         if not order.assigned_on or start<get_datetime(order.assigned_on):frappe.throw('Execution must occur after the current assignment.')
+        if order.get('rework_on') and start<get_datetime(order.rework_on):frappe.throw('Rework execution must occur after the rework decision.')
         self.findings=(self.findings or '').strip()
         if not self.findings or not self.tasks:frappe.throw('Findings and at least one performed task are required.')
         for row in self.tasks:

@@ -61,3 +61,8 @@ Native requests are documented in [Requests](docs/REQUESTS.md), including roles,
 ## Technician execution
 
 [Execution](docs/EXECUTION.md) records performed tasks, findings, actual time and private evidence through native Desk forms while preserving authorized work orders and immutable history.
+
+
+## Completion and closure
+
+[Controlled completion and closure](docs/CLOSURE.md) separate technical completion, requester acceptance, reasoned rework/cancellation and supervisor closure, with immutable scoped audit events.

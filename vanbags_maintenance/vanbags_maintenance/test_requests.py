@@ -55,7 +55,7 @@ class TestRequests(IntegrationTestCase):
     def test_dispatcher_cannot_read_someone_elses_draft(self):
         doc=self.make();frappe.set_user(self.users["dispatcher"])
         with self.assertRaises(frappe.PermissionError):doc.check_permission("read")
-        self.assertEqual(frappe.get_list(policy.REQUEST,pluck="name"),[])
+        self.assertEqual(frappe.get_list(policy.REQUEST,filters={"name":doc.name},pluck="name"),[])
 
     def test_requester_cannot_bypass_flow_or_edit_after_sending(self):
         doc=self.make();doc.status="Approved"

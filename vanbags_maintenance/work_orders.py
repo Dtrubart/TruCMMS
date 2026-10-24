@@ -17,7 +17,7 @@ def can_read(doc,user=None):
     user=user or frappe.session.user
     if not org.in_scope(doc,user):return False
     roles=frappe.get_roles(user)
-    return org.privileged(user) or SUPERVISOR in roles or DISPATCHER in roles or (TECHNICIAN in roles and doc.status=='Assigned' and doc.assigned_to==user)
+    return org.privileged(user) or SUPERVISOR in roles or DISPATCHER in roles or (TECHNICIAN in roles and doc.status not in ('Draft','Authorized') and doc.assigned_to==user) or ('TruCMMS Requester' in roles and doc.get('requester')==user and bool(doc.get('completed_on') or doc.get('rework_on') or doc.get('cancelled_on')))
 
 
 def has_permission(doc,user=None,ptype=None):
@@ -33,8 +33,10 @@ def query(user=None):
     user=user or frappe.session.user
     scope=org.query(DT,user)
     if supervisor(user) or DISPATCHER in frappe.get_roles(user):return scope
-    if TECHNICIAN not in frappe.get_roles(user):return '1=0'
-    return f"({scope}) AND `tab{DT}`.status='Assigned' AND `tab{DT}`.assigned_to={frappe.db.escape(user)}"
+    roles=frappe.get_roles(user);clauses=[]
+    if TECHNICIAN in roles:clauses.append(f"(`tab{DT}`.status NOT IN ('Draft','Authorized') AND `tab{DT}`.assigned_to={frappe.db.escape(user)})")
+    if 'TruCMMS Requester' in roles:clauses.append(f"(`tab{DT}`.requester={frappe.db.escape(user)} AND (`tab{DT}`.completed_on IS NOT NULL OR `tab{DT}`.rework_on IS NOT NULL OR `tab{DT}`.cancelled_on IS NOT NULL))")
+    return f"({scope}) AND ("+' OR '.join(clauses)+')' if clauses else '1=0'
 
 
 def validate_technician(doc):
@@ -44,7 +46,7 @@ def validate_technician(doc):
     if not org.in_scope(doc,user):frappe.throw('Technician must be authorized for the Company and Site.',frappe.PermissionError)
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST"])
 def from_request(request):
     source=frappe.get_doc('TruCMMS Maintenance Request',request)
     source.check_permission('read')

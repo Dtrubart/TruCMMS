@@ -74,6 +74,13 @@
    "fieldtype": "Table",
    "options": "TruCMMS Execution Task",
    "reqd": 1
+  },
+  {
+   "fieldname": "execution_cycle",
+   "label": "Execution Cycle",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "default": "1"
   }
  ],
  "field_order": [
@@ -86,7 +93,8 @@
   "actual_end",
   "actual_minutes",
   "findings",
-  "tasks"
+  "tasks",
+  "execution_cycle"
  ],
  "autoname": "format:EXE-{YYYY}-{#####}",
  "track_changes": 1,
@@ -112,6 +120,11 @@
    "read": 1,
    "report": 1,
    "export": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1
   }
- ]
+ ],
+ "modified": "2026-10-24 20:28:27.097909"
 }

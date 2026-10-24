@@ -298,3 +298,9 @@ doc_events["DocShare"]["validate"].append("vanbags_maintenance.work_orders.valid
 has_permission["TruCMMS Work Execution"] = "vanbags_maintenance.execution.has_permission"
 permission_query_conditions["TruCMMS Work Execution"] = "vanbags_maintenance.execution.query"
 doc_events["DocShare"]["validate"].append("vanbags_maintenance.execution.validate_share")
+
+after_install = "vanbags_maintenance.lifecycle.setup"
+after_migrate = "vanbags_maintenance.lifecycle.setup"
+has_permission["TruCMMS Work Event"] = "vanbags_maintenance.lifecycle.event_permission"
+permission_query_conditions["TruCMMS Work Event"] = "vanbags_maintenance.lifecycle.event_query"
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.lifecycle.validate_share")
