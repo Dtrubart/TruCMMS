@@ -101,7 +101,7 @@ def validate_context(doc):
 
 def setup_company_selection():
     from frappe.permissions import add_permission
-    for role in ("VB Maintenance User", "VB Maintenance Manager", "TruCMMS Requester", "TruCMMS Dispatcher"):
+    for role in ("VB Maintenance User", "VB Maintenance Manager", "TruCMMS Requester", "TruCMMS Dispatcher", "TruCMMS Supervisor", "TruCMMS Technician"):
         if not frappe.db.exists("Custom DocPerm", {"parent": "Company", "role": role, "permlevel": 0}):
             add_permission("Company", role, ptype="select")
     frappe.clear_cache(doctype="Company")

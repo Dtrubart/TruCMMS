@@ -79,8 +79,18 @@
    "role": "TruCMMS Dispatcher",
    "read": 1,
    "select": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1
   }
  ],
- "modified": "2026-10-24 14:21:00.795272",
+ "modified": "2026-10-24 19:53:39.532934",
  "engine": "InnoDB"
 }

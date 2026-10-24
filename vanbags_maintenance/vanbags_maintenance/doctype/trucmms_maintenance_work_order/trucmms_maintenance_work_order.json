@@ -1,0 +1,171 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Maintenance Work Order",
+ "module": "Vanbags Maintenance",
+ "autoname": "format:MWO-{YYYY}-{#####}",
+ "title_field": "subject",
+ "track_changes": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "status",
+  "origin_type",
+  "maintenance_request",
+  "company",
+  "site",
+  "equipment",
+  "functional_location",
+  "subject",
+  "scope",
+  "priority",
+  "assigned_to",
+  "authorized_by",
+  "authorized_on",
+  "assigned_by",
+  "assigned_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nAuthorized\nAssigned",
+   "default": "Draft",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "origin_type",
+   "label": "Origin Type",
+   "fieldtype": "Select",
+   "options": "Maintenance Request",
+   "default": "Maintenance Request",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "maintenance_request",
+   "label": "Maintenance Request",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Request",
+   "reqd": 1,
+   "unique": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "equipment",
+   "label": "Equipment",
+   "fieldtype": "Link",
+   "options": "VB Equipment",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "functional_location",
+   "label": "Functional Location",
+   "fieldtype": "Link",
+   "options": "VB Equipment Location",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "subject",
+   "label": "Subject",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "scope",
+   "label": "Scope of Work",
+   "fieldtype": "Long Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "priority",
+   "label": "Priority",
+   "fieldtype": "Select",
+   "options": "Low\nMedium\nHigh\nCritical",
+   "default": "Medium",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "assigned_to",
+   "label": "Assigned Technician",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "authorized_by",
+   "label": "Authorized By",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "authorized_on",
+   "label": "Authorized On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "assigned_by",
+   "label": "Assigned By",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "assigned_on",
+   "label": "Assigned On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "share": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

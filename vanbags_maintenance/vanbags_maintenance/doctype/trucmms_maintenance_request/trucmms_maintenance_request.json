@@ -141,9 +141,13 @@
    "export": 1,
    "share": 1,
    "report": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1
   }
  ],
- "modified": "2026-10-24 14:21:48.496775",
+ "modified": "2026-10-24 19:54:49.762002",
  "engine": "InnoDB",
  "sort_field": "creation",
  "sort_order": "DESC"

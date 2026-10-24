@@ -51,3 +51,8 @@ Equipment and functional locations now require Company and Site. Configure both 
 ## Maintenance requests
 
 Native requests are documented in [Requests](docs/REQUESTS.md), including roles, organizational permissions, transitions and private evidence.
+
+
+## Maintenance work orders
+
+[Work orders](docs/WORK-ORDERS.md) extend approved requests with scoped authorization and technician assignment. Execution and completion remain subsequent increments.

@@ -8,7 +8,7 @@ app_license = "mit"
 fixtures = [
 	{
 		"doctype": "Role",
-		"filters": {"role_name": ["in", ["VB Maintenance User", "VB Maintenance Manager", "TruCMMS Requester", "TruCMMS Dispatcher"]]}
+		"filters": {"role_name": ["in", ["VB Maintenance User", "VB Maintenance Manager", "TruCMMS Requester", "TruCMMS Dispatcher", "TruCMMS Supervisor", "TruCMMS Technician"]]}
 	}
 ]
 
@@ -286,3 +286,10 @@ permission_query_conditions["TruCMMS Maintenance Request"] = "vanbags_maintenanc
 permission_query_conditions["File"] = "vanbags_maintenance.requests.file_query"
 extend_doctype_class = {"File": ["vanbags_maintenance.requests.RequestFileGuard"]}
 doc_events["DocShare"]["validate"] = ["vanbags_maintenance.organization.validate_share", "vanbags_maintenance.requests.validate_share"]
+
+# Maintenance work orders: scope, authorization and assignment.
+after_install = "vanbags_maintenance.work_orders.setup"
+after_migrate = "vanbags_maintenance.work_orders.setup"
+has_permission["TruCMMS Maintenance Work Order"] = "vanbags_maintenance.work_orders.has_permission"
+permission_query_conditions["TruCMMS Maintenance Work Order"] = "vanbags_maintenance.work_orders.query"
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.work_orders.validate_share")

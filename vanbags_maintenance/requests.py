@@ -17,7 +17,7 @@ def can_read(doc, user=None):
     if not org.in_scope(doc,user):return False
     if org.privileged(user):return True
     roles=frappe.get_roles(user)
-    return (REQUESTER in roles and doc.owner==user) or (DISPATCHER in roles and doc.status!="Draft")
+    return (REQUESTER in roles and doc.owner==user) or ((DISPATCHER in roles or "TruCMMS Supervisor" in roles) and doc.status!="Draft")
 
 
 def has_permission(doc, user=None, ptype=None):
@@ -39,35 +39,41 @@ def query(user=None):
     clauses=[]
     roles=frappe.get_roles(user)
     if REQUESTER in roles:clauses.append(f"`tab{REQUEST}`.owner={frappe.db.escape(user)}")
-    if DISPATCHER in roles:clauses.append(f"`tab{REQUEST}`.status!='Draft'")
+    if DISPATCHER in roles or "TruCMMS Supervisor" in roles:clauses.append(f"`tab{REQUEST}`.status!='Draft'")
     visibility="("+" OR ".join(clauses)+")" if clauses else "1=0"
     return f"({scope}) AND {visibility}"
 
 
 def file_request(doc):
-    if doc.attached_to_doctype==REQUEST and doc.attached_to_name:
-        return frappe.get_doc(REQUEST,doc.attached_to_name)
+    if doc.attached_to_doctype in (REQUEST, "TruCMMS Maintenance Work Order") and doc.attached_to_name:
+        return frappe.get_doc(doc.attached_to_doctype,doc.attached_to_name)
 
 
 def file_permission(doc,user=None,ptype=None):
     parent=file_request(doc)
     if parent:
-        has_permission(parent,user,ptype="read")
+        if not parent.has_permission("read", user=user):
+            frappe.throw("Evidence access requires parent document access.",frappe.PermissionError)
         if ptype in ("write","create","delete"):
-            has_permission(parent,user,ptype="write")
+            if not parent.has_permission("write", user=user):
+                frappe.throw("Evidence changes require parent write access.",frappe.PermissionError)
             if parent.status in FINAL:frappe.throw("Final request evidence is read-only.",frappe.PermissionError)
     return True
 
 
 def file_query(user=None):
     if org.privileged(user):return ""
-    condition=query(user)
-    return f"(`tabFile`.attached_to_doctype IS NULL OR `tabFile`.attached_to_doctype!={frappe.db.escape(REQUEST)} OR EXISTS (SELECT 1 FROM `tab{REQUEST}` WHERE `tab{REQUEST}`.name=`tabFile`.attached_to_name AND ({condition})))"
+    from vanbags_maintenance.work_orders import DT, query as work_order_query
+    clauses=[]
+    for dt,condition in ((REQUEST,query(user)),(DT,work_order_query(user))):
+        if not frappe.db.exists("DocType",dt):continue
+        clauses.append(f"(`tabFile`.attached_to_doctype!={frappe.db.escape(dt)} OR EXISTS (SELECT 1 FROM `tab{dt}` WHERE `tab{dt}`.name=`tabFile`.attached_to_name AND ({condition})))")
+    return "(`tabFile`.attached_to_doctype IS NULL OR ("+" AND ".join(clauses)+"))"
 
 
 def validate_file(doc,method=None):
     old=doc.get_doc_before_save()
-    if old and old.attached_to_doctype==REQUEST and (old.attached_to_doctype,old.attached_to_name)!=(doc.attached_to_doctype,doc.attached_to_name):
+    if old and old.attached_to_doctype in (REQUEST, "TruCMMS Maintenance Work Order") and (old.attached_to_doctype,old.attached_to_name)!=(doc.attached_to_doctype,doc.attached_to_name):
         frappe.throw("Request evidence cannot be detached or reassigned.",frappe.PermissionError)
     parent=file_request(doc)
     if not parent:return
@@ -90,7 +96,11 @@ def validate_share(doc,method=None):
     elif doc.share_doctype=="File":
         parent=file_request(frappe.get_doc("File",doc.share_name))
     else:return
-    if parent and (doc.everyone or not can_read(parent,doc.user)):
+    if parent:
+        from vanbags_maintenance.work_orders import can_read as work_order_read
+        readable = can_read(parent,doc.user) if parent.doctype==REQUEST else work_order_read(parent,doc.user)
+        if not doc.everyone and readable:return
+        
         frappe.throw("Sharing cannot expand request visibility.",frappe.PermissionError)
 
 

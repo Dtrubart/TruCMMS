@@ -1,6 +1,6 @@
 {
  "creation": "2026-10-23 21:09:34.956376",
- "modified": "2026-10-24 14:21:48.497903",
+ "modified": "2026-10-24 19:53:39.525819",
  "owner": "Administrator",
  "modified_by": "Administrator",
  "docstatus": 0,
@@ -31,6 +31,12 @@
   },
   {
    "role": "TruCMMS Dispatcher"
+  },
+  {
+   "role": "TruCMMS Supervisor"
+  },
+  {
+   "role": "TruCMMS Technician"
   }
  ],
  "idx": 30
