@@ -11,6 +11,9 @@ def prepare_organization():
     original=frappe.session.user
     frappe.set_user("Administrator")
     try:
+        # Native Company creation expects the setup-wizard Transit warehouse type.
+        if not frappe.db.exists("Warehouse Type", "Transit"):
+            frappe.get_doc({"doctype":"Warehouse Type","name":"Transit"}).insert()
         for company, abbr in [(COMPANY_A,"TCMA"),(COMPANY_B,"TCMB")]:
             if not frappe.db.exists("Company", company):
                 frappe.get_doc({"doctype":"Company","company_name":company,"abbr":abbr,"country":"Canada","default_currency":"CAD"}).insert()
