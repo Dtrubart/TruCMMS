@@ -51,7 +51,7 @@
    "label": "Operating Time Zone",
    "fieldtype": "Data",
    "reqd": 0,
-   "description": "IANA zone, for example America/Vancouver. ERPNext form dates use the system timezone; operating views must convert explicitly."
+   "description": "IANA operating zone, for example America/Vancouver. Native forms display the ERPNext user timezone; historical/API values use the system timezone."
   }
  ],
  "permissions": [

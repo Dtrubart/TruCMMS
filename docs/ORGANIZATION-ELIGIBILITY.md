@@ -8,7 +8,7 @@ Membership applies to a user and discipline. Site authorization applies to a tea
 
 New orders use Managed eligibility. Before assignment and technician actions, the server checks enabled users/roles, native Company/Site permissions, team/discipline, membership and site eligibility. Every managed assignment creates immutable history. Existing orders migrate to Legacy without inventing missing team data. Supervisors can explicitly adopt open Legacy orders with a reason; prior history is retained.
 
-TruCMMS Site stores an IANA operating timezone. Existing ERPNext timestamps and interval forms remain in the system timezone; operating views must explicitly convert them. Changing a system clock containing maintenance records requires a separate timestamp migration. No automatic timestamp shifts are performed. Future scheduling fields and four-view UI are outside this increment.
+TruCMMS Site stores an IANA operating timezone. Historical/API timestamps remain in the system timezone. Native forms display and convert the ERPNext user timezone; operating views must explicitly convert the site timezone. Changing a system clock containing maintenance records requires a separate timestamp migration. No automatic timestamp shifts are performed. Future scheduling fields and four-view UI are outside this increment.
 
 Organization and audit records do not accept attachments; maintenance evidence belongs to work records. Import/export/share remain restricted for operational roles. Procurement, contract costs, multiple assignments, PM generation and new completion states are outside A/B.
 

@@ -47,7 +47,7 @@
    "label": "Valid From",
    "fieldtype": "Datetime",
    "reqd": 1,
-   "description": "Inclusive; entered in the ERPNext system timezone.",
+   "description": "Inclusive start. Native forms display your ERPNext user timezone; API values use the system timezone.",
    "in_list_view": 1
   },
   {
@@ -55,7 +55,7 @@
    "label": "Valid Until",
    "fieldtype": "Datetime",
    "reqd": 0,
-   "description": "Exclusive; empty means no scheduled end. ERPNext system timezone."
+   "description": "Exclusive end; empty means no scheduled end. Native forms display your ERPNext user timezone; API values use the system timezone."
   },
   {
    "fieldname": "revoked",
