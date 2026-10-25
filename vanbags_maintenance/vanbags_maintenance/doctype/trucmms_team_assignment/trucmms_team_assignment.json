@@ -1,0 +1,154 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Team Assignment",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "track_changes": 1,
+ "allow_rename": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "work_order",
+  "company",
+  "site",
+  "team",
+  "discipline",
+  "technician",
+  "membership",
+  "site_authorization",
+  "assigned_on",
+  "assigned_by",
+  "reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "label": "Work Order",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Maintenance Work Order"
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "Company"
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Site"
+  },
+  {
+   "fieldname": "team",
+   "label": "Team",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Maintenance Team"
+  },
+  {
+   "fieldname": "discipline",
+   "label": "Discipline",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Discipline"
+  },
+  {
+   "fieldname": "technician",
+   "label": "Technician",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "membership",
+   "label": "Membership",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Team Membership"
+  },
+  {
+   "fieldname": "site_authorization",
+   "label": "Site Authorization",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Team Site Authorization"
+  },
+  {
+   "fieldname": "assigned_on",
+   "label": "Assigned On",
+   "fieldtype": "Datetime",
+   "reqd": 1
+  },
+  {
+   "fieldname": "assigned_by",
+   "label": "Assigned By",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "reason",
+   "label": "Reason",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "report": 1,
+   "delete": 0,
+   "share": 0,
+   "export": 0
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "report": 1,
+   "delete": 0,
+   "share": 0,
+   "export": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0,
+   "delete": 0,
+   "share": 0,
+   "export": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "export": 0,
+   "share": 0,
+   "report": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0,
+   "delete": 0,
+   "share": 0,
+   "export": 0
+  }
+ ],
+ "modified": "2026-10-24 23:00:00",
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

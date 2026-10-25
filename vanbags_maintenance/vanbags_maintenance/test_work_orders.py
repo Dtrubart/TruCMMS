@@ -15,6 +15,16 @@ class WorkOrderCase(IntegrationTestCase):
         for key,role in [('requester','TruCMMS Requester'),('dispatcher',wo.DISPATCHER),('supervisor',wo.SUPERVISOR),('tech',wo.TECHNICIAN),('other',wo.TECHNICIAN)]:
             user=frappe.get_doc({'doctype':'User','email':self.token+key+'@example.com','first_name':'Work order test','send_welcome_email':0,'roles':[{'role':role}]}).insert()
             self.users[key]=user.name;grant_scope(user.name)
+        from frappe.utils import now_datetime,add_to_date
+        from vanbags_maintenance import teams
+        self.discipline='TEST-MECHANICAL'
+        if not frappe.db.exists(teams.DISC,self.discipline):frappe.get_doc({'doctype':teams.DISC,'discipline_code':self.discipline,'discipline_name':'Test mechanical'}).insert()
+        self.team=frappe.get_doc({'doctype':teams.TEAM,'team_code':self.token,'team_name':self.token,'company':COMPANY_A,'management_site':org_context()['site'],'team_type':'Internal','disciplines':[{'discipline':self.discipline}]}).insert().name
+        start=add_to_date(now_datetime(),days=-20)
+        self.site_grant=frappe.get_doc({'doctype':teams.GRANT,'team':self.team,'site':org_context()['site'],'valid_from':start}).insert().name
+        self.memberships={}
+        for key in ('tech','other'):
+            self.memberships[key]=frappe.get_doc({'doctype':teams.MEMBER,'team':self.team,'user':self.users[key],'discipline':self.discipline,'function':'Technician','valid_from':start}).insert().name
         self.location=frappe.get_doc({'doctype':'VB Equipment Location',**org_context(),'location_name':self.token}).insert()
         frappe.set_user(self.users['requester'])
         self.request=frappe.get_doc({'doctype':'TruCMMS Maintenance Request',**org_context(),'subject':'Fault','description':'Inspect pump','functional_location':self.location.name,'priority':'High'}).insert()
@@ -25,7 +35,7 @@ class WorkOrderCase(IntegrationTestCase):
         frappe.set_user('Administrator');frappe.db.rollback(save_point='wo_case');super().tearDown()
 
     def make(self):
-        frappe.set_user(self.users['dispatcher']);return frappe.get_doc(wo.from_request(self.request.name))
+        frappe.set_user(self.users['dispatcher']);doc=frappe.get_doc(wo.from_request(self.request.name));doc.responsible_team=self.team;doc.required_discipline=self.discipline;doc.save();return doc
 
     def authorize(self):
         doc=self.make();frappe.set_user(self.users['supervisor']);return apply_workflow(doc.as_dict(),'Authorize')

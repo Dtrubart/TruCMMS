@@ -77,6 +77,7 @@ def equipment_history(filters=None):
         for e in visible(EX,{'work_order':['in',names]},['name','work_order','company','site','actual_end','findings','actual_minutes']):
             add(EX,e,e.actual_end,e.findings+' ('+str(e.actual_minutes)+' recorded minutes)',order=e.work_order)
         for e in visible(EVENT,{'work_order':['in',names]},['name','work_order','company','site','occurred_on','action','reason']):add(EVENT,e,e.occurred_on,e.action+': '+e.reason,order=e.work_order)
+        for e in visible('TruCMMS Team Assignment',{'work_order':['in',names]},['name','work_order','company','site','assigned_on','team','discipline','technician']):add('TruCMMS Team Assignment',e,e.assigned_on,e.team+' / '+e.discipline+': '+e.technician,order=e.work_order)
         for e in visible(adj.DT,{'work_order':['in',names]},['name','work_order','company','site','occurred_on','execution','reason']):add(adj.DT,e,e.occurred_on,'Void '+e.execution+': '+e.reason,order=e.work_order)
     rows.sort(key=lambda r:(get_datetime(r['occurred_on']),r['record']))
     columns=[dict(fieldname=n,label=l,fieldtype=t,options=o,width=w) for n,l,t,o,w in [

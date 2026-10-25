@@ -33,3 +33,23 @@ frappe.ui.form.on("TruCMMS Maintenance Work Order", {
   for (const field of ["subject", "scope", "priority", "target_closure"]) frm.set_df_property(field,"read_only",frm.doc.status !== "Draft");
  }
 });
+
+frappe.ui.form.on('TruCMMS Maintenance Work Order', {
+    refresh(frm) {
+        frm.set_query('responsible_team', () => ({filters: {company: frm.doc.company, disabled: 0}}));
+        const locked = ['Technical Completed','Accepted','Closed','Cancelled'].includes(frm.doc.status) || frm.doc.team_policy === 'Legacy';
+        frm.set_df_property('responsible_team','read_only',locked);
+        frm.set_df_property('required_discipline','read_only',locked);
+        frm.set_query('required_discipline', () => ({filters:{disabled:0}}));
+        if (!frm.is_new() && frm.doc.team_policy === 'Legacy' && ['Draft','Authorized','Assigned'].includes(frm.doc.status) && (frappe.user.has_role('TruCMMS Supervisor') || frappe.user.has_role('System Manager'))) {
+            frm.add_custom_button(__('Adopt Team Eligibility'), () => frappe.prompt([
+                {fieldname:'team',label:__('Responsible Team'),fieldtype:'Link',options:'TruCMMS Maintenance Team',reqd:1,get_query:()=>({filters:{company:frm.doc.company,disabled:0}})},
+                {fieldname:'discipline',label:__('Required Discipline'),fieldtype:'Link',options:'TruCMMS Discipline',reqd:1},
+                {fieldname:'reason',label:__('Reason'),fieldtype:'Small Text',reqd:1}
+            ], async values => {
+                await frappe.call({method:'vanbags_maintenance.teams.adopt_legacy',type:'POST',args:{work_order:frm.doc.name,...values}});
+                await frm.reload_doc();
+            },__('Adopt Existing Responsibility')));
+        }
+    }
+});

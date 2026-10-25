@@ -40,7 +40,11 @@
   "rework_on",
   "rework_reason",
   "acceptance_method",
-  "target_closure"
+  "target_closure",
+  "team_policy",
+  "responsible_team",
+  "required_discipline",
+  "team_assignment"
  ],
  "fields": [
   {
@@ -276,6 +280,36 @@
    "label": "Target Closure",
    "fieldtype": "Datetime",
    "description": "Optional target for accepted final closure; frozen on authorization."
+  },
+  {
+   "fieldname": "team_policy",
+   "label": "Team Policy",
+   "fieldtype": "Select",
+   "reqd": 0,
+   "read_only": 1,
+   "options": "Managed\nLegacy"
+  },
+  {
+   "fieldname": "responsible_team",
+   "label": "Responsible Team",
+   "fieldtype": "Link",
+   "reqd": 0,
+   "options": "TruCMMS Maintenance Team"
+  },
+  {
+   "fieldname": "required_discipline",
+   "label": "Required Discipline",
+   "fieldtype": "Link",
+   "reqd": 0,
+   "options": "TruCMMS Discipline"
+  },
+  {
+   "fieldname": "team_assignment",
+   "label": "Team Assignment",
+   "fieldtype": "Link",
+   "reqd": 0,
+   "read_only": 1,
+   "options": "TruCMMS Team Assignment"
   }
  ],
  "permissions": [
@@ -316,5 +350,5 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "modified": "2026-10-24 21:03:38.652495"
+ "modified": "2026-10-24 23:00:00"
 }

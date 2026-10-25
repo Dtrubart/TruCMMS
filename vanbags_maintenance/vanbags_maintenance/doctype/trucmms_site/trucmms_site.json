@@ -12,7 +12,8 @@
   "site_code",
   "site_name",
   "company",
-  "disabled"
+  "disabled",
+  "time_zone"
  ],
  "fields": [
   {
@@ -44,6 +45,13 @@
    "label": "Disabled",
    "fieldtype": "Check",
    "default": "0"
+  },
+  {
+   "fieldname": "time_zone",
+   "label": "Operating Time Zone",
+   "fieldtype": "Data",
+   "reqd": 0,
+   "description": "IANA zone, for example America/Vancouver. ERPNext form dates use the system timezone; operating views must convert explicitly."
   }
  ],
  "permissions": [
@@ -91,6 +99,6 @@
    "select": 1
   }
  ],
- "modified": "2026-10-24 19:53:39.532934",
+ "modified": "2026-10-24 23:00:00",
  "engine": "InnoDB"
 }

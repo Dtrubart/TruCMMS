@@ -1,0 +1,74 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Discipline",
+ "module": "Vanbags Maintenance",
+ "autoname": "field:discipline_code",
+ "track_changes": 1,
+ "allow_rename": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "discipline_code",
+  "discipline_name",
+  "description",
+  "disabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "discipline_code",
+   "label": "Discipline Code",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "discipline_name",
+   "label": "Discipline Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "label": "Description",
+   "fieldtype": "Small Text",
+   "reqd": 0
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Disabled",
+   "fieldtype": "Check",
+   "reqd": 0,
+   "default": "0"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1
+  }
+ ],
+ "modified": "2026-10-24 23:00:00",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "discipline_name",
+ "show_title_field_in_link": 1
+}

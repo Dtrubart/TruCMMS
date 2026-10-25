@@ -308,3 +308,14 @@ doc_events["DocShare"]["validate"].append("vanbags_maintenance.lifecycle.validat
 has_permission["TruCMMS Execution Adjustment"]="vanbags_maintenance.adjustments.has_permission"
 permission_query_conditions["TruCMMS Execution Adjustment"]="vanbags_maintenance.adjustments.query"
 doc_events["DocShare"]["validate"].append("vanbags_maintenance.adjustments.validate_share")
+
+# A/B: explicit team eligibility and safe temporal configuration.
+after_install = "vanbags_maintenance.configuration.setup"
+after_migrate = "vanbags_maintenance.configuration.setup"
+for dt, query_name in [("TruCMMS Maintenance Team","team_query"),("TruCMMS Team Membership","member_query"),("TruCMMS Team Site Authorization","grant_query")]:
+    has_permission[dt]="vanbags_maintenance.teams.permission"
+    permission_query_conditions[dt]="vanbags_maintenance.teams."+query_name
+has_permission["TruCMMS Team Assignment"]="vanbags_maintenance.lifecycle.event_permission"
+permission_query_conditions["TruCMMS Team Assignment"]="vanbags_maintenance.teams.assignment_query"
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.teams.validate_share")
+doc_events["System Settings"]={"validate":"vanbags_maintenance.configuration.guard_system_timezone"}

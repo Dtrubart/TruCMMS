@@ -1,0 +1,28 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Team Discipline",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "track_changes": 1,
+ "allow_rename": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "discipline"
+ ],
+ "fields": [
+  {
+   "fieldname": "discipline",
+   "label": "Discipline",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "in_list_view": 1,
+   "options": "TruCMMS Discipline"
+  }
+ ],
+ "permissions": [],
+ "modified": "2026-10-24 23:00:00",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "istable": 1,
+ "editable_grid": 1
+}

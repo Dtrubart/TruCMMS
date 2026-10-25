@@ -110,7 +110,7 @@ class TestReporting(WorkOrderCase):
             frappe.set_user(self.users['requester'])
             request=frappe.get_doc({'doctype':'TruCMMS Maintenance Request','company':self.order.company,'site':self.order.site,'equipment':equipment.name,'subject':sector+' fault','description':'Functional failure','priority':'High'}).insert()
             request=apply_workflow(request.as_dict(),'Send Request');frappe.set_user(self.users['dispatcher']);request=apply_workflow(request.as_dict(),'Triage');request=apply_workflow(request.as_dict(),'Approve')
-            order=frappe.get_doc(wo.from_request(request.name));frappe.set_user(self.users['supervisor']);order=apply_workflow(order.as_dict(),'Authorize');order.assigned_to=self.users['tech'];order.save();order=apply_workflow(order.as_dict(),'Assign')
+            order=frappe.get_doc(wo.from_request(request.name));order.responsible_team=self.team;order.required_discipline=self.discipline;order.save();frappe.set_user(self.users['supervisor']);order=apply_workflow(order.as_dict(),'Authorize');order.assigned_to=self.users['tech'];order.save();order=apply_workflow(order.as_dict(),'Assign')
             frappe.set_user('Administrator');frappe.db.set_value(wo.DT,order.name,'assigned_on',add_to_date(now_datetime(),hours=-3))
             frappe.set_user(self.users['tech']);start=add_to_date(now_datetime(),minutes=-150+index*20)
             frappe.get_doc({'doctype':'TruCMMS Work Execution','work_order':order.name,'actual_start':start,'actual_end':add_to_date(start,minutes=10),'findings':'Function restored','tasks':[{'task':'Repair and test','result':'Completed','findings':'Passed'}]}).insert()

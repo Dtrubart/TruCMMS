@@ -1,6 +1,6 @@
 {
  "creation": "2026-10-23 21:09:34.956376",
- "modified": "2026-10-24 21:05:00.938395",
+ "modified": "2026-10-24 23:00:00",
  "owner": "Administrator",
  "modified_by": "Administrator",
  "docstatus": 0,
@@ -109,6 +109,38 @@
    "label": "TruCMMS Equipment History",
    "link_type": "Report",
    "link_to": "TruCMMS Equipment History"
+  },
+  {
+   "type": "Link",
+   "label": "Maintenance Team",
+   "link_type": "DocType",
+   "link_to": "TruCMMS Maintenance Team",
+   "hidden": 0,
+   "onboard": 0
+  },
+  {
+   "type": "Link",
+   "label": "Discipline",
+   "link_type": "DocType",
+   "link_to": "TruCMMS Discipline",
+   "hidden": 0,
+   "onboard": 0
+  },
+  {
+   "type": "Link",
+   "label": "Team Membership",
+   "link_type": "DocType",
+   "link_to": "TruCMMS Team Membership",
+   "hidden": 0,
+   "onboard": 0
+  },
+  {
+   "type": "Link",
+   "label": "Team Site Authorization",
+   "link_type": "DocType",
+   "link_to": "TruCMMS Team Site Authorization",
+   "hidden": 0,
+   "onboard": 0
   }
  ]
 }

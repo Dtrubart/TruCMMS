@@ -1,0 +1,131 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Team Membership",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "track_changes": 1,
+ "allow_rename": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "team",
+  "company",
+  "user",
+  "discipline",
+  "function",
+  "valid_from",
+  "valid_until",
+  "revoked",
+  "revoked_on",
+  "revoked_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "team",
+   "label": "Team",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Maintenance Team",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "reqd": 0,
+   "read_only": 1,
+   "options": "Company",
+   "fetch_from": "team.company"
+  },
+  {
+   "fieldname": "user",
+   "label": "User",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "User",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "discipline",
+   "label": "Discipline",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Discipline",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "function",
+   "label": "Function",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "default": "Technician",
+   "options": "Technician\nLead"
+  },
+  {
+   "fieldname": "valid_from",
+   "label": "Valid From",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "description": "Inclusive; entered in the ERPNext system timezone.",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "valid_until",
+   "label": "Valid Until",
+   "fieldtype": "Datetime",
+   "reqd": 0,
+   "description": "Exclusive; empty means no scheduled end. ERPNext system timezone."
+  },
+  {
+   "fieldname": "revoked",
+   "label": "Revoked",
+   "fieldtype": "Check",
+   "reqd": 0,
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "revoked_on",
+   "label": "Revoked On",
+   "fieldtype": "Datetime",
+   "reqd": 0,
+   "read_only": 1
+  },
+  {
+   "fieldname": "revoked_by",
+   "label": "Revoked By",
+   "fieldtype": "Link",
+   "reqd": 0,
+   "read_only": 1,
+   "options": "User"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1
+  }
+ ],
+ "modified": "2026-10-24 23:00:00",
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

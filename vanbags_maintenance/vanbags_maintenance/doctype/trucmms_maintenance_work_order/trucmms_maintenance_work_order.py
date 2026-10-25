@@ -21,6 +21,8 @@ class TruCMMSMaintenanceWorkOrder(Document):
         if self.target_closure:self.target_closure=get_datetime(self.target_closure)
         old=self.get_doc_before_save()
         from vanbags_maintenance import lifecycle
+        from vanbags_maintenance import teams
+        teams.validate_order(self,old)
         if old:
             lifecycle.validate_change(self,old)
             if self.status!=old.status and (old.status,self.status) not in (('Draft','Authorized'),('Authorized','Assigned')):

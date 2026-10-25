@@ -17,6 +17,8 @@ def order_for_recording(name, user=None, lock=False):
     if (not org.in_scope(order,user) or order.status!='Assigned' or order.assigned_to!=user
             or wo.TECHNICIAN not in frappe.get_roles(user) or not frappe.db.get_value('User',user,'enabled')):
         frappe.throw('Only the currently assigned, authorized technician may record execution.',frappe.PermissionError)
+    from vanbags_maintenance.teams import execution_check
+    execution_check(order,user)
     return order
 
 
