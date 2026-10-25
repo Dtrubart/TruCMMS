@@ -20,6 +20,15 @@ def locked_sql(query,values=None,**kwargs):
         raise
 
 
+def locked_document(doctype,name):
+    try:return frappe.get_doc(doctype,name,for_update=True)
+    except frappe.QueryDeadlockError as error:
+        cause=error.args[0] if error.args else None
+        code=cause.args[0] if isinstance(cause,Exception) and cause.args else cause
+        if code in (1020,1205,1213):frappe.throw('Maintenance data changed concurrently. Reload and retry.',frappe.TimestampMismatchError)
+        raise
+
+
 def manager(user=None):
     return org.privileged(user) or 'TruCMMS Supervisor' in frappe.get_roles(user or frappe.session.user)
 
@@ -208,9 +217,13 @@ def adopt_legacy(work_order,team,discipline,reason):
     locked_sql(f'SELECT name FROM `tab{wo.DT}` WHERE name=%s FOR UPDATE',(work_order,))
     doc=frappe.get_doc(wo.DT,work_order);doc.check_permission('write')
     if doc.team_policy!='Legacy' or doc.status not in ('Draft','Authorized','Assigned'):frappe.throw('Only open legacy orders may be adopted.')
+    snapshot=doc.as_dict()
     previous=frappe.flags.get('trucmms_team_adoption');frappe.flags.trucmms_team_adoption={'name':doc.name,'reason':reason.strip()}
     try:
-        doc.responsible_team=team;doc.required_discipline=discipline;doc.team_policy='Managed';doc.save();return doc.as_dict()
+        doc.responsible_team=team;doc.required_discipline=discipline;doc.team_policy='Managed';doc.save()
+        from vanbags_maintenance.work_cycle import event
+        event(doc,'Adopt Team Eligibility',doc.status,reason.strip(),snapshot)
+        return doc.as_dict()
     finally:frappe.flags.trucmms_team_adoption=previous
 
 def validate_share(doc,method=None):

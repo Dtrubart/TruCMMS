@@ -22,7 +22,7 @@ def public_snapshot(data):
 
 def locked_order(name):
     teams.locked_sql(f'SELECT name FROM `tab{wo.DT}` WHERE name=%s FOR UPDATE',(name,))
-    doc=frappe.get_doc(wo.DT,name);doc.check_permission('read');return doc
+    doc=teams.locked_document(wo.DT,name);doc.check_permission('read');return doc
 
 def event(doc,action,before,reason,snapshot=None):
     previous=frappe.flags.get('trucmms_lifecycle');frappe.flags.trucmms_lifecycle={'name':doc.name,'action':action,'reason':reason}
@@ -179,7 +179,7 @@ def adopt(work_order,reason,acceptance_user=None):
 
 def setup():
     from vanbags_maintenance import configuration
-    configuration.setup()
+    configuration.setup(record=False)
     frappe.db.sql("UPDATE `tabTruCMMS Maintenance Work Order` SET lifecycle_policy='Legacy' WHERE COALESCE(lifecycle_policy,'')=''")
     frappe.db.sql("UPDATE `tabTruCMMS Site` SET acceptance_policy='By Origin' WHERE COALESCE(acceptance_policy,'')=''")
     frappe.db.add_unique(CYCLE,['work_order','execution_cycle'],'work_cycle_once')
@@ -188,7 +188,8 @@ def setup():
     states=['Draft','Authorized','Assigned','On Hold','Technical Completed','Verified','Accepted','Closed','Cancelled']
     for state in states:
         if not frappe.db.exists('Workflow State',state):frappe.get_doc({'doctype':'Workflow State','workflow_state_name':state}).insert(ignore_permissions=True)
-    edges=[('Draft','Authorize','Authorized',wo.SUPERVISOR,''),('Authorized','Assign','Assigned',wo.SUPERVISOR,''),('Assigned','Complete Work','Technical Completed',wo.TECHNICIAN,'')]
+    primary_condition="doc.lifecycle_policy != 'C1' or doc.assigned_to == frappe.session.user"
+    edges=[('Draft','Authorize','Authorized',wo.SUPERVISOR,''),('Authorized','Assign','Assigned',wo.SUPERVISOR,''),('Assigned','Complete Work','Technical Completed',wo.TECHNICIAN,primary_condition)]
     legacy="doc.lifecycle_policy != 'C1'";current="doc.lifecycle_policy == 'C1'"
     for role,action in [('TruCMMS Requester','Accept Work'),(wo.SUPERVISOR,'Accept on Behalf')]:
         edges.extend([('Technical Completed',action,'Accepted',role,legacy),('Verified',action,'Accepted',role,current+' and doc.acceptance_required')])
@@ -206,17 +207,23 @@ def setup():
     if frappe.db.exists('Workflow',name):
         flow=frappe.get_doc('Workflow',name)
         actual={(r.state,r.action,r.next_state,r.allowed,r.condition or '') for r in flow.transitions}
+        predecessor={(a,action,z,role,'' if action=='Complete Work' else condition) for a,action,z,role,condition in edges}
+        if actual==predecessor and actual!=expected:
+            for row in flow.transitions:
+                if row.action=='Complete Work':row.condition=primary_condition
+            flow.save(ignore_permissions=True);actual={(r.state,r.action,r.next_state,r.allowed,r.condition or '') for r in flow.transitions}
         if actual!=expected or {r.state for r in flow.states}!=set(states) or not flow.is_active or flow.document_type!=wo.DT or flow.workflow_state_field!='status' or any(str(r.doc_status)!='0' or r.allow_edit!=wo.SUPERVISOR for r in flow.states):frappe.throw('Custom C workflow requires explicit upgrade review.')
     else:
         original=frappe.get_doc('Workflow','TruCMMS Work Order Workflow')
         legacy_states={'Draft','Authorized','Assigned','Technical Completed','Accepted','Closed','Cancelled'}
-        legacy_edges={(a,action,z,role) for a,action,z,role,condition in edges if a in legacy_states and z in legacy_states and action!='Reopen Order' and condition in ('',legacy)}
+        legacy_edges={(a,action,z,role) for a,action,z,role,condition in edges if a in legacy_states and z in legacy_states and action!='Reopen Order' and condition in ('',legacy,primary_condition)}
         actual_legacy={(r.state,r.action,r.next_state,r.allowed) for r in original.transitions}
         if actual_legacy!=legacy_edges or {r.state for r in original.states}!=legacy_states or original.document_type!=wo.DT or original.workflow_state_field!='status' or any(r.condition or not r.allow_self_approval for r in original.transitions) or any(str(r.doc_status)!='0' or r.allow_edit!=(wo.DISPATCHER if r.state=='Draft' else wo.SUPERVISOR) for r in original.states):frappe.throw('Custom legacy workflow requires explicit C upgrade review.')
         original.is_active=0;original.save(ignore_permissions=True)
         flow=frappe.get_doc({'doctype':'Workflow','workflow_name':name,'document_type':wo.DT,'is_active':1,'workflow_state_field':'status','send_email_alert':0,'states':[{'state':state,'doc_status':'0','allow_edit':wo.SUPERVISOR} for state in states],'transitions':[{'state':a,'action':action,'next_state':z,'allowed':role,'allow_self_approval':1,'condition':condition} for a,action,z,role,condition in edges]})
         flow.insert(ignore_permissions=True)
     frappe.clear_cache(doctype=wo.DT)
+    configuration.record_deployment()
 
 
 def history_query(dt,user=None):

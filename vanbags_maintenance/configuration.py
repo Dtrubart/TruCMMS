@@ -38,7 +38,7 @@ def guard_system_timezone(doc,method=None):
         if frappe.db.count('TruCMMS Maintenance Work Order') or frappe.db.count('TruCMMS Team Membership') or frappe.db.count('TruCMMS Team Site Authorization'):
             frappe.throw('A versioned timestamp migration is required before changing the system timezone. Configure the operating timezone on TruCMMS Site instead.')
 
-def setup():
+def setup(record=True):
     from vanbags_maintenance.lifecycle import setup as previous
     previous()
     # Existing records are legacy only once. Clients cannot request this policy.
@@ -47,6 +47,11 @@ def setup():
         frappe.db.add_index(dt,fields,index)
     default=frappe.db.get_single_value('System Settings','time_zone') or 'UTC'
     frappe.db.sql("UPDATE `tabTruCMMS Site` SET time_zone=%s WHERE COALESCE(time_zone,'')=''",(default,))
+    if record:record_deployment()
+
+
+def record_deployment():
+    default=frappe.db.get_single_value('System Settings','time_zone') or 'UTC'
     folder=Path(__file__).parent;digest=hashlib.sha256()
     for p in sorted(folder.rglob('*')):
         if p.is_file() and p.suffix in ('.py','.js','.json') and '__pycache__' not in p.parts:

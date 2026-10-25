@@ -170,3 +170,14 @@ class TestWorkCycle(WorkOrderCase):
         doc=self.direct();doc.responsible_team=self.team;doc.required_discipline=self.discipline;doc.save();frappe.set_user(self.users['supervisor']);doc=apply_workflow(doc.as_dict(),'Authorize');doc.assigned_to=self.users['tech'];doc.save();doc=apply_workflow(doc.as_dict(),'Assign');self.order=doc;self.backdate(doc)
         self.verify();self.action('supervisor','Close Order');self.site_policy('Required');self.action('supervisor','Reopen Order');self.assertTrue(self.order.acceptance_required);self.assertEqual(self.order.status,'Authorized')
         frappe.set_user(self.users['supervisor']);self.order=frappe.get_doc(cycle.designate_acceptor(self.order.name,self.users['requester'],'Requester identified for reopened cycle'));self.order.assigned_to=self.users['tech'];self.order.save();self.order=apply_workflow(self.order.as_dict(),'Assign');self.assertEqual(self.order.status,'Assigned')
+
+    def test_secondary_has_no_primary_completion_workflow_action(self):
+        from frappe.model.workflow import get_transitions
+        frappe.set_user(self.users['supervisor']);allocations.add(self.order.name,self.users['other'],self.discipline,'Secondary execution')
+        frappe.set_user(self.users['other']);self.assertNotIn('Complete Work',[row.action for row in get_transitions(self.order)])
+        frappe.set_user(self.users['tech']);self.assertIn('Complete Work',[row.action for row in get_transitions(self.order)])
+
+    def test_team_adoption_keeps_reason_even_before_assignment(self):
+        frappe.set_user('Administrator');doc=self.direct();frappe.set_user('Administrator');frappe.db.set_value(wo.DT,doc.name,'team_policy','Legacy')
+        frappe.set_user(self.users['supervisor']);teams.adopt_legacy(doc.name,self.team,self.discipline,'Explicit team adoption reason')
+        self.assertEqual(frappe.db.get_value(cycle.EVENT,{'work_order':doc.name,'action':'Adopt Team Eligibility'},'reason'),'Explicit team adoption reason')
