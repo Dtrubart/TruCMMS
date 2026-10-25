@@ -1,6 +1,6 @@
 {
  "creation": "2026-10-23 21:09:34.956376",
- "modified": "2026-10-24 20:06:06.788849",
+ "modified": "2026-10-24 21:05:00.938395",
  "owner": "Administrator",
  "modified_by": "Administrator",
  "docstatus": 0,
@@ -97,6 +97,18 @@
    "label": "Work Execution",
    "link_type": "DocType",
    "link_to": "TruCMMS Work Execution"
+  },
+  {
+   "type": "Link",
+   "label": "TruCMMS Work Register",
+   "link_type": "Report",
+   "link_to": "TruCMMS Work Register"
+  },
+  {
+   "type": "Link",
+   "label": "TruCMMS Equipment History",
+   "link_type": "Report",
+   "link_to": "TruCMMS Equipment History"
   }
  ]
 }

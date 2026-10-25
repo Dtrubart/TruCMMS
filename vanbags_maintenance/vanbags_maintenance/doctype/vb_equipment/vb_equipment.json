@@ -120,7 +120,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-24 19:53:39.533544",
+ "modified": "2026-10-24 21:03:38.653608",
  "modified_by": "Administrator",
  "module": "Vanbags Maintenance",
  "name": "VB Equipment",
@@ -169,22 +169,26 @@
   {
    "role": "TruCMMS Requester",
    "read": 1,
-   "select": 1
+   "select": 1,
+   "report": 1
   },
   {
    "role": "TruCMMS Dispatcher",
    "read": 1,
-   "select": 1
+   "select": 1,
+   "report": 1
   },
   {
    "role": "TruCMMS Supervisor",
    "read": 1,
-   "select": 1
+   "select": 1,
+   "report": 1
   },
   {
    "role": "TruCMMS Technician",
    "read": 1,
-   "select": 1
+   "select": 1,
+   "report": 1
   }
  ],
  "row_format": "Dynamic",

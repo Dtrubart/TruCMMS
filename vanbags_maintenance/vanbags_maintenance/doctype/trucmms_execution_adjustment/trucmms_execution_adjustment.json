@@ -1,0 +1,89 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Execution Adjustment",
+ "module": "Vanbags Maintenance",
+ "autoname": "format:ADJ-{YYYY}-{#####}",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "execution",
+   "label": "Execution",
+   "fieldtype": "Link",
+   "options": "TruCMMS Work Execution",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "work_order",
+   "label": "Work Order",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Work Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Void Reason",
+   "fieldtype": "Long Text",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "actor",
+   "label": "Voided By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "occurred_on",
+   "label": "Voided On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  }
+ ],
+ "field_order": [
+  "execution",
+  "work_order",
+  "company",
+  "site",
+  "reason",
+  "actor",
+  "occurred_on"
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1
+  }
+ ]
+}

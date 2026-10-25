@@ -7,3 +7,5 @@ frappe.ui.form.on("VB Equipment", {
         }}));
     }
 });
+
+frappe.ui.form.on("VB Equipment",{refresh(frm){if(!frm.is_new())frm.add_custom_button(__("Maintenance History"),()=>frappe.set_route("query-report","TruCMMS Equipment History",{equipment:frm.doc.name}));}});

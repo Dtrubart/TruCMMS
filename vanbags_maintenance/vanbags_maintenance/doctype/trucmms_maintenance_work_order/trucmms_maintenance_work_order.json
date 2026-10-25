@@ -39,7 +39,8 @@
   "rework_by",
   "rework_on",
   "rework_reason",
-  "acceptance_method"
+  "acceptance_method",
+  "target_closure"
  ],
  "fields": [
   {
@@ -269,6 +270,12 @@
    "label": "Acceptance Method",
    "fieldtype": "Data",
    "read_only": 1
+  },
+  {
+   "fieldname": "target_closure",
+   "label": "Target Closure",
+   "fieldtype": "Datetime",
+   "description": "Optional target for accepted final closure; frozen on authorization."
   }
  ],
  "permissions": [
@@ -276,17 +283,20 @@
    "role": "TruCMMS Dispatcher",
    "read": 1,
    "write": 1,
-   "create": 1
+   "create": 1,
+   "report": 1
   },
   {
    "role": "TruCMMS Supervisor",
    "read": 1,
    "write": 1,
-   "create": 1
+   "create": 1,
+   "report": 1
   },
   {
    "role": "TruCMMS Technician",
-   "read": 1
+   "read": 1,
+   "report": 1
   },
   {
    "role": "System Manager",
@@ -300,10 +310,11 @@
   },
   {
    "role": "TruCMMS Requester",
-   "read": 1
+   "read": 1,
+   "report": 1
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "modified": "2026-10-24 20:28:27.097117"
+ "modified": "2026-10-24 21:03:38.652495"
 }

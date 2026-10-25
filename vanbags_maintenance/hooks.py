@@ -304,3 +304,7 @@ after_migrate = "vanbags_maintenance.lifecycle.setup"
 has_permission["TruCMMS Work Event"] = "vanbags_maintenance.lifecycle.event_permission"
 permission_query_conditions["TruCMMS Work Event"] = "vanbags_maintenance.lifecycle.event_query"
 doc_events["DocShare"]["validate"].append("vanbags_maintenance.lifecycle.validate_share")
+
+has_permission["TruCMMS Execution Adjustment"]="vanbags_maintenance.adjustments.has_permission"
+permission_query_conditions["TruCMMS Execution Adjustment"]="vanbags_maintenance.adjustments.query"
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.adjustments.validate_share")

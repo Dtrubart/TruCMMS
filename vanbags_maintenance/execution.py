@@ -29,6 +29,8 @@ def has_permission(doc,user=None,ptype=None):
     order=frappe.get_doc(wo.DT,doc.work_order)
     if not wo.can_read(order,user):frappe.throw('Execution access requires work order access.',frappe.PermissionError)
     if ptype=='write':
+        from vanbags_maintenance.adjustments import is_void
+        if is_void(doc.name):frappe.throw('Voided execution evidence is frozen.',frappe.PermissionError)
         # Native upload_file requires parent write permission. The controller still
         # rejects every update to a saved entry; only evidence may be appended.
         if doc.technician!=user:frappe.throw('Only the recording technician may append evidence.',frappe.PermissionError)
@@ -46,6 +48,8 @@ def query(user=None):
 def evidence_access(parent,user=None,write=False,existing=False):
     has_permission(parent,user,'read')
     if write:
+        from vanbags_maintenance.adjustments import is_void
+        if is_void(parent.name):frappe.throw('Voided execution evidence is frozen.',frappe.PermissionError)
         if existing:frappe.throw('Recorded execution evidence cannot be changed or deleted.',frappe.PermissionError)
         if parent.technician!=(user or frappe.session.user):frappe.throw('Only the recording technician may append evidence.',frappe.PermissionError)
         order=order_for_recording(parent.work_order,user)

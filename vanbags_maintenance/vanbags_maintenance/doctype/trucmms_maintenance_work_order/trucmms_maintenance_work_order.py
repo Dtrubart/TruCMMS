@@ -18,6 +18,7 @@ class TruCMMSMaintenanceWorkOrder(Document):
 
     def validate(self):
         org.validate_context(self)
+        if self.target_closure:self.target_closure=get_datetime(self.target_closure)
         old=self.get_doc_before_save()
         from vanbags_maintenance import lifecycle
         if old:
@@ -41,7 +42,7 @@ class TruCMMSMaintenanceWorkOrder(Document):
             a,b=old.get(f),self.get(f)
             if f.endswith('_on') and a and b:a,b=get_datetime(a),get_datetime(b)
             if a!=b:frappe.throw('Work order audit fields cannot be changed.')
-        if old.status!='Draft' and any(self.get(f)!=old.get(f) for f in ('subject','scope','priority','origin_type')):
+        if old.status!='Draft' and any(self.get(f)!=old.get(f) for f in ('subject','scope','priority','origin_type','target_closure')):
             frappe.throw('Authorized scope is immutable; a revision process is required.')
         if self.status!=old.status:
             if (old.status,self.status)==('Draft','Authorized'):

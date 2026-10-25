@@ -29,7 +29,7 @@ class TruCMMSWorkExecution(Document):
                 frappe.throw('Each performed task requires a task, valid result and findings.')
         # Serialize all entries for this technician, including work on different orders.
         frappe.db.sql('select name from `tabUser` where name=%s for update',(self.technician,))
-        if frappe.db.sql('select name from `tabTruCMMS Work Execution` where technician=%s and actual_start<%s and actual_end>%s for update',(self.technician,end,start)):
+        if frappe.db.sql('select name from `tabTruCMMS Work Execution` where technician=%s and actual_start<%s and actual_end>%s and not exists (select 1 from `tabTruCMMS Execution Adjustment` a where a.execution=`tabTruCMMS Work Execution`.name) for update',(self.technician,end,start)):
             frappe.throw('Actual time overlaps another execution entry for this technician.')
         self.actual_minutes=(end-start).total_seconds()/60
 

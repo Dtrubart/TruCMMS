@@ -1,5 +1,6 @@
 frappe.ui.form.on("TruCMMS Maintenance Work Order", {
  refresh(frm) {
+  if (!frm.is_new()) frm.add_custom_button(__("Work Register"),()=>frappe.set_route("query-report","TruCMMS Work Register",{work_order:frm.doc.name}));
   frm.trucmms_action=(action)=>frappe.prompt({fieldname:"reason",label:__("Reason / Summary"),fieldtype:"Small Text",reqd:1},async values=>{
    await frappe.call({method:"vanbags_maintenance.lifecycle.perform",args:{work_order:frm.doc.name,action,reason:values.reason}});
    await frm.reload_doc();
@@ -29,6 +30,6 @@ frappe.ui.form.on("TruCMMS Maintenance Work Order", {
     frm.add_custom_button(__("Record Execution"),()=>frappe.new_doc("TruCMMS Work Execution",{work_order:frm.doc.name,company:frm.doc.company,site:frm.doc.site}));
    }
   }
-  for (const field of ["subject", "scope", "priority"]) frm.set_df_property(field,"read_only",frm.doc.status !== "Draft");
+  for (const field of ["subject", "scope", "priority", "target_closure"]) frm.set_df_property(field,"read_only",frm.doc.status !== "Draft");
  }
 });

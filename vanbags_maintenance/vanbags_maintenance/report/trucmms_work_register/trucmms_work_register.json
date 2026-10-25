@@ -1,0 +1,29 @@
+{
+ "doctype": "Report",
+ "name": "TruCMMS Work Register",
+ "report_name": "TruCMMS Work Register",
+ "ref_doctype": "TruCMMS Maintenance Work Order",
+ "report_type": "Script Report",
+ "is_standard": "Yes",
+ "module": "Vanbags Maintenance",
+ "disabled": 0,
+ "prepared_report": 0,
+ "add_total_row": 0,
+ "roles": [
+  {
+   "role": "TruCMMS Dispatcher"
+  },
+  {
+   "role": "TruCMMS Supervisor"
+  },
+  {
+   "role": "TruCMMS Technician"
+  },
+  {
+   "role": "TruCMMS Requester"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
+}

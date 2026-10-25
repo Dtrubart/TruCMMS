@@ -24,7 +24,8 @@ def validate_action(doc,action,reason):
     requester='TruCMMS Requester' in frappe.get_roles() and doc.requester==user
     if action=='Complete Work':
         if wo.TECHNICIAN not in frappe.get_roles() or doc.assigned_to!=user:frappe.throw('Assigned technician required.',frappe.PermissionError)
-        latest=frappe.get_all('TruCMMS Work Execution',filters={'work_order':doc.name,'execution_cycle':cint(doc.execution_cycle) or 1},order_by='actual_end desc, creation desc',limit_page_length=1)
+        from vanbags_maintenance.adjustments import effective_latest
+        latest=effective_latest(doc.name,cint(doc.execution_cycle) or 1)
         if not latest:frappe.throw('Record execution for the current cycle before completing work.')
         entry=frappe.get_doc('TruCMMS Work Execution',latest[0].name)
         if entry.technician!=user or get_datetime(entry.actual_end)<get_datetime(doc.assigned_on):frappe.throw('Record execution for the current assigned technician before completing work.')
@@ -43,7 +44,7 @@ def validate_change(doc,old):
     if old.status in TERMINAL:frappe.throw('Closed and cancelled orders are immutable.',frappe.PermissionError)
     ctx=frappe.flags.get('trucmms_lifecycle')
     if ctx and ctx['name']==doc.name:
-        if any(doc.get(f)!=old.get(f) for f in wo.CONTEXT+('maintenance_request','requester','subject','scope','priority','assigned_to','origin_type')+wo.AUDIT):
+        if any(doc.get(f)!=old.get(f) for f in wo.CONTEXT+('maintenance_request','requester','subject','scope','priority','assigned_to','origin_type','target_closure')+wo.AUDIT):
             frappe.throw('Lifecycle actions cannot change authorized scope or assignment.')
         if doc.status!=validate_action(old,ctx['action'],ctx['reason']):frappe.throw('Invalid lifecycle destination.')
         return
