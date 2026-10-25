@@ -10,6 +10,11 @@ class TruCMMSWorkExecution(Document):
         self.company=order.company;self.site=order.site;self.execution_cycle=order.execution_cycle or 1
         self.technician=self.owner=frappe.session.user
         self.recorded_on=now_datetime()
+        from vanbags_maintenance.allocations import current
+        allocation=current(order,frappe.session.user)
+        self.allocation=allocation.name if allocation else None
+        self.discipline=allocation.discipline if allocation else None
+        self.team=allocation.team if allocation else None
 
     def validate(self):
         if not self.is_new():frappe.throw('Saved execution entries are immutable.',frappe.PermissionError)
@@ -19,8 +24,13 @@ class TruCMMSWorkExecution(Document):
         start,end=get_datetime(self.actual_start),get_datetime(self.actual_end)
         if not self.actual_start or not self.actual_end or end<=start:frappe.throw('Actual end must be after actual start.')
         if end>now_datetime():frappe.throw('Actual execution cannot be recorded in the future.')
-        if not order.assigned_on or start<get_datetime(order.assigned_on):frappe.throw('Execution must occur after the current assignment.')
+        from vanbags_maintenance.allocations import assignment_start
+        assigned=assignment_start(order,self.technician)
+        if not assigned or start<get_datetime(assigned):frappe.throw('Execution must occur after the current assignment.')
         if order.get('rework_on') and start<get_datetime(order.rework_on):frappe.throw('Rework execution must occur after the rework decision.')
+        if order.get('lifecycle_policy')=='C1':
+            from vanbags_maintenance.allocations import validate_execution
+            validate_execution(order,self,start,end)
         self.findings=(self.findings or '').strip()
         if not self.findings or not self.tasks:frappe.throw('Findings and at least one performed task are required.')
         for row in self.tasks:

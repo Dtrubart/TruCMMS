@@ -14,7 +14,9 @@ def order_for_recording(name, user=None, lock=False):
     else:
         order=frappe.get_doc(wo.DT,name)
     if not order.has_permission('read',user=user):frappe.throw('Work order access required.',frappe.PermissionError)
-    if (not org.in_scope(order,user) or order.status!='Assigned' or order.assigned_to!=user
+    from vanbags_maintenance.allocations import current
+    allocated=current(order,user)
+    if (not org.in_scope(order,user) or order.status!='Assigned' or (order.assigned_to!=user and not allocated)
             or wo.TECHNICIAN not in frappe.get_roles(user) or not frappe.db.get_value('User',user,'enabled')):
         frappe.throw('Only the currently assigned, authorized technician may record execution.',frappe.PermissionError)
     from vanbags_maintenance.teams import execution_check

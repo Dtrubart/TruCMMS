@@ -71,6 +71,13 @@
    "label": "Execution Cycle",
    "fieldtype": "Int",
    "read_only": 1
+  },
+  {
+   "fieldname": "before_snapshot",
+   "label": "Before Snapshot",
+   "fieldtype": "Code",
+   "read_only": 1,
+   "options": "JSON"
   }
  ],
  "field_order": [
@@ -83,7 +90,8 @@
   "actor",
   "occurred_on",
   "reason",
-  "execution_cycle"
+  "execution_cycle",
+  "before_snapshot"
  ],
  "permissions": [
   {
@@ -108,5 +116,6 @@
   }
  ],
  "sort_field": "creation",
- "sort_order": "DESC"
+ "sort_order": "DESC",
+ "modified": "2026-10-25 00:00:00"
 }

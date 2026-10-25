@@ -17,7 +17,7 @@ def visible(dt,filters,fields,order_by='creation asc'):
 def register(filters=None):
     filters=frappe._dict(filters or {})
     if not frappe.has_permission(wo.DT,'report'):frappe.throw('Work report permission required.',frappe.PermissionError)
-    allowed={'All','Open','Overdue','Technical Completed','Accepted','Closed','Cancelled','Unscheduled'}
+    allowed={'All','Open','Overdue','Technical Completed','Accepted','Verified','On Hold','Closed','Cancelled','Unscheduled'}
     view=filters.get('view') or 'Open'
     if view not in allowed:frappe.throw('Invalid report view.')
     conditions={k:filters[k] for k in ('company','site','equipment','name') if filters.get(k)}
@@ -26,7 +26,7 @@ def register(filters=None):
     if filters.get('from_date') and filters.get('to_date'):conditions['creation']=['between',[str(getdate(filters.from_date)),str(get_datetime(str(add_days(getdate(filters.to_date),1)))-timedelta(microseconds=1))]]
     elif filters.get('from_date'):conditions['creation']=['>=',getdate(filters.from_date)]
     elif filters.get('to_date'):conditions['creation']=['<',add_days(getdate(filters.to_date),1)]
-    rows=visible(wo.DT,conditions,['name','maintenance_request','company','site','equipment','functional_location','subject','status','assigned_to','target_closure','completed_on','accepted_on','closed_on','creation'])
+    rows=visible(wo.DT,conditions,['name','maintenance_request','company','site','equipment','functional_location','subject','status','assigned_to','target_closure','completed_on','accepted_on','closed_on','creation','scheduled_start','scheduled_end','execution_cycle','lifecycle_policy','verified_on'])
     now=now_datetime()
     for row in rows:
         row.overdue=int(row.status not in ('Closed','Cancelled') and bool(row.target_closure) and get_datetime(row.target_closure)<now)
@@ -52,7 +52,7 @@ def work_register(filters=None):
     columns=[dict(fieldname=n,label=l,fieldtype=t,options=o,width=w) for n,l,t,o,w in [
         ('name','Work Order','Link',wo.DT,180),('status','Status','Data',None,150),('company','Company','Link','Company',150),('site','Site','Link','TruCMMS Site',150),
         ('equipment','Equipment','Link','VB Equipment',160),('subject','Subject','Data',None,220),('maintenance_request','Request','Link','TruCMMS Maintenance Request',170),
-        ('assigned_to','Technician','Link','User',180),('target_closure','Target Closure','Datetime',None,170),('overdue','Overdue','Check',None,80),
+        ('execution_cycle','Current Cycle','Int',None,100),('scheduled_start','Scheduled Start','Datetime',None,170),('scheduled_end','Scheduled End','Datetime',None,170),('assigned_to','Technician','Link','User',180),('target_closure','Target Closure','Datetime',None,170),('overdue','Overdue','Check',None,80),
         ('recorded_minutes','Recorded Minutes','Float',None,140),('voided_minutes','Voided Minutes','Float',None,140),('effective_minutes','Effective Minutes','Float',None,145),('execution_count','Execution Entries','Int',None,120),('void_count','Voids','Int',None,80)]]
     summary=[dict(label=label,value=value,datatype=kind,indicator='Blue') for label,value,kind in [
         ('Orders',len(rows),'Int'),('Overdue',sum(r.overdue for r in rows),'Int'),('Closed',sum(r.status=='Closed' for r in rows),'Int'),
@@ -78,6 +78,7 @@ def equipment_history(filters=None):
             add(EX,e,e.actual_end,e.findings+' ('+str(e.actual_minutes)+' recorded minutes)',order=e.work_order)
         for e in visible(EVENT,{'work_order':['in',names]},['name','work_order','company','site','occurred_on','action','reason']):add(EVENT,e,e.occurred_on,e.action+': '+e.reason,order=e.work_order)
         for e in visible('TruCMMS Team Assignment',{'work_order':['in',names]},['name','work_order','company','site','assigned_on','team','discipline','technician']):add('TruCMMS Team Assignment',e,e.assigned_on,e.team+' / '+e.discipline+': '+e.technician,order=e.work_order)
+        for e in visible('TruCMMS Work Cycle',{'work_order':['in',names]},['name','work_order','company','site','recorded_on','execution_cycle','ended_action']):add('TruCMMS Work Cycle',e,e.recorded_on,'Cycle '+str(e.execution_cycle)+': '+e.ended_action,order=e.work_order)
         for e in visible(adj.DT,{'work_order':['in',names]},['name','work_order','company','site','occurred_on','execution','reason']):add(adj.DT,e,e.occurred_on,'Void '+e.execution+': '+e.reason,order=e.work_order)
     rows.sort(key=lambda r:(get_datetime(r['occurred_on']),r['record']))
     columns=[dict(fieldname=n,label=l,fieldtype=t,options=o,width=w) for n,l,t,o,w in [

@@ -319,3 +319,11 @@ has_permission["TruCMMS Team Assignment"]="vanbags_maintenance.lifecycle.event_p
 permission_query_conditions["TruCMMS Team Assignment"]="vanbags_maintenance.teams.assignment_query"
 doc_events["DocShare"]["validate"].append("vanbags_maintenance.teams.validate_share")
 doc_events["System Settings"]={"validate":"vanbags_maintenance.configuration.guard_system_timezone"}
+
+# C1 keeps the previous workflow as an inactive compatibility contract.
+after_install="vanbags_maintenance.work_cycle.setup"
+after_migrate="vanbags_maintenance.work_cycle.setup"
+for dt,method in [("TruCMMS Work Cycle","cycle_query"),("TruCMMS Work Allocation","allocation_query")]:
+    has_permission[dt]="vanbags_maintenance.lifecycle.event_permission"
+    permission_query_conditions[dt]="vanbags_maintenance.work_cycle."+method
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.work_cycle.validate_share")

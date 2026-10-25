@@ -1,0 +1,141 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Work Allocation",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "track_changes": 1,
+ "allow_rename": 0,
+ "field_order": [
+  "work_order",
+  "company",
+  "site",
+  "execution_cycle",
+  "technician",
+  "discipline",
+  "team",
+  "assignment",
+  "assigned_on",
+  "assigned_by",
+  "ended_on",
+  "ended_by",
+  "reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "label": "Work Order",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Maintenance Work Order"
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "Company"
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Site"
+  },
+  {
+   "fieldname": "execution_cycle",
+   "label": "Execution Cycle",
+   "fieldtype": "Int",
+   "reqd": 1
+  },
+  {
+   "fieldname": "technician",
+   "label": "Technician",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "discipline",
+   "label": "Discipline",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Discipline"
+  },
+  {
+   "fieldname": "team",
+   "label": "Team",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Maintenance Team"
+  },
+  {
+   "fieldname": "assignment",
+   "label": "Assignment",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Team Assignment"
+  },
+  {
+   "fieldname": "assigned_on",
+   "label": "Assigned On",
+   "fieldtype": "Datetime",
+   "reqd": 1
+  },
+  {
+   "fieldname": "assigned_by",
+   "label": "Assigned By",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "ended_on",
+   "label": "Ended On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ended_by",
+   "label": "Ended By",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "reason",
+   "label": "Reason",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1,
+   "select": 1
+  }
+ ],
+ "modified": "2026-10-25 00:00:00",
+ "engine": "InnoDB"
+}

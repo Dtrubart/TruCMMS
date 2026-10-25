@@ -21,6 +21,7 @@ def void_entry(execution,reason):
     order=frappe.get_doc(wo.DT,entry.work_order);order.check_permission('read')
     if not wo.supervisor():frappe.throw('Supervisor authorization required.',frappe.PermissionError)
     if order.status!='Assigned':frappe.throw('Execution can be voided only while the order is Assigned.')
+    if (entry.execution_cycle or 1)!=(order.execution_cycle or 1):frappe.throw('Execution from an archived cycle cannot be voided.')
     frappe.db.sql('select name from `tabUser` where name=%s for update',(entry.technician,))
     existing=frappe.db.get_value(DT,{'execution':execution},'name')
     if existing:return frappe.get_doc(DT,existing).as_dict()

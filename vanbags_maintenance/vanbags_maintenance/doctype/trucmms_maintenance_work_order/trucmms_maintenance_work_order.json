@@ -44,14 +44,37 @@
   "team_policy",
   "responsible_team",
   "required_discipline",
-  "team_assignment"
+  "team_assignment",
+  "lifecycle_policy",
+  "acceptance_policy_snapshot",
+  "acceptance_required",
+  "acceptance_user",
+  "scheduled_start",
+  "scheduled_end",
+  "direct_key",
+  "direct_payload_hash",
+  "direct_reason",
+  "has_review_history",
+  "hold_from_state",
+  "verified_by",
+  "verified_on",
+  "verified_reason",
+  "held_by",
+  "held_on",
+  "held_reason",
+  "resumed_by",
+  "resumed_on",
+  "resumed_reason",
+  "reopened_by",
+  "reopened_on",
+  "reopened_reason"
  ],
  "fields": [
   {
    "fieldname": "status",
    "label": "Status",
    "fieldtype": "Select",
-   "options": "Draft\nAuthorized\nAssigned\nTechnical Completed\nAccepted\nClosed\nCancelled",
+   "options": "Draft\nAuthorized\nAssigned\nOn Hold\nTechnical Completed\nVerified\nAccepted\nClosed\nCancelled",
    "default": "Draft",
    "read_only": 1,
    "reqd": 1
@@ -60,7 +83,7 @@
    "fieldname": "origin_type",
    "label": "Origin Type",
    "fieldtype": "Select",
-   "options": "Maintenance Request",
+   "options": "Maintenance Request\nDirect",
    "default": "Maintenance Request",
    "read_only": 1,
    "reqd": 1
@@ -70,7 +93,7 @@
    "label": "Maintenance Request",
    "fieldtype": "Link",
    "options": "TruCMMS Maintenance Request",
-   "reqd": 1,
+   "reqd": 0,
    "unique": 1,
    "read_only": 1
   },
@@ -310,6 +333,148 @@
    "reqd": 0,
    "read_only": 1,
    "options": "TruCMMS Team Assignment"
+  },
+  {
+   "fieldname": "lifecycle_policy",
+   "label": "Lifecycle Policy",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "options": "\nC1\nLegacy"
+  },
+  {
+   "fieldname": "acceptance_policy_snapshot",
+   "label": "Acceptance Policy Snapshot",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "acceptance_required",
+   "label": "Acceptance Required",
+   "fieldtype": "Check",
+   "read_only": 1
+  },
+  {
+   "fieldname": "acceptance_user",
+   "label": "Acceptance User",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "scheduled_start",
+   "label": "Scheduled Start",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "scheduled_end",
+   "label": "Scheduled End",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "direct_key",
+   "label": "Direct Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "direct_payload_hash",
+   "label": "Direct Payload Hash",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "direct_reason",
+   "label": "Direct Reason",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "has_review_history",
+   "label": "Has Review History",
+   "fieldtype": "Check",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hold_from_state",
+   "label": "Hold From State",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "verified_by",
+   "label": "Verified By",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "verified_on",
+   "label": "Verified On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "verified_reason",
+   "label": "Verified Reason",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "held_by",
+   "label": "Held By",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "held_on",
+   "label": "Held On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "held_reason",
+   "label": "Held Reason",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "resumed_by",
+   "label": "Resumed By",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "resumed_on",
+   "label": "Resumed On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "resumed_reason",
+   "label": "Resumed Reason",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reopened_by",
+   "label": "Reopened By",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "reopened_on",
+   "label": "Reopened On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reopened_reason",
+   "label": "Reopened Reason",
+   "fieldtype": "Small Text",
+   "read_only": 1
   }
  ],
  "permissions": [
@@ -350,5 +515,5 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "modified": "2026-10-24 23:00:00"
+ "modified": "2026-10-25 00:00:00"
 }

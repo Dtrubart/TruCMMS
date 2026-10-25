@@ -81,6 +81,27 @@
    "fieldtype": "Int",
    "read_only": 1,
    "default": "1"
+  },
+  {
+   "fieldname": "allocation",
+   "label": "Allocation",
+   "fieldtype": "Link",
+   "options": "TruCMMS Work Allocation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "discipline",
+   "label": "Discipline",
+   "fieldtype": "Link",
+   "options": "TruCMMS Discipline",
+   "read_only": 1
+  },
+  {
+   "fieldname": "team",
+   "label": "Team",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Team",
+   "read_only": 1
   }
  ],
  "field_order": [
@@ -94,7 +115,10 @@
   "actual_minutes",
   "findings",
   "tasks",
-  "execution_cycle"
+  "execution_cycle",
+  "allocation",
+  "discipline",
+  "team"
  ],
  "autoname": "format:EXE-{YYYY}-{#####}",
  "track_changes": 1,
@@ -126,5 +150,5 @@
    "read": 1
   }
  ],
- "modified": "2026-10-24 20:28:27.097909"
+ "modified": "2026-10-25 00:10:00"
 }

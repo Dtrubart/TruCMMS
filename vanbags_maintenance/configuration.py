@@ -55,7 +55,7 @@ def setup():
     if not frappe.db.exists('TruCMMS Deployment',{'package_fingerprint':fingerprint,'site_name':frappe.local.site}):
         previous_flag=frappe.flags.get('trucmms_deployment_insert');frappe.flags.trucmms_deployment_insert=True
         try:
-            frappe.get_doc({'doctype':'TruCMMS Deployment','package_fingerprint':fingerprint,'site_name':frappe.local.site,'framework_version':frappe.__version__,'policy_version':'A/B-1','migration_result':'Completed','storage_timezone':default,'deployed_on':frappe.utils.now_datetime()}).insert(ignore_permissions=True)
+            frappe.get_doc({'doctype':'TruCMMS Deployment','package_fingerprint':fingerprint,'site_name':frappe.local.site,'framework_version':frappe.__version__,'policy_version':'C-1','migration_result':'Completed','storage_timezone':default,'deployed_on':frappe.utils.now_datetime()}).insert(ignore_permissions=True)
         finally:frappe.flags.trucmms_deployment_insert=previous_flag
 
 

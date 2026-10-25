@@ -35,7 +35,10 @@ class WorkOrderCase(IntegrationTestCase):
         frappe.set_user('Administrator');frappe.db.rollback(save_point='wo_case');super().tearDown()
 
     def make(self):
-        frappe.set_user(self.users['dispatcher']);doc=frappe.get_doc(wo.from_request(self.request.name));doc.responsible_team=self.team;doc.required_discipline=self.discipline;doc.save();return doc
+        frappe.set_user(self.users['dispatcher']);doc=frappe.get_doc(wo.from_request(self.request.name))
+        if not getattr(self,'use_c_policy',False):
+            frappe.set_user('Administrator');frappe.db.set_value(wo.DT,doc.name,'lifecycle_policy','Legacy');doc.reload();frappe.set_user(self.users['dispatcher'])
+        doc.responsible_team=self.team;doc.required_discipline=self.discipline;doc.save();return doc
 
     def authorize(self):
         doc=self.make();frappe.set_user(self.users['supervisor']);return apply_workflow(doc.as_dict(),'Authorize')

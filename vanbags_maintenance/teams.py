@@ -170,6 +170,8 @@ def validate_order(doc,old):
         if doc.team_policy not in (None,'','Managed') or doc.team_assignment:frappe.throw('New orders must use managed team eligibility.')
         doc.team_policy='Managed';return
     locked_sql('SELECT name FROM `tabTruCMMS Maintenance Work Order` WHERE name=%s FOR UPDATE',(doc.name,))
+    cctx=frappe.flags.get('trucmms_c_action')
+    if cctx and cctx['name']==doc.name and cctx['action']=='Reopen Order':return
     adoption=frappe.flags.get('trucmms_team_adoption')
     adopting=bool(adoption and adoption['name']==doc.name and old.team_policy=='Legacy')
     if doc.team_policy!=old.team_policy and not adopting:frappe.throw('Use controlled legacy adoption.',frappe.PermissionError)
@@ -185,7 +187,7 @@ def validate_order(doc,old):
         if team.company!=doc.company:frappe.throw('Team and order company must match.')
     if doc.assigned_to and (changed or old.status=='Authorized' and doc.status=='Assigned' or adopting):
         membership,grant=eligibility(doc,lock=True)
-        if doc.status=='Assigned':
+        if doc.status=='Assigned' or cctx and cctx['action']=='Reassign Work' and doc.status=='On Hold':
             previous=frappe.flags.get('trucmms_assignment_insert');frappe.flags.trucmms_assignment_insert=True
             try:
                 row=frappe.get_doc({'doctype':ASSIGN,'work_order':doc.name,'company':doc.company,'site':doc.site,'team':doc.responsible_team,'discipline':doc.required_discipline,'technician':doc.assigned_to,'membership':membership,'site_authorization':grant,'assigned_on':now_datetime(),'assigned_by':frappe.session.user,'reason':adoption['reason'] if adopting else 'Authorized technician assignment'}).insert(ignore_permissions=True)
@@ -193,7 +195,10 @@ def validate_order(doc,old):
             finally:frappe.flags.trucmms_assignment_insert=previous
 
 def execution_check(order,user=None):
-    if order.team_policy=='Managed':eligibility(order,user,lock=True)
+    if order.get('lifecycle_policy')=='C1':
+        from vanbags_maintenance.allocations import execution_context
+        execution_context(order,user or order.assigned_to)
+    elif order.team_policy=='Managed':eligibility(order,user,lock=True)
 
 @frappe.whitelist(methods=['POST'])
 def adopt_legacy(work_order,team,discipline,reason):

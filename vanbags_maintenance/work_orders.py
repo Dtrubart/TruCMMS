@@ -17,7 +17,9 @@ def can_read(doc,user=None):
     user=user or frappe.session.user
     if not org.in_scope(doc,user):return False
     roles=frappe.get_roles(user)
-    return org.privileged(user) or SUPERVISOR in roles or DISPATCHER in roles or (TECHNICIAN in roles and doc.status not in ('Draft','Authorized') and doc.assigned_to==user) or ('TruCMMS Requester' in roles and doc.get('requester')==user and bool(doc.get('completed_on') or doc.get('rework_on') or doc.get('cancelled_on')))
+    from vanbags_maintenance.allocations import current
+    allocated=bool(current(doc,user)) if TECHNICIAN in roles else False
+    return org.privileged(user) or SUPERVISOR in roles or DISPATCHER in roles or (TECHNICIAN in roles and doc.status not in ('Draft','Authorized') and (doc.assigned_to==user or allocated)) or ('TruCMMS Requester' in roles and user in (doc.get('requester'),doc.get('acceptance_user')) and bool(doc.get('completed_on') or doc.get('rework_on') or doc.get('cancelled_on') or doc.get('has_review_history')))
 
 
 def has_permission(doc,user=None,ptype=None):
@@ -34,8 +36,10 @@ def query(user=None):
     scope=org.query(DT,user)
     if supervisor(user) or DISPATCHER in frappe.get_roles(user):return scope
     roles=frappe.get_roles(user);clauses=[]
-    if TECHNICIAN in roles:clauses.append(f"(`tab{DT}`.status NOT IN ('Draft','Authorized') AND `tab{DT}`.assigned_to={frappe.db.escape(user)})")
-    if 'TruCMMS Requester' in roles:clauses.append(f"(`tab{DT}`.requester={frappe.db.escape(user)} AND (`tab{DT}`.completed_on IS NOT NULL OR `tab{DT}`.rework_on IS NOT NULL OR `tab{DT}`.cancelled_on IS NOT NULL))")
+    if TECHNICIAN in roles:
+        from vanbags_maintenance.allocations import participant_sql
+        clauses.append(f"(`tab{DT}`.status NOT IN ('Draft','Authorized') AND (`tab{DT}`.assigned_to={frappe.db.escape(user)} OR ({participant_sql(user)})))")
+    if 'TruCMMS Requester' in roles:clauses.append(f"((`tab{DT}`.requester={frappe.db.escape(user)} OR `tab{DT}`.acceptance_user={frappe.db.escape(user)}) AND (`tab{DT}`.completed_on IS NOT NULL OR `tab{DT}`.rework_on IS NOT NULL OR `tab{DT}`.cancelled_on IS NOT NULL OR `tab{DT}`.has_review_history=1))")
     return f"({scope}) AND ("+' OR '.join(clauses)+')' if clauses else '1=0'
 
 

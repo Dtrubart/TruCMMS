@@ -13,6 +13,9 @@ EDGES={'Complete Work':('Assigned','Technical Completed'),'Accept Work':('Techni
 
 
 def validate_action(doc,action,reason):
+    if doc.get('lifecycle_policy')=='C1':
+        from vanbags_maintenance.work_cycle import validate_action as current
+        return current(doc,action,reason)
     user=frappe.session.user
     if not org.in_scope(doc,user) or not wo.can_read(doc,user):frappe.throw('Company/Site and work order access required.',frappe.PermissionError)
     if not (reason or '').strip():frappe.throw('A reason or summary is required.')
@@ -43,6 +46,9 @@ def validate_action(doc,action,reason):
 
 
 def validate_change(doc,old):
+    if old.get('lifecycle_policy')=='C1' or doc.get('lifecycle_policy')=='C1' or frappe.flags.get('trucmms_c_action'):
+        from vanbags_maintenance.work_cycle import validate_change as current
+        return current(doc,old)
     if old.status in TERMINAL:frappe.throw('Closed and cancelled orders are immutable.',frappe.PermissionError)
     ctx=frappe.flags.get('trucmms_lifecycle')
     if ctx and ctx['name']==doc.name:
@@ -63,6 +69,9 @@ def perform(work_order,action,reason):
     reason=(reason or '').strip()
     frappe.db.sql('select name from `tabTruCMMS Maintenance Work Order` where name=%s for update',(work_order,))
     doc=frappe.get_doc(DT,work_order)
+    if doc.get('lifecycle_policy')=='C1' or action=='Reopen Order':
+        from vanbags_maintenance.work_cycle import perform as current
+        return current(work_order,action,reason)
     doc.check_permission('read')
     target=validate_action(doc,action,reason)
     before=doc.status;stamp=now_datetime();user=frappe.session.user
