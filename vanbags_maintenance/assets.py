@@ -316,6 +316,7 @@ def setup():
     frappe.db.sql("UPDATE `tabVB Equipment` SET placement_policy='Legacy' WHERE COALESCE(placement_policy,'')=''")
     frappe.db.add_index(INSTALL,['equipment','effective_until'],'equipment_active_placement')
     frappe.db.add_index(INSTALL,['company','site','location','effective_from'],'position_history')
+    setup_navigation()
     configuration.record_deployment()
 
 
@@ -359,3 +360,14 @@ def asset_snapshot(values):
     result={k:values.get(k) for k in fields}
     result['attributes']=[{k:row.get(k) for k in ('key','value','value_type','unit')} for row in values.get('attributes',[])]
     return result
+
+
+def setup_navigation():
+    # Add supported D entries without resetting an operator's other workspace links.
+    entries=[(PROFILE,'DocType'),(CRIT,'DocType'),('TruCMMS Installation Register','Report')]
+    for dt,table in [('Workspace','links'),('Workspace Sidebar','items')]:
+        doc=frappe.get_doc(dt,'TruCMMS');changed=False
+        for name,kind in entries:
+            if not any(row.link_to==name and row.link_type==kind for row in doc.get(table)):
+                doc.append(table,{'type':'Link','label':name,'link_type':kind,'link_to':name});changed=True
+        if changed:doc.save(ignore_permissions=True)
