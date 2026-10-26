@@ -370,4 +370,10 @@ def setup_navigation():
         for name,kind in entries:
             if not any(row.link_to==name and row.link_type==kind for row in doc.get(table)):
                 doc.append(table,{'type':'Link','label':name,'link_type':kind,'link_to':name});changed=True
-        if changed:doc.save(ignore_permissions=True)
+        if changed:
+            # Workspace Sidebar exports on save even during migration/tests in Frappe 16.
+            # Updating site navigation must never rewrite the installed source package.
+            previous=(frappe.flags.get('in_import'),frappe.flags.get('in_patch'))
+            frappe.flags.in_import=True;frappe.flags.in_patch=True
+            try:doc.save(ignore_permissions=True)
+            finally:frappe.flags.in_import,frappe.flags.in_patch=previous

@@ -1,4 +1,5 @@
 import frappe
+from unittest.mock import patch
 from frappe.tests import IntegrationTestCase
 
 
@@ -26,7 +27,8 @@ class TestTruCMMSNavigation(IntegrationTestCase):
 		self.assertEqual(sidebar.items[0].link_to, "TruCMMS")
 		self.assertEqual(sidebar.items[0].link_type, "Workspace")
 
-	def test_d_navigation_upgrade_adds_links_without_resetting_custom_entries(self):
+	@patch("frappe.desk.doctype.workspace_sidebar.workspace_sidebar.WorkspaceSidebar.export_sidebar")
+	def test_d_navigation_upgrade_adds_links_without_resetting_custom_entries(self,_export):
 		from vanbags_maintenance.assets import setup_navigation
 		frappe.db.savepoint('navigation_d_case');original=frappe.session.user;frappe.set_user('Administrator')
 		try:

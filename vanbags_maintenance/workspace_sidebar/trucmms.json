@@ -1,216 +1,129 @@
 {
- "app": "vanbags_maintenance",
  "creation": "2026-10-23 21:09:34.956376",
+ "modified": "2026-10-24 23:00:00",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
  "docstatus": 0,
  "doctype": "Workspace Sidebar",
+ "name": "TruCMMS",
+ "title": "TruCMMS",
+ "app": "vanbags_maintenance",
+ "module": "Vanbags Maintenance",
  "header_icon": "assets",
- "idx": 0,
+ "standard": 1,
  "items": [
   {
-   "child": 0,
-   "collapsible": 0,
-   "icon": "home",
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Home",
-   "link_to": "TruCMMS",
    "link_type": "Workspace",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS",
+   "icon": "home",
+   "child": 0
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Equipment",
+   "link_type": "DocType",
    "link_to": "VB Equipment",
-   "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "child": 0
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Equipment Categories",
+   "link_type": "DocType",
    "link_to": "VB Equipment Category",
-   "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "child": 0
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Functional Locations",
+   "link_type": "DocType",
    "link_to": "VB Equipment Location",
-   "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "child": 0
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Sites",
-   "link_to": "TruCMMS Site",
    "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Site"
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Maintenance Requests",
-   "link_to": "TruCMMS Maintenance Request",
    "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Maintenance Request"
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Maintenance Work Orders",
-   "link_to": "TruCMMS Maintenance Work Order",
    "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Maintenance Work Order"
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Work Execution",
-   "link_to": "TruCMMS Work Execution",
    "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Work Execution"
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "TruCMMS Work Register",
-   "link_to": "TruCMMS Work Register",
    "link_type": "Report",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Work Register"
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "TruCMMS Equipment History",
-   "link_to": "TruCMMS Equipment History",
    "link_type": "Report",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Equipment History"
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Maintenance Team",
-   "link_to": "TruCMMS Maintenance Team",
    "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Maintenance Team"
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Discipline",
-   "link_to": "TruCMMS Discipline",
    "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Discipline"
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Team Membership",
-   "link_to": "TruCMMS Team Membership",
    "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Team Membership"
   },
   {
-   "child": 0,
-   "collapsible": 0,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "Team Site Authorization",
-   "link_to": "TruCMMS Team Site Authorization",
    "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Team Site Authorization"
   },
   {
-   "child": 0,
-   "collapsible": 1,
-   "indent": 0,
-   "keep_closed": 0,
-   "label": "Preserved custom company link",
-   "link_to": "Company",
-   "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
-  },
-  {
-   "child": 0,
-   "collapsible": 1,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "TruCMMS Equipment Profile",
+   "link_type": "DocType",
    "link_to": "TruCMMS Equipment Profile",
-   "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "collapsible": 0,
+   "child": 0
   },
   {
-   "child": 0,
-   "collapsible": 1,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "TruCMMS Criticality",
-   "link_to": "TruCMMS Criticality",
    "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Criticality",
+   "collapsible": 0,
+   "child": 0
   },
   {
-   "child": 0,
-   "collapsible": 1,
-   "indent": 0,
-   "keep_closed": 0,
+   "type": "Link",
    "label": "TruCMMS Installation Register",
-   "link_to": "TruCMMS Installation Register",
    "link_type": "Report",
-   "show_arrow": 0,
-   "type": "Link"
+   "link_to": "TruCMMS Installation Register",
+   "collapsible": 0,
+   "child": 0
   }
- ],
- "modified": "2026-10-26 10:15:09.322461",
- "modified_by": "Administrator",
- "module": "Vanbags Maintenance",
- "name": "TruCMMS",
- "owner": "Administrator",
- "standard": 1,
- "title": "TruCMMS"
+ ]
 }
