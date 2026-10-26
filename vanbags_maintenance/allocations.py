@@ -5,13 +5,18 @@ from vanbags_maintenance import teams,work_orders as wo
 from vanbags_maintenance.work_contract import atomic
 DT='TruCMMS Work Allocation'
 
-def current(order,user=None):
+def current(order,user=None,lock=False):
     if order.get('lifecycle_policy')!='C1':return None
-    rows=frappe.get_all(DT,filters={'work_order':order.name,'execution_cycle':cint(order.execution_cycle),'technician':user or frappe.session.user,'ended_on':['is','not set']},fields=['name','technician','discipline','team','assigned_on','assigned_by','assignment'])
+    if lock:
+        rows=teams.locked_sql(f'SELECT name,technician,discipline,team,assigned_on,assigned_by,assignment FROM `tab{DT}` WHERE work_order=%s AND execution_cycle=%s AND technician=%s AND ended_on IS NULL FOR UPDATE',(order.name,cint(order.execution_cycle),user or frappe.session.user),as_dict=True)
+    else:
+        rows=frappe.get_all(DT,filters={'work_order':order.name,'execution_cycle':cint(order.execution_cycle),'technician':user or frappe.session.user,'ended_on':['is','not set']},fields=['name','technician','discipline','team','assigned_on','assigned_by','assignment'])
     if len(rows)>1:frappe.throw('Duplicate active allocation; administrative review required.')
     return rows[0] if rows else None
 
-def active(order):
+def active(order,lock=False):
+    if lock:
+        return teams.locked_sql(f'SELECT name,technician,discipline,team,assigned_on,assigned_by,assignment FROM `tab{DT}` WHERE work_order=%s AND execution_cycle=%s AND ended_on IS NULL ORDER BY name FOR UPDATE',(order.name,cint(order.execution_cycle)),as_dict=True)
     return frappe.get_all(DT,filters={'work_order':order.name,'execution_cycle':cint(order.execution_cycle),'ended_on':['is','not set']},fields=['name','technician','discipline','team','assigned_on','assigned_by','assignment'])
 
 def write(values):
@@ -29,19 +34,19 @@ def end(row,reason):
     finally:frappe.flags.trucmms_allocation_write=previous
 
 def ensure_primary(doc,method=None):
-    if doc.get('lifecycle_policy')!='C1' or not (doc.status=='Assigned' or doc.status=='On Hold' and doc.hold_from_state=='Assigned') or not doc.assigned_to or current(doc,doc.assigned_to):return
+    if doc.get('lifecycle_policy')!='C1' or not (doc.status=='Assigned' or doc.status=='On Hold' and doc.hold_from_state=='Assigned') or not doc.assigned_to or current(doc,doc.assigned_to,lock=True):return
     if not doc.team_assignment:frappe.throw('Managed team responsibility is required before C execution.')
     write({'work_order':doc.name,'company':doc.company,'site':doc.site,'execution_cycle':doc.execution_cycle,'technician':doc.assigned_to,'discipline':doc.required_discipline,'team':doc.responsible_team,'assignment':doc.team_assignment,'assigned_on':doc.assigned_on,'assigned_by':doc.assigned_by,'reason':'Primary authorized assignment'})
 
 def execution_context(order,user):
-    row=current(order,user)
+    row=current(order,user,lock=True)
     if not row:frappe.throw('An active current-cycle allocation is required.',frappe.PermissionError)
     context=frappe._dict(order.as_dict());context.required_discipline=row.discipline;context.responsible_team=row.team;context.assigned_to=user
     teams.eligibility(context,user,lock=True)
     return row
 
 def assignment_start(order,user):
-    row=current(order,user)
+    row=current(order,user,lock=True)
     return row.assigned_on if row else order.assigned_on
 
 def participant_sql(user):
@@ -54,7 +59,7 @@ def archive_and_carry(order,rows,reason,carry=False):
             write({'work_order':order.name,'company':order.company,'site':order.site,'execution_cycle':order.execution_cycle,'technician':row.technician,'discipline':row.discipline,'team':row.team,'assignment':row.assignment,'assigned_on':now_datetime(),'assigned_by':row.assigned_by,'reason':'Carry forward authorized assignment: '+reason})
 
 def check_completion(order):
-    rows=active(order)
+    rows=active(order,lock=True)
     if not rows or not any(r.technician==order.assigned_to for r in rows):frappe.throw('Primary allocation is missing.')
     for row in rows:
         execution_context(order,row.technician)
@@ -71,7 +76,7 @@ def add(work_order,technician,discipline,reason):
     if not wo.supervisor():frappe.throw('Supervisor required.',frappe.PermissionError)
     if order.lifecycle_policy!='C1' or order.status!='Assigned':frappe.throw('Add participants only to assigned C orders.')
     if not (reason or '').strip():frappe.throw('Allocation reason required.')
-    if current(order,technician):frappe.throw('This technician already has an active allocation.')
+    if current(order,technician,lock=True):frappe.throw('This technician already has an active allocation.')
     context=frappe._dict(order.as_dict());context.required_discipline=discipline;context.assigned_to=technician
     member,grant=teams.eligibility(context,technician,lock=True)
     previous=frappe.flags.get('trucmms_assignment_insert');frappe.flags.trucmms_assignment_insert=True
@@ -106,9 +111,9 @@ def mine(work_order):
 
 
 def validate_execution(order,entry,start,end):
-    row=current(order,entry.technician)
+    row=current(order,entry.technician,lock=True)
     if not row or (entry.allocation,entry.discipline,entry.team)!=(row.name,row.discipline,row.team):frappe.throw('Execution allocation context is server controlled.')
-    events=frappe.get_all('TruCMMS Work Event',filters={'work_order':order.name,'execution_cycle':order.execution_cycle,'action':['in',['Hold Work','Resume Work']]},fields=['action','occurred_on'],order_by='occurred_on asc')
+    events=teams.locked_sql("SELECT action,occurred_on FROM `tabTruCMMS Work Event` WHERE work_order=%s AND execution_cycle=%s AND action IN ('Hold Work','Resume Work') ORDER BY occurred_on,name FOR UPDATE",(order.name,order.execution_cycle),as_dict=True)
     held=None
     for event in events:
         if event.action=='Hold Work':held=get_datetime(event.occurred_on)

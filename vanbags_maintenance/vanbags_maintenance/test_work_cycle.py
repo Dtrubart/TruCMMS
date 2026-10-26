@@ -181,3 +181,10 @@ class TestWorkCycle(WorkOrderCase):
         frappe.set_user('Administrator');doc=self.direct();frappe.set_user('Administrator');frappe.db.set_value(wo.DT,doc.name,'team_policy','Legacy')
         frappe.set_user(self.users['supervisor']);teams.adopt_legacy(doc.name,self.team,self.discipline,'Explicit team adoption reason')
         self.assertEqual(frappe.db.get_value(cycle.EVENT,{'work_order':doc.name,'action':'Adopt Team Eligibility'},'reason'),'Explicit team adoption reason')
+
+    def test_evidence_from_previous_allocation_is_frozen_after_reallocation(self):
+        from frappe.utils.file_manager import save_file
+        frappe.set_user(self.users['supervisor']);first=allocations.add(self.order.name,self.users['other'],self.discipline,'First scope');self.backdate(self.order);entry=self.entry('other')
+        frappe.set_user(self.users['supervisor']);allocations.remove(first['name'],'First scope ended');allocations.add(self.order.name,self.users['other'],self.discipline,'New scope')
+        frappe.set_user(self.users['other'])
+        with self.assertRaises(frappe.PermissionError):save_file(self.token+'old-allocation.txt',b'Late prior allocation evidence','TruCMMS Work Execution',entry.name,is_private=1)

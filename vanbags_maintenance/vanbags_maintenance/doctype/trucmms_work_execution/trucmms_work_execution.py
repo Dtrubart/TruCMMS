@@ -11,7 +11,7 @@ class TruCMMSWorkExecution(Document):
         self.technician=self.owner=frappe.session.user
         self.recorded_on=now_datetime()
         from vanbags_maintenance.allocations import current
-        allocation=current(order,frappe.session.user)
+        allocation=current(order,frappe.session.user,lock=True)
         self.allocation=allocation.name if allocation else None
         self.discipline=allocation.discipline if allocation else None
         self.team=allocation.team if allocation else None

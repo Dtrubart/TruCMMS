@@ -75,7 +75,7 @@ def validate_action(doc,action,reason):
         if not supervisor:frappe.throw('Supervisor resume required.',frappe.PermissionError)
         if doc.status!='On Hold' or doc.hold_from_state not in ('Authorized','Assigned'):frappe.throw('This order is not resumable.')
         if doc.hold_from_state=='Assigned':
-            for row in allocations.active(doc):allocations.execution_context(doc,row.technician)
+            for row in allocations.active(doc,lock=True):allocations.execution_context(doc,row.technician)
         return doc.hold_from_state
     if action=='Cancel Order':
         if not supervisor:frappe.throw('Supervisor cancellation required.',frappe.PermissionError)
@@ -112,7 +112,7 @@ def perform(work_order,action,reason):
     target=validate_action(doc,action,reason);before=doc.status;snapshot=doc.as_dict();stamp=now_datetime();user=frappe.session.user
     prefixes={'Complete Work':'completed','Verify Work':'verified','Accept Work':'accepted','Accept on Behalf':'accepted','Close Order':'closed','Request Rework':'rework','Hold Work':'held','Resume Work':'resumed','Cancel Order':'cancelled','Reopen Order':'reopened'}
     allowed=set(old_policy.AUDIT+AUDIT+('execution_cycle','has_review_history','hold_from_state'))
-    rows=allocations.active(doc) if doc.lifecycle_policy=='C1' else []
+    rows=allocations.active(doc,lock=True) if doc.lifecycle_policy=='C1' else []
     if action in ('Request Rework','Reopen Order'):
         archive(doc,action)
         doc.execution_cycle=(cint(doc.execution_cycle) or 1)+1
@@ -154,9 +154,9 @@ def reassign(work_order,technician,reason,team=None,discipline=None):
     if not (reason or '').strip():frappe.throw('Reassignment reason required.')
     team=team or doc.responsible_team;discipline=discipline or doc.required_discipline
     if (technician,team,discipline)==(doc.assigned_to,doc.responsible_team,doc.required_discipline):frappe.throw('Choose a different assignment.')
-    if team!=doc.responsible_team and any(r.technician!=doc.assigned_to for r in allocations.active(doc)):frappe.throw('End secondary allocations before changing the responsible team.')
-    if technician!=doc.assigned_to and allocations.current(doc,technician):frappe.throw('End the existing secondary allocation before making it primary.')
-    snapshot=doc.as_dict();old=allocations.current(doc,doc.assigned_to)
+    if team!=doc.responsible_team and any(r.technician!=doc.assigned_to for r in allocations.active(doc,lock=True)):frappe.throw('End secondary allocations before changing the responsible team.')
+    if technician!=doc.assigned_to and allocations.current(doc,technician,lock=True):frappe.throw('End the existing secondary allocation before making it primary.')
+    snapshot=doc.as_dict();old=allocations.current(doc,doc.assigned_to,lock=True)
     if old:allocations.end(old,reason)
     doc.assigned_to=technician;doc.responsible_team=team;doc.required_discipline=discipline
     save(doc,'Reassign Work',reason,('assigned_to','responsible_team','required_discipline','team_assignment')+wo.AUDIT)
