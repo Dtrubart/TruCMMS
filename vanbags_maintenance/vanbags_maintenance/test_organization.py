@@ -70,7 +70,10 @@ class TestOrganization(IntegrationTestCase):
         equipment.site=SITE_A2;equipment.location=self.locations[1].name
         with self.assertRaises(frappe.PermissionError):equipment.save()
         grant_scope(self.user,site=SITE_A2)
-        equipment.save();self.assertEqual(equipment.name,original)
+        equipment.reload()
+        from vanbags_maintenance.assets import place
+        moved=place(equipment.name,SITE_A2,self.locations[1].name,'Authorized controlled transfer')
+        self.assertEqual(moved['name'],original)
 
     def test_sharing_cannot_expand_scope(self):
         grant_scope(self.user)

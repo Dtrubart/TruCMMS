@@ -1,0 +1,100 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Equipment Profile",
+ "module": "Vanbags Maintenance",
+ "autoname": "field:code",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "fields": [
+  {
+   "fieldname": "code",
+   "label": "Code",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "profile_name",
+   "label": "Profile Name",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "version",
+   "label": "Version",
+   "fieldtype": "Int",
+   "reqd": 1,
+   "default": 1
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Disabled",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "definitions",
+   "label": "Definitions",
+   "fieldtype": "Table",
+   "reqd": 1,
+   "options": "TruCMMS Attribute Definition"
+  }
+ ],
+ "field_order": [
+  "code",
+  "profile_name",
+  "version",
+  "disabled",
+  "definitions"
+ ],
+ "permissions": [
+  {
+   "role": "VB Maintenance User",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  }
+ ],
+ "istable": 0,
+ "allow_import": 0,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "engine": "InnoDB"
+}

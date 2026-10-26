@@ -21,6 +21,8 @@ class VBEquipment(Document):
 		self.serial_number = (self.serial_number or "").strip()
 
 	def validate(self):
+		from vanbags_maintenance.assets import validate_equipment
+		validate_equipment(self)
 		validate_context(self)
 		if not self.equipment_code:
 			frappe.throw(
@@ -95,3 +97,9 @@ class VBEquipment(Document):
 						f"Cannot assign a disabled Location: {self.location}",
 						title="Invalid Location",
 					)
+
+	def after_insert(self):
+		from vanbags_maintenance.assets import initialize_placement
+		initialize_placement(self)
+	def on_trash(self):
+		if frappe.db.exists('TruCMMS Equipment Installation',{'equipment':self.name}):frappe.throw('Equipment with placement history must be retained.',frappe.PermissionError)

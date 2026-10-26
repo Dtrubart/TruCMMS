@@ -1,0 +1,33 @@
+{
+ "doctype": "Report",
+ "name": "TruCMMS Installation Register",
+ "report_name": "TruCMMS Installation Register",
+ "ref_doctype": "TruCMMS Equipment Installation",
+ "report_type": "Script Report",
+ "is_standard": "Yes",
+ "module": "Vanbags Maintenance",
+ "roles": [
+  {
+   "role": "VB Maintenance User"
+  },
+  {
+   "role": "VB Maintenance Manager"
+  },
+  {
+   "role": "TruCMMS Requester"
+  },
+  {
+   "role": "TruCMMS Dispatcher"
+  },
+  {
+   "role": "TruCMMS Supervisor"
+  },
+  {
+   "role": "TruCMMS Technician"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "disabled": 0
+}

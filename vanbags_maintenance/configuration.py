@@ -35,7 +35,7 @@ def local_instant(value,site,fold=None):
 def guard_system_timezone(doc,method=None):
     old=doc.get_doc_before_save()
     if old and old.time_zone!=doc.time_zone:
-        if frappe.db.count('TruCMMS Maintenance Work Order') or frappe.db.count('TruCMMS Team Membership') or frappe.db.count('TruCMMS Team Site Authorization'):
+        if frappe.db.count('TruCMMS Equipment Installation') or frappe.db.count('TruCMMS Maintenance Work Order') or frappe.db.count('TruCMMS Team Membership') or frappe.db.count('TruCMMS Team Site Authorization'):
             frappe.throw('A versioned timestamp migration is required before changing the system timezone. Configure the operating timezone on TruCMMS Site instead.')
 
 def setup(record=True):
@@ -60,7 +60,7 @@ def record_deployment():
     if not frappe.db.exists('TruCMMS Deployment',{'package_fingerprint':fingerprint,'site_name':frappe.local.site}):
         previous_flag=frappe.flags.get('trucmms_deployment_insert');frappe.flags.trucmms_deployment_insert=True
         try:
-            frappe.get_doc({'doctype':'TruCMMS Deployment','package_fingerprint':fingerprint,'site_name':frappe.local.site,'framework_version':frappe.__version__,'policy_version':'C-1','migration_result':'Completed','storage_timezone':default,'deployed_on':frappe.utils.now_datetime()}).insert(ignore_permissions=True)
+            frappe.get_doc({'doctype':'TruCMMS Deployment','package_fingerprint':fingerprint,'site_name':frappe.local.site,'framework_version':frappe.__version__,'policy_version':'D-1','migration_result':'Completed','storage_timezone':default,'deployed_on':frappe.utils.now_datetime()}).insert(ignore_permissions=True)
         finally:frappe.flags.trucmms_deployment_insert=previous_flag
 
 

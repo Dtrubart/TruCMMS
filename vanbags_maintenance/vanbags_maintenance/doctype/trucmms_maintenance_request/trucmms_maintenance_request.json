@@ -21,7 +21,8 @@
   "requested_by",
   "submitted_on",
   "reviewed_by",
-  "reviewed_on"
+  "reviewed_on",
+  "equipment_snapshot"
  ],
  "fields": [
   {
@@ -117,6 +118,12 @@
    "fieldname": "reviewed_on",
    "label": "Decision On",
    "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "equipment_snapshot",
+   "label": "Equipment Context at Creation",
+   "fieldtype": "JSON",
    "read_only": 1
   }
  ],

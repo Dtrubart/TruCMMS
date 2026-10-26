@@ -141,6 +141,24 @@
    "link_to": "TruCMMS Team Site Authorization",
    "hidden": 0,
    "onboard": 0
+  },
+  {
+   "type": "Link",
+   "label": "TruCMMS Equipment Profile",
+   "link_type": "DocType",
+   "link_to": "TruCMMS Equipment Profile"
+  },
+  {
+   "type": "Link",
+   "label": "TruCMMS Criticality",
+   "link_type": "DocType",
+   "link_to": "TruCMMS Criticality"
+  },
+  {
+   "type": "Link",
+   "label": "TruCMMS Installation Register",
+   "link_type": "Report",
+   "link_to": "TruCMMS Installation Register"
   }
  ]
 }

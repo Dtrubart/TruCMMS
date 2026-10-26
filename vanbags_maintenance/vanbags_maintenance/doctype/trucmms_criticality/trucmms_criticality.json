@@ -1,0 +1,97 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Criticality",
+ "module": "Vanbags Maintenance",
+ "autoname": "field:code",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "fields": [
+  {
+   "fieldname": "code",
+   "label": "Code",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "criticality_name",
+   "label": "Criticality Name",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "rank",
+   "label": "Rank",
+   "fieldtype": "Int",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "label": "Description",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Disabled",
+   "fieldtype": "Check"
+  }
+ ],
+ "field_order": [
+  "code",
+  "criticality_name",
+  "rank",
+  "description",
+  "disabled"
+ ],
+ "permissions": [
+  {
+   "role": "VB Maintenance User",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  }
+ ],
+ "istable": 0,
+ "allow_import": 0,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "engine": "InnoDB"
+}

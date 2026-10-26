@@ -327,3 +327,12 @@ for dt,method in [("TruCMMS Work Cycle","cycle_query"),("TruCMMS Work Allocation
     has_permission[dt]="vanbags_maintenance.lifecycle.event_permission"
     permission_query_conditions[dt]="vanbags_maintenance.work_cycle."+method
 doc_events["DocShare"]["validate"].append("vanbags_maintenance.work_cycle.validate_share")
+
+# D: stable equipment identities, controlled effective placement and typed profiles.
+after_install="vanbags_maintenance.assets.setup"
+after_migrate="vanbags_maintenance.assets.setup"
+for dt,method in [("TruCMMS Equipment Installation","installation_query"),("TruCMMS Asset Event","event_query")]:
+    has_permission[dt]="vanbags_maintenance.assets.history_permission"
+    permission_query_conditions[dt]="vanbags_maintenance.assets."+method
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.assets.validate_share")
+doc_events["VB Equipment Location"]={"validate":"vanbags_maintenance.assets.validate_location"}

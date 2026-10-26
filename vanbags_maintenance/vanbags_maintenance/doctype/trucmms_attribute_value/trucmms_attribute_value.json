@@ -1,0 +1,46 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Attribute Value",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "fields": [
+  {
+   "fieldname": "key",
+   "label": "Key",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "value",
+   "label": "Value",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "value_type",
+   "label": "Value Type",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "unit",
+   "label": "Unit",
+   "fieldtype": "Data",
+   "read_only": 1
+  }
+ ],
+ "field_order": [
+  "key",
+  "value",
+  "value_type",
+  "unit"
+ ],
+ "permissions": [],
+ "istable": 1,
+ "allow_import": 0,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "engine": "InnoDB"
+}

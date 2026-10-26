@@ -11,7 +11,8 @@
   "site",
   "location_name",
   "disabled",
-  "parent_location"
+  "parent_location",
+  "single_equipment"
  ],
  "fields": [
   {
@@ -54,6 +55,12 @@
    "fieldtype": "Link",
    "options": "VB Equipment Location",
    "link_filters": "[[\"company\", \"=\", \"eval:doc.company\"], [\"site\", \"=\", \"eval:doc.site\"], [\"disabled\", \"=\", 0]]"
+  },
+  {
+   "fieldname": "single_equipment",
+   "label": "Single Equipment",
+   "fieldtype": "Check",
+   "description": "When enabled, this position accepts at most one active equipment placement. Existing occupancies must be reconciled first."
   }
  ],
  "grid_page_length": 50,

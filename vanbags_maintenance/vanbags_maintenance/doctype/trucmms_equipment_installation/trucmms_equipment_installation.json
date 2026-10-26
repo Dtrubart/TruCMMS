@@ -1,0 +1,154 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Equipment Installation",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "fields": [
+  {
+   "fieldname": "equipment",
+   "label": "Equipment",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "VB Equipment"
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "Company"
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Site"
+  },
+  {
+   "fieldname": "location",
+   "label": "Location",
+   "fieldtype": "Link",
+   "options": "VB Equipment Location"
+  },
+  {
+   "fieldname": "effective_from",
+   "label": "Effective From",
+   "fieldtype": "Datetime",
+   "reqd": 1
+  },
+  {
+   "fieldname": "effective_until",
+   "label": "Effective Until",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "recorded_on",
+   "label": "Recorded On",
+   "fieldtype": "Datetime",
+   "reqd": 1
+  },
+  {
+   "fieldname": "recorded_by",
+   "label": "Recorded By",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "ended_on",
+   "label": "Ended On",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "ended_by",
+   "label": "Ended By",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "reason",
+   "label": "Reason",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_reason",
+   "label": "End Reason",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "entry_type",
+   "label": "Entry Type",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "options": "Initial\nDeclared Baseline\nInstall\nTransfer\nReplacement"
+  }
+ ],
+ "field_order": [
+  "equipment",
+  "company",
+  "site",
+  "location",
+  "effective_from",
+  "effective_until",
+  "recorded_on",
+  "recorded_by",
+  "ended_on",
+  "ended_by",
+  "reason",
+  "end_reason",
+  "entry_type"
+ ],
+ "permissions": [
+  {
+   "role": "VB Maintenance User",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "select": 1
+  }
+ ],
+ "istable": 0,
+ "allow_import": 0,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "engine": "InnoDB"
+}

@@ -84,6 +84,8 @@ def validate_action(doc,action,reason):
     if action=='Reopen Order':
         if not supervisor:frappe.throw('Supervisor reopening required.',frappe.PermissionError)
         if doc.status!='Closed':frappe.throw('Only closed orders may be reopened.')
+        from vanbags_maintenance.assets import validate_work_equipment
+        validate_work_equipment(doc)
         return 'Authorized'
     frappe.throw('Unsupported lifecycle action.')
 
@@ -177,7 +179,7 @@ def adopt(work_order,reason,acceptance_user=None):
     event(doc,'Adopt C Policy',doc.status,reason,snapshot);return doc.as_dict()
 
 
-def setup():
+def setup(record=True):
     from vanbags_maintenance import configuration
     configuration.setup(record=False)
     frappe.db.sql("UPDATE `tabTruCMMS Maintenance Work Order` SET lifecycle_policy='Legacy' WHERE COALESCE(lifecycle_policy,'')=''")
@@ -223,7 +225,7 @@ def setup():
         flow=frappe.get_doc({'doctype':'Workflow','workflow_name':name,'document_type':wo.DT,'is_active':1,'workflow_state_field':'status','send_email_alert':0,'states':[{'state':state,'doc_status':'0','allow_edit':wo.SUPERVISOR} for state in states],'transitions':[{'state':a,'action':action,'next_state':z,'allowed':role,'allow_self_approval':1,'condition':condition} for a,action,z,role,condition in edges]})
         flow.insert(ignore_permissions=True)
     frappe.clear_cache(doctype=wo.DT)
-    configuration.record_deployment()
+    if record:configuration.record_deployment()
 
 
 def history_query(dt,user=None):

@@ -19,6 +19,8 @@ class TruCMMSMaintenanceWorkOrder(Document):
         initialize(self)
 
     def validate(self):
+        from vanbags_maintenance.assets import work_snapshot
+        work_snapshot(self)
         org.validate_context(self)
         if self.target_closure:self.target_closure=get_datetime(self.target_closure)
         old=self.get_doc_before_save()

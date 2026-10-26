@@ -19,6 +19,8 @@ class TruCMMSMaintenanceRequest(Document):
             self.set(field,(self.get(field) or "").strip())
 
     def validate(self):
+        from vanbags_maintenance.assets import work_snapshot
+        work_snapshot(self)
         org.validate_context(self)
         old=self.get_doc_before_save()
         user=frappe.session.user

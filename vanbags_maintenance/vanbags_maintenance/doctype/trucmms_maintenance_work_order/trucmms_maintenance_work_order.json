@@ -67,7 +67,8 @@
   "resumed_reason",
   "reopened_by",
   "reopened_on",
-  "reopened_reason"
+  "reopened_reason",
+  "equipment_snapshot"
  ],
  "fields": [
   {
@@ -474,6 +475,12 @@
    "fieldname": "reopened_reason",
    "label": "Reopened Reason",
    "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "equipment_snapshot",
+   "label": "Equipment Context at Creation",
+   "fieldtype": "JSON",
    "read_only": 1
   }
  ],

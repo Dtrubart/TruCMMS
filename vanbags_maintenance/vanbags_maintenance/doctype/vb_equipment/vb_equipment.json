@@ -1,6 +1,6 @@
 {
  "actions": [],
- "allow_bulk_edit": 1,
+ "allow_bulk_edit": 0,
  "allow_rename": 0,
  "autoname": "field:equipment_code",
  "creation": "2026-08-09 23:36:18.000000",
@@ -19,7 +19,15 @@
   "serial_number",
   "acquisition_date",
   "commissioning_date",
-  "notes"
+  "notes",
+  "asset_tag",
+  "tag_key",
+  "placement_policy",
+  "technical_profile",
+  "profile_snapshot",
+  "attributes",
+  "criticality",
+  "criticality_snapshot"
  ],
  "fields": [
   {
@@ -37,7 +45,8 @@
    "options": "TruCMMS Site",
    "reqd": 1,
    "in_list_view": 1,
-   "link_filters": "[[\"company\", \"=\", \"eval:doc.company\"], [\"disabled\", \"=\", 0]]"
+   "link_filters": "[[\"company\", \"=\", \"eval:doc.company\"], [\"disabled\", \"=\", 0]]",
+   "read_only_depends_on": "eval:!doc.__islocal"
   },
   {
    "fieldname": "equipment_code",
@@ -81,7 +90,8 @@
    "in_list_view": 1,
    "label": "Functional Location",
    "options": "VB Equipment Location",
-   "link_filters": "[[\"company\", \"=\", \"eval:doc.company\"], [\"site\", \"=\", \"eval:doc.site\"], [\"disabled\", \"=\", 0]]"
+   "link_filters": "[[\"company\", \"=\", \"eval:doc.company\"], [\"site\", \"=\", \"eval:doc.site\"], [\"disabled\", \"=\", 0]]",
+   "read_only_depends_on": "eval:!doc.__islocal"
   },
   {
    "fieldname": "manufacturer",
@@ -115,6 +125,60 @@
    "fieldname": "notes",
    "fieldtype": "Small Text",
    "label": "Notes"
+  },
+  {
+   "fieldname": "asset_tag",
+   "label": "Asset Tag",
+   "fieldtype": "Data",
+   "read_only_depends_on": "eval:!doc.__islocal"
+  },
+  {
+   "fieldname": "tag_key",
+   "label": "Tag Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "placement_policy",
+   "label": "Placement Policy",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "options": "\nD1\nLegacy"
+  },
+  {
+   "fieldname": "technical_profile",
+   "label": "Technical Profile",
+   "fieldtype": "Link",
+   "options": "TruCMMS Equipment Profile",
+   "read_only_depends_on": "eval:!doc.__islocal"
+  },
+  {
+   "fieldname": "profile_snapshot",
+   "label": "Profile Snapshot",
+   "fieldtype": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "attributes",
+   "label": "Attributes",
+   "fieldtype": "Table",
+   "options": "TruCMMS Attribute Value",
+   "read_only_depends_on": "eval:!doc.__islocal"
+  },
+  {
+   "fieldname": "criticality",
+   "label": "Criticality",
+   "fieldtype": "Link",
+   "options": "TruCMMS Criticality",
+   "read_only_depends_on": "eval:!doc.__islocal"
+  },
+  {
+   "fieldname": "criticality_snapshot",
+   "label": "Criticality Snapshot",
+   "fieldtype": "JSON",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
@@ -193,7 +257,7 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
- "search_fields": "equipment_code,equipment_name,serial_number",
+ "search_fields": "equipment_code,equipment_name,serial_number,asset_tag",
  "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",

@@ -80,6 +80,9 @@ def equipment_history(filters=None):
         for e in visible('TruCMMS Team Assignment',{'work_order':['in',names]},['name','work_order','company','site','assigned_on','team','discipline','technician']):add('TruCMMS Team Assignment',e,e.assigned_on,e.team+' / '+e.discipline+': '+e.technician,order=e.work_order)
         for e in visible('TruCMMS Work Cycle',{'work_order':['in',names]},['name','work_order','company','site','recorded_on','execution_cycle','ended_action']):add('TruCMMS Work Cycle',e,e.recorded_on,'Cycle '+str(e.execution_cycle)+': '+e.ended_action,order=e.work_order)
         for e in visible(adj.DT,{'work_order':['in',names]},['name','work_order','company','site','occurred_on','execution','reason']):add(adj.DT,e,e.occurred_on,'Void '+e.execution+': '+e.reason,order=e.work_order)
+    for e in visible('TruCMMS Equipment Installation',{'equipment':f.equipment},['name','company','site','location','effective_from','effective_until','entry_type']):
+        add('TruCMMS Equipment Installation',e,e.effective_from,e.entry_type+': '+(e.location or 'Mobile / site custody')+(' — removed '+str(e.effective_until) if e.effective_until else ' — active'))
+    for e in visible('TruCMMS Asset Event',{'equipment':f.equipment},['name','company','site','effective_on','action','reason']):add('TruCMMS Asset Event',e,e.effective_on,e.action+': '+e.reason)
     rows.sort(key=lambda r:(get_datetime(r['occurred_on']),r['record']))
     columns=[dict(fieldname=n,label=l,fieldtype=t,options=o,width=w) for n,l,t,o,w in [
         ('occurred_on','Occurred','Datetime',None,170),('record_type','Record Type','Link','DocType',210),('record','Record','Dynamic Link','record_type',180),

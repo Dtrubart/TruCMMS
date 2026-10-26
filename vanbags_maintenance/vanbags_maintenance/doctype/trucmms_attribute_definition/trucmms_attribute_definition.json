@@ -1,0 +1,70 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Attribute Definition",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "fields": [
+  {
+   "fieldname": "key",
+   "label": "Key",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "label",
+   "label": "Label",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "value_type",
+   "label": "Value Type",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "options": "Text\nInteger\nDecimal\nDate\nBoolean\nChoice"
+  },
+  {
+   "fieldname": "unit",
+   "label": "Unit",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "required",
+   "label": "Required",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "minimum",
+   "label": "Minimum",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "maximum",
+   "label": "Maximum",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "choices",
+   "label": "Choices",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "field_order": [
+  "key",
+  "label",
+  "value_type",
+  "unit",
+  "required",
+  "minimum",
+  "maximum",
+  "choices"
+ ],
+ "permissions": [],
+ "istable": 1,
+ "allow_import": 0,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "engine": "InnoDB"
+}
