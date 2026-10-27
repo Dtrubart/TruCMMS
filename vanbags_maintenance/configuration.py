@@ -53,15 +53,11 @@ def setup(record=True):
 
 def record_deployment():
     default=frappe.db.get_single_value('System Settings','time_zone') or 'UTC'
-    folder=Path(__file__).parent;digest=hashlib.sha256()
-    for p in sorted(folder.rglob('*')):
-        if p.is_file() and p.suffix in ('.py','.js','.json') and '__pycache__' not in p.parts:
-            digest.update(str(p.relative_to(folder)).encode());digest.update(p.read_text().replace('\r\n','\n').encode())
-    fingerprint=digest.hexdigest()
+    fingerprint=package_fingerprint()
     if not frappe.db.exists('TruCMMS Deployment',{'package_fingerprint':fingerprint,'site_name':frappe.local.site}):
         previous_flag=frappe.flags.get('trucmms_deployment_insert');frappe.flags.trucmms_deployment_insert=True
         try:
-            frappe.get_doc({'doctype':'TruCMMS Deployment','package_fingerprint':fingerprint,'site_name':frappe.local.site,'framework_version':frappe.__version__,'policy_version':'E-1','migration_result':'Completed','storage_timezone':default,'deployed_on':frappe.utils.now_datetime()}).insert(ignore_permissions=True)
+            frappe.get_doc({'doctype':'TruCMMS Deployment','package_fingerprint':fingerprint,'site_name':frappe.local.site,'framework_version':frappe.__version__,'policy_version':'F-1','migration_result':'Completed','storage_timezone':default,'deployed_on':frappe.utils.now_datetime()}).insert(ignore_permissions=True)
         finally:frappe.flags.trucmms_deployment_insert=previous_flag
 
 
@@ -69,3 +65,11 @@ def record_deployment():
 def operating_clock(site,value=None):
     doc=frappe.get_doc('TruCMMS Site',site);doc.check_permission('read')
     return {'system_timezone':frappe.db.get_single_value('System Settings','time_zone') or 'UTC','operating_timezone':doc.time_zone,'operating_time':site_time(value or frappe.utils.now_datetime(),site)}
+
+
+def package_fingerprint():
+    folder=Path(__file__).parent;digest=hashlib.sha256()
+    for p in sorted(folder.rglob('*')):
+        if p.is_file() and p.suffix in ('.py','.js','.json') and '__pycache__' not in p.parts:
+            digest.update(str(p.relative_to(folder)).encode());digest.update(p.read_text().replace('\r\n','\n').encode())
+    return digest.hexdigest()

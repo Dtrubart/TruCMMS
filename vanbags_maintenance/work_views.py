@@ -98,7 +98,7 @@ def execution_order_query(doctype,txt,searchfield,start,page_len,filters=None):
     rows=frappe.get_list(wo.DT,filters={'name':['in',names],'status':'Assigned'},or_filters={'name':['like','%'+txt+'%'],'subject':['like','%'+txt+'%']},fields=['name','subject'],order_by='name asc',limit_start=max(0,cint(start)),limit_page_length=min(50,max(1,cint(page_len))))
     return [[r.name,r.subject] for r in rows]
 
-def setup():
+def setup(record=True):
     from vanbags_maintenance import assets,configuration
     assets.setup(record=False)
     for dt,table in [('Workspace','links'),('Workspace Sidebar','items')]:
@@ -108,4 +108,4 @@ def setup():
             prior=(frappe.flags.get('in_import'),frappe.flags.get('in_patch'));frappe.flags.in_import=True;frappe.flags.in_patch=True
             try:doc.save(ignore_permissions=True)
             finally:frappe.flags.in_import,frappe.flags.in_patch=prior
-    configuration.record_deployment()
+    if record:configuration.record_deployment()

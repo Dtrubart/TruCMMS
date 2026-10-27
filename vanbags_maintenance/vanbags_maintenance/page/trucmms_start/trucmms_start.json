@@ -1,0 +1,32 @@
+{
+ "doctype": "Page",
+ "name": "trucmms-start",
+ "page_name": "trucmms-start",
+ "title": "TruCMMS",
+ "module": "Vanbags Maintenance",
+ "standard": "Yes",
+ "system_page": 0,
+ "roles": [
+  {
+   "role": "VB Maintenance User"
+  },
+  {
+   "role": "VB Maintenance Manager"
+  },
+  {
+   "role": "TruCMMS Requester"
+  },
+  {
+   "role": "TruCMMS Dispatcher"
+  },
+  {
+   "role": "TruCMMS Supervisor"
+  },
+  {
+   "role": "TruCMMS Technician"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
+}

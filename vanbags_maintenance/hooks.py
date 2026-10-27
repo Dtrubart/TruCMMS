@@ -342,4 +342,9 @@ after_install="vanbags_maintenance.work_views.setup"
 after_migrate="vanbags_maintenance.work_views.setup"
 
 # Current IANA rules for native Desk Datetime controls, using the supported Moment API.
-app_include_js=["/assets/vanbags_maintenance/js/timezone_rules.js"]
+app_include_js=["/assets/vanbags_maintenance/js/timezone_rules.js","/assets/vanbags_maintenance/js/navigation.js"]
+
+# R1 candidate: approved task-oriented navigation, with native permissions preserved.
+after_install="vanbags_maintenance.navigation.setup"
+after_migrate="vanbags_maintenance.navigation.setup"
+extend_bootinfo=["vanbags_maintenance.navigation.extend_bootinfo"]

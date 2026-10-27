@@ -1,0 +1,174 @@
+{
+  "release": "R1-RC1",
+  "baseline_status": "Proposed specification; human sign-off required",
+  "cases": [
+    {
+      "id": "CH02-R1-T01",
+      "scenario": "Create equipment without a financial Asset",
+      "expected": "Record accepted",
+      "test": "test_manager_creates_valid_equipment",
+      "file": "vanbags_maintenance/doctype/vb_equipment/test_vb_equipment.py"
+    },
+    {
+      "id": "CH02-R1-T02",
+      "scenario": "Replace equipment at a functional location",
+      "expected": "Equipment and installation history preserved",
+      "test": "test_replacement_is_atomic_and_keeps_two_identities",
+      "file": "vanbags_maintenance/test_assets.py"
+    },
+    {
+      "id": "CH02-R1-T03",
+      "scenario": "Create maintenance request",
+      "expected": "Valid request recorded",
+      "test": "test_requester_sends_dispatcher_approves",
+      "file": "vanbags_maintenance/test_requests.py"
+    },
+    {
+      "id": "CH02-R1-T04",
+      "scenario": "Approve and convert request",
+      "expected": "Correct Work Order created",
+      "test": "test_conversion_is_idempotent_and_preserves_context",
+      "file": "vanbags_maintenance/test_work_orders.py"
+    },
+    {
+      "id": "CH02-R1-T05",
+      "scenario": "Reject request",
+      "expected": "No unauthorized Work Order created",
+      "test": "test_rejection_requires_reason_and_preserves_decision",
+      "file": "vanbags_maintenance/test_requests.py"
+    },
+    {
+      "id": "CH02-R1-T06",
+      "scenario": "Assign site-specific team",
+      "expected": "Authorized assignment accepted",
+      "test": "test_assignment_records_immutable_eligibility_snapshot",
+      "file": "vanbags_maintenance/test_teams.py"
+    },
+    {
+      "id": "CH02-R1-T07",
+      "scenario": "Assign shared team at authorized site",
+      "expected": "Assignment accepted",
+      "test": "test_shared_team_assigns_at_second_authorized_site",
+      "file": "vanbags_maintenance/test_r1_acceptance.py"
+    },
+    {
+      "id": "CH02-R1-T08",
+      "scenario": "Assign team at unauthorized site",
+      "expected": "Assignment rejected",
+      "test": "test_person_scope_does_not_replace_missing_team_site_authorization",
+      "file": "vanbags_maintenance/test_r1_acceptance.py"
+    },
+    {
+      "id": "CH02-R1-T09",
+      "scenario": "Assign two technical disciplines",
+      "expected": "Distinct assignments preserved",
+      "test": "test_distinct_disciplines_are_preserved_on_execution",
+      "file": "vanbags_maintenance/test_work_cycle.py"
+    },
+    {
+      "id": "CH02-R1-T10",
+      "scenario": "Technician records tasks and labor",
+      "expected": "Execution saved with attribution",
+      "test": "test_recording_stamps_identity_context_and_duration",
+      "file": "vanbags_maintenance/test_execution.py"
+    },
+    {
+      "id": "CH02-R1-T11",
+      "scenario": "Technician attaches evidence",
+      "expected": "Authorized attachment accessible",
+      "test": "test_private_evidence_is_append_only",
+      "file": "vanbags_maintenance/test_execution.py"
+    },
+    {
+      "id": "CH02-R1-T12",
+      "scenario": "Supervisor verifies completion",
+      "expected": "Controlled transition succeeds",
+      "test": "test_request_requires_verification_before_acceptance",
+      "file": "vanbags_maintenance/test_work_cycle.py"
+    },
+    {
+      "id": "CH02-R1-T13",
+      "scenario": "Requester rejects completed work",
+      "expected": "Rework path activated",
+      "test": "test_rework_archives_cycle_and_requires_new_execution",
+      "file": "vanbags_maintenance/test_work_cycle.py"
+    },
+    {
+      "id": "CH02-R1-T14",
+      "scenario": "Requester accepts completed work",
+      "expected": "Closure proceeds under policy",
+      "test": "test_request_requires_verification_before_acceptance",
+      "file": "vanbags_maintenance/test_work_cycle.py"
+    },
+    {
+      "id": "CH02-R1-T15",
+      "scenario": "PM-like work without requester",
+      "expected": "Authorized direct origin supported",
+      "test": "test_direct_creation_is_idempotent_and_rejects_key_reuse",
+      "file": "vanbags_maintenance/test_work_cycle.py"
+    },
+    {
+      "id": "CH02-R1-T16",
+      "scenario": "Technician uses mobile browser",
+      "expected": "Core execution usable",
+      "test": "test_same_submission_returns_original_and_preserves_one_execution",
+      "file": "vanbags_maintenance/test_work_views.py"
+    },
+    {
+      "id": "CH02-R1-T17",
+      "scenario": "Technician opens My Work",
+      "expected": "Only authorized work appears",
+      "test": "test_my_work_includes_secondary_and_revokes_removed_allocation",
+      "file": "vanbags_maintenance/test_work_views.py"
+    },
+    {
+      "id": "CH02-R1-T18",
+      "scenario": "Supervisor opens Date Agenda",
+      "expected": "Correct date grouping",
+      "test": "test_calendar_and_agenda_share_rows_and_explicit_offsets",
+      "file": "vanbags_maintenance/test_work_views.py"
+    },
+    {
+      "id": "CH02-R1-T19",
+      "scenario": "User opens Calendar",
+      "expected": "Authorized scheduled work displayed",
+      "test": "test_end_at_midnight_does_not_occupy_next_day",
+      "file": "vanbags_maintenance/test_work_views.py"
+    },
+    {
+      "id": "CH02-R1-T20",
+      "scenario": "Unauthorized API call",
+      "expected": "Access denied",
+      "test": "test_unassigned_technician_and_forged_hidden_fields_are_rejected",
+      "file": "vanbags_maintenance/test_work_views.py"
+    },
+    {
+      "id": "CH02-R1-T21",
+      "scenario": "Technician changes teams",
+      "expected": "Historical assignments preserved",
+      "test": "test_technician_changes_team_without_rewriting_prior_assignment",
+      "file": "vanbags_maintenance/test_r1_acceptance.py"
+    },
+    {
+      "id": "CH02-R1-T22",
+      "scenario": "Equipment maintenance history report",
+      "expected": "Records reconcile with source Work Orders",
+      "test": "test_equipment_history_preserves_original_links",
+      "file": "vanbags_maintenance/test_reporting.py"
+    },
+    {
+      "id": "CH02-R1-T23",
+      "scenario": "Work Order cancelled",
+      "expected": "Reason, actor, and history retained",
+      "test": "test_c1_cancellation_retains_execution_and_reason",
+      "file": "vanbags_maintenance/test_work_cycle.py"
+    },
+    {
+      "id": "CH02-R1-T24",
+      "scenario": "Work Order reopened or reworked",
+      "expected": "Prior completion evidence preserved",
+      "test": "test_reopening_archives_closure_and_returns_authorized",
+      "file": "vanbags_maintenance/test_work_cycle.py"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+frappe.ui.form.on("TruCMMS Maintenance Team",{refresh(frm){if(frm.is_new())return;for(const [label,target] of [["Integrantes","TruCMMS Team Membership"],["Cobertura por sede","TruCMMS Team Site Authorization"]])frm.add_custom_button(__(label),()=>frappe.set_route('List',target,{team:frm.doc.name}),__('Equipo de mantenimiento'));}});

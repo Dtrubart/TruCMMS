@@ -10,7 +10,7 @@
  "title": "TruCMMS",
  "module": "Vanbags Maintenance",
  "app": "vanbags_maintenance",
- "type": "Workspace",
+ "type": "Link",
  "public": 1,
  "is_hidden": 0,
  "icon": "assets",
@@ -168,5 +168,7 @@
    "collapsible": 0,
    "child": 0
   }
- ]
+ ],
+ "link_type": "Page",
+ "link_to": "trucmms-start"
 }

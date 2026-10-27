@@ -10,7 +10,7 @@ class TestTruCMMSNavigation(IntegrationTestCase):
 		self.assertEqual(workspace.app, "vanbags_maintenance")
 		self.assertTrue(workspace.public)
 		targets = {row.link_to for row in workspace.links if row.type == "Link" and row.link_type == "DocType"}
-		self.assertEqual(targets, {"VB Equipment", "VB Equipment Category", "VB Equipment Location", "TruCMMS Site", "TruCMMS Maintenance Request", "TruCMMS Maintenance Work Order", "TruCMMS Work Execution", "TruCMMS Maintenance Team", "TruCMMS Discipline", "TruCMMS Team Membership", "TruCMMS Team Site Authorization", "TruCMMS Equipment Profile", "TruCMMS Criticality"})
+		self.assertEqual(targets, {"Company", "VB Equipment", "VB Equipment Category", "VB Equipment Location", "TruCMMS Site", "TruCMMS Maintenance Request", "TruCMMS Maintenance Work Order", "TruCMMS Maintenance Team", "TruCMMS Discipline", "TruCMMS Equipment Profile", "TruCMMS Criticality"})
 		self.assertTrue(any(row.link_type=="Page" and row.link_to=="trucmms-work" for row in workspace.links))
 		for target in targets:
 			self.assertTrue(frappe.db.exists("DocType", target))
@@ -25,8 +25,8 @@ class TestTruCMMSNavigation(IntegrationTestCase):
 		self.assertEqual({row.role for row in icon.roles}, {"VB Maintenance User", "VB Maintenance Manager", "System Manager", "TruCMMS Requester", "TruCMMS Dispatcher", "TruCMMS Supervisor", "TruCMMS Technician"})
 		sidebar = frappe.get_doc("Workspace Sidebar", icon.link_to)
 		self.assertTrue(sidebar.standard)
-		self.assertEqual(sidebar.items[0].link_to, "TruCMMS")
-		self.assertEqual(sidebar.items[0].link_type, "Workspace")
+		self.assertEqual(sidebar.items[0].link_to, "trucmms-start")
+		self.assertEqual(sidebar.items[0].link_type, "Page")
 
 	@patch("frappe.desk.doctype.workspace_sidebar.workspace_sidebar.WorkspaceSidebar.export_sidebar")
 	def test_d_navigation_upgrade_adds_links_without_resetting_custom_entries(self,_export):
@@ -36,10 +36,10 @@ class TestTruCMMSNavigation(IntegrationTestCase):
 			for dt,table in [('Workspace','links'),('Workspace Sidebar','items')]:
 				doc=frappe.get_doc(dt,'TruCMMS')
 				doc.set(table,[r for r in doc.get(table) if r.link_to not in ('TruCMMS Equipment Profile','TruCMMS Criticality','TruCMMS Installation Register')])
-				doc.append(table,{'type':'Link','label':'Preserved custom company link','link_type':'DocType','link_to':'Company'});doc.save(ignore_permissions=True)
+				doc.append(table,{'type':'Link','label':'Preserved custom user link','link_type':'DocType','link_to':'User'});doc.save(ignore_permissions=True)
 			setup_navigation();setup_navigation()
 			for dt,table in [('Workspace','links'),('Workspace Sidebar','items')]:
 				links=frappe.get_doc(dt,'TruCMMS').get(table);names=[r.link_to for r in links]
-				for name in ('Company','TruCMMS Equipment Profile','TruCMMS Criticality','TruCMMS Installation Register'):self.assertEqual(names.count(name),1)
+				for name in ('User','TruCMMS Equipment Profile','TruCMMS Criticality','TruCMMS Installation Register'):self.assertEqual(names.count(name),1)
 		finally:
 			frappe.db.rollback(save_point='navigation_d_case');frappe.set_user(original)

@@ -83,5 +83,7 @@ frappe.pages["trucmms-work"].on_page_load=function(wrapper){
   try{const result=await frappe.call({method:"vanbags_maintenance.work_views.get_work",type:"GET",args:{filters:JSON.stringify(filters)}});if(request!==sequence)return;data=result.message;render();}
   catch(error){if(request===sequence){note.text(__("Work could not be loaded. Check the connection and filters, then Refresh."));content.empty();}}
  }
- wrapper.trucmms_work={controls,load,get mode(){return mode;}};ready=true;load();
+ wrapper.trucmms_work={controls,load,get mode(){return mode;},async apply_options(options){ready=false;for(const key of ['company','site','equipment','status','basis','from_date','to_date'])if(options[key]!==undefined)await controls[key].set_value(options[key]);if(modes.includes(options.mode))mode=options.mode;if(['Date Agenda','Calendar'].includes(mode)&&!['Scheduled','Closure Target'].includes(controls.basis.get_value()))await controls.basis.set_value('Scheduled');ready=true;load();}};ready=true;load();
 };
+
+frappe.pages["trucmms-work"].on_page_show=function(wrapper){const options=frappe.route_options;if(options&&wrapper.trucmms_work){frappe.route_options=null;wrapper.trucmms_work.apply_options(options);}};

@@ -188,3 +188,9 @@ class TestWorkCycle(WorkOrderCase):
         frappe.set_user(self.users['supervisor']);allocations.remove(first['name'],'First scope ended');allocations.add(self.order.name,self.users['other'],self.discipline,'New scope')
         frappe.set_user(self.users['other'])
         with self.assertRaises(frappe.PermissionError):save_file(self.token+'old-allocation.txt',b'Late prior allocation evidence','TruCMMS Work Execution',entry.name,is_private=1)
+
+    def test_c1_cancellation_retains_execution_and_reason(self):
+        self.entry();name=self.order.name;doc=self.action('supervisor','Cancel Order','Pilot cancellation with retained evidence')
+        self.assertEqual(doc.status,'Cancelled');self.assertEqual(frappe.db.count('TruCMMS Work Execution',{'work_order':name}),1)
+        events=frappe.get_all('TruCMMS Work Event',filters={'work_order':name,'action':'Cancel Order'},fields=['reason','actor'])
+        self.assertEqual(len(events),1);self.assertEqual(events[0].reason,'Pilot cancellation with retained evidence');self.assertEqual(events[0].actor,self.users['supervisor'])
