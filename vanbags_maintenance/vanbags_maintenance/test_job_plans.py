@@ -22,7 +22,12 @@ class TestJobPlans(IntegrationTestCase):
         self.units = {}
         for label in ('mm','kWh','L-min','hour','box','each'):
             self.units[label] = frappe.get_doc(dict(doctype='UOM', uom_name=self.token+'-'+label, must_be_whole_number=0)).insert().name
-        self.item = frappe.get_doc(dict(doctype='Item', item_code=self.token, item_name='Filter pack', item_group='All Item Groups', stock_uom=self.units['each'], is_stock_item=0, is_sales_item=0, is_purchase_item=0,
+        # A fresh headless ERPNext install has no setup-wizard Item Group tree.
+        # Build the test's own root only when needed; never seed production data.
+        group = frappe.db.get_value('Item Group', {'parent_item_group':['is','not set']}, 'name')
+        if not group:
+            group = frappe.get_doc(dict(doctype='Item Group', item_group_name='TruCMMS Test Item Root', is_group=1)).insert().name
+        self.item = frappe.get_doc(dict(doctype='Item', item_code=self.token, item_name='Filter pack', item_group=group, stock_uom=self.units['each'], is_stock_item=0, is_sales_item=0, is_purchase_item=0,
             uoms=[dict(uom=self.units['each'], conversion_factor=1),dict(uom=self.units['box'], conversion_factor=4)])).insert()
         self.plan = self.make_plan()
         frappe.set_user(self.users['dispatcher'])
