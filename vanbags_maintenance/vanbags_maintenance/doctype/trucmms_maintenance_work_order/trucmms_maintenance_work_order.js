@@ -25,7 +25,7 @@ frappe.ui.form.on("TruCMMS Maintenance Work Order", {
   if(frm.doc.status==="Assigned"&&primary&&technician)action("Complete Work");
   let allocated=primary;
   if(managed&&technician&&!primary){const result=await frappe.call({method:"vanbags_maintenance.allocations.mine",args:{work_order:frm.doc.name}});allocated=!!result.message;}
-  if(frm.doc.status==="Assigned"&&allocated&&technician)frm.add_custom_button(__("Record Execution"),()=>frappe.new_doc("TruCMMS Work Execution",{work_order:frm.doc.name,company:frm.doc.company,site:frm.doc.site}));
+  if(frm.doc.status==="Assigned"&&allocated&&technician)frm.page.set_primary_action(__("Record Execution"),()=>frappe.new_doc("TruCMMS Work Execution",{work_order:frm.doc.name,company:frm.doc.company,site:frm.doc.site}));
   if(frm.doc.status==="Technical Completed"){
    if(managed&&supervisor)action("Verify Work");
    if(!managed&&acceptor)action("Accept Work");

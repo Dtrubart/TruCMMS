@@ -310,14 +310,14 @@ def validate_share(doc,method=None):
         if doc.everyone:frappe.throw('Asset history cannot be public.',frappe.PermissionError)
         history_permission(frappe.get_doc(doc.share_doctype,doc.share_name),doc.user,'read')
 
-def setup():
+def setup(record=True):
     from vanbags_maintenance import work_cycle,configuration
     work_cycle.setup(record=False)
     frappe.db.sql("UPDATE `tabVB Equipment` SET placement_policy='Legacy' WHERE COALESCE(placement_policy,'')=''")
     frappe.db.add_index(INSTALL,['equipment','effective_until'],'equipment_active_placement')
     frappe.db.add_index(INSTALL,['company','site','location','effective_from'],'position_history')
     setup_navigation()
-    configuration.record_deployment()
+    if record:configuration.record_deployment()
 
 
 def installation_register(filters=None):

@@ -2,7 +2,8 @@
 import hashlib,json
 from pathlib import Path
 from datetime import datetime,timezone
-from zoneinfo import ZoneInfo,ZoneInfoNotFoundError
+from zoneinfo import ZoneInfoNotFoundError
+from vanbags_maintenance.timezones import zone as ZoneInfo
 import frappe
 from frappe.utils import get_datetime
 
@@ -60,7 +61,7 @@ def record_deployment():
     if not frappe.db.exists('TruCMMS Deployment',{'package_fingerprint':fingerprint,'site_name':frappe.local.site}):
         previous_flag=frappe.flags.get('trucmms_deployment_insert');frappe.flags.trucmms_deployment_insert=True
         try:
-            frappe.get_doc({'doctype':'TruCMMS Deployment','package_fingerprint':fingerprint,'site_name':frappe.local.site,'framework_version':frappe.__version__,'policy_version':'D-1','migration_result':'Completed','storage_timezone':default,'deployed_on':frappe.utils.now_datetime()}).insert(ignore_permissions=True)
+            frappe.get_doc({'doctype':'TruCMMS Deployment','package_fingerprint':fingerprint,'site_name':frappe.local.site,'framework_version':frappe.__version__,'policy_version':'E-1','migration_result':'Completed','storage_timezone':default,'deployed_on':frappe.utils.now_datetime()}).insert(ignore_permissions=True)
         finally:frappe.flags.trucmms_deployment_insert=previous_flag
 
 

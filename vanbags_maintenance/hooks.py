@@ -336,3 +336,10 @@ for dt,method in [("TruCMMS Equipment Installation","installation_query"),("TruC
     permission_query_conditions[dt]="vanbags_maintenance.assets."+method
 doc_events["DocShare"]["validate"].append("vanbags_maintenance.assets.validate_share")
 doc_events["VB Equipment Location"]={"validate":"vanbags_maintenance.assets.validate_location"}
+
+# E: permission-coherent work views and retry-safe native execution submission.
+after_install="vanbags_maintenance.work_views.setup"
+after_migrate="vanbags_maintenance.work_views.setup"
+
+# Current IANA rules for native Desk Datetime controls, using the supported Moment API.
+app_include_js=["/assets/vanbags_maintenance/js/timezone_rules.js"]

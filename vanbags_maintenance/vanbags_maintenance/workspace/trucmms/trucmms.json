@@ -159,6 +159,14 @@
    "label": "TruCMMS Installation Register",
    "link_type": "Report",
    "link_to": "TruCMMS Installation Register"
+  },
+  {
+   "type": "Link",
+   "label": "Work Views",
+   "link_type": "Page",
+   "link_to": "trucmms-work",
+   "collapsible": 0,
+   "child": 0
   }
  ]
 }

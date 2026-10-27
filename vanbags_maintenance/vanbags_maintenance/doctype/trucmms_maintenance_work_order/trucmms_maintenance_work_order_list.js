@@ -1,5 +1,6 @@
 frappe.listview_settings['TruCMMS Maintenance Work Order']={
  onload(listview){
+  listview.page.add_inner_button(__("Work Views"),()=>frappe.set_route("trucmms-work"));
   if(!['TruCMMS Supervisor','TruCMMS Dispatcher','System Manager'].some(role=>frappe.user.has_role(role)))return;
   listview.page.add_inner_button(__('New Direct Order'),()=>{const request_key=crypto.randomUUID();return frappe.prompt([
    {fieldname:'company',label:__('Company'),fieldtype:'Link',options:'Company',reqd:1},

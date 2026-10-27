@@ -102,6 +102,21 @@
    "fieldtype": "Link",
    "options": "TruCMMS Maintenance Team",
    "read_only": 1
+  },
+  {
+   "fieldname": "submission_key",
+   "label": "Submission Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "submission_digest",
+   "label": "Submission Digest",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1
   }
  ],
  "field_order": [
@@ -118,7 +133,9 @@
   "execution_cycle",
   "allocation",
   "discipline",
-  "team"
+  "team",
+  "submission_key",
+  "submission_digest"
  ],
  "autoname": "format:EXE-{YYYY}-{#####}",
  "track_changes": 1,

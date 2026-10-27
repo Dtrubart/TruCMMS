@@ -6,6 +6,8 @@ from vanbags_maintenance import execution as policy
 
 class TruCMMSWorkExecution(Document):
     def before_insert(self):
+        from vanbags_maintenance.submission import validate_new
+        validate_new(self)
         order=policy.order_for_recording(self.work_order, lock=True)
         self.company=order.company;self.site=order.site;self.execution_cycle=order.execution_cycle or 1
         self.technician=self.owner=frappe.session.user

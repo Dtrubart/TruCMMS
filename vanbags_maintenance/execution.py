@@ -6,6 +6,8 @@ DT='TruCMMS Work Execution'
 
 
 def order_for_recording(name, user=None, lock=False):
+    from vanbags_maintenance.timezones import assert_storage_clock
+    assert_storage_clock()
     user=user or frappe.session.user
     # All technical write gates share the work-order lock with completion and allocation changes.
     from vanbags_maintenance import teams
