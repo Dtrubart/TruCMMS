@@ -348,3 +348,11 @@ app_include_js=["/assets/vanbags_maintenance/js/timezone_rules.js","/assets/vanb
 after_install="vanbags_maintenance.navigation.setup"
 after_migrate="vanbags_maintenance.navigation.setup"
 extend_bootinfo=["vanbags_maintenance.navigation.extend_bootinfo"]
+
+# R2.1: versioned procedure library; no scheduler or order generation yet.
+after_install="vanbags_maintenance.job_plans.setup"
+after_migrate="vanbags_maintenance.job_plans.setup"
+for dt,method in [("TruCMMS Job Plan","plan_query"),("TruCMMS Job Plan Revision","revision_query")]:
+    has_permission[dt]="vanbags_maintenance.job_plans.permission"
+    permission_query_conditions[dt]="vanbags_maintenance.job_plans."+method
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.job_plans.validate_share")

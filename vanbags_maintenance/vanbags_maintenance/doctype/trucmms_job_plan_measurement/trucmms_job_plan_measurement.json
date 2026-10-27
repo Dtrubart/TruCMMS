@@ -1,0 +1,104 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Job Plan Measurement",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "istable": 1,
+ "track_changes": 0,
+ "field_order": [
+  "task_code",
+  "metric_key",
+  "metric_name",
+  "metric_kind",
+  "unit",
+  "direction",
+  "required",
+  "has_lower_limit",
+  "lower_limit",
+  "has_upper_limit",
+  "upper_limit"
+ ],
+ "fields": [
+  {
+   "fieldname": "task_code",
+   "label": "Código tarea",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "metric_key",
+   "label": "Clave de medición",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "metric_name",
+   "label": "Nombre",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "metric_kind",
+   "label": "Tipo de medición",
+   "fieldtype": "Select",
+   "options": "Cumulative\nCondition\nRate",
+   "default": "Condition",
+   "reqd": 1
+  },
+  {
+   "fieldname": "unit",
+   "label": "Unidad",
+   "fieldtype": "Link",
+   "options": "UOM",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "direction",
+   "label": "Comportamiento",
+   "fieldtype": "Select",
+   "options": "Increasing\nDecreasing\nVariable",
+   "default": "Variable",
+   "reqd": 1
+  },
+  {
+   "fieldname": "required",
+   "label": "Lectura obligatoria",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "has_lower_limit",
+   "label": "Tiene límite inferior",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "lower_limit",
+   "label": "Límite inferior",
+   "fieldtype": "Float",
+   "precision": "6",
+   "depends_on": "has_lower_limit"
+  },
+  {
+   "fieldname": "has_upper_limit",
+   "label": "Tiene límite superior",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "upper_limit",
+   "label": "Límite superior",
+   "fieldtype": "Float",
+   "precision": "6",
+   "depends_on": "has_upper_limit"
+  }
+ ]
+}

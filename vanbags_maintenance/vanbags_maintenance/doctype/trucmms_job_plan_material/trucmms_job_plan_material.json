@@ -1,0 +1,87 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Job Plan Material",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "istable": 1,
+ "track_changes": 0,
+ "field_order": [
+  "task_code",
+  "item",
+  "quantity",
+  "uom",
+  "item_name",
+  "stock_uom",
+  "conversion_factor",
+  "stock_quantity",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "task_code",
+   "label": "Código tarea",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "item",
+   "label": "Insumo / repuesto",
+   "fieldtype": "Link",
+   "options": "Item",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 4
+  },
+  {
+   "fieldname": "quantity",
+   "label": "Cantidad prevista",
+   "fieldtype": "Float",
+   "precision": "6",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "uom",
+   "label": "Unidad prevista",
+   "fieldtype": "Link",
+   "options": "UOM",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "item_name",
+   "label": "Nombre del artículo",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_uom",
+   "label": "Unidad de stock",
+   "fieldtype": "Link",
+   "options": "UOM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "conversion_factor",
+   "label": "Factor de conversión",
+   "fieldtype": "Float",
+   "precision": "6",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_quantity",
+   "label": "Cantidad en unidad de stock",
+   "fieldtype": "Float",
+   "precision": "6",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Observaciones",
+   "fieldtype": "Small Text"
+  }
+ ]
+}

@@ -7,7 +7,8 @@ GROUPS=[
   ('Solicitudes','DocType','TruCMMS Maintenance Request'),('Órdenes de trabajo','DocType',wo.DT),('Vistas de trabajo','Page','trucmms-work')]),
  ('Activos',{'VB Maintenance User','VB Maintenance Manager','TruCMMS Dispatcher','TruCMMS Supervisor','TruCMMS Technician','System Manager'},[
   ('Equipos físicos','DocType','VB Equipment'),('Ubicaciones funcionales','DocType','VB Equipment Location'),('Instalaciones y reemplazos','Report','TruCMMS Installation Register')]),
- ('Planes y rutinas',set(),[]),
+ ('Planes y rutinas',{'TruCMMS Dispatcher','TruCMMS Supervisor','TruCMMS Technician','System Manager'},[
+  ('Procedimientos','DocType','TruCMMS Job Plan')]),
  ('Recursos y servicios',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
   ('Equipos de mantenimiento','DocType','TruCMMS Maintenance Team')]),
  ('Repuestos y costos',set(),[]),
@@ -15,7 +16,7 @@ GROUPS=[
   ('Registro de trabajo','Report','TruCMMS Work Register'),('Historial de equipos','Report','TruCMMS Equipment History')]),
  ('Configuración',{'VB Maintenance Manager','System Manager'},[
   ('Empresas','DocType','Company'),('Sedes','DocType','TruCMMS Site'),('Categorías de equipos','DocType','VB Equipment Category'),('Perfiles técnicos','DocType','TruCMMS Equipment Profile'),('Criticidad','DocType','TruCMMS Criticality'),('Disciplinas','DocType','TruCMMS Discipline')])]
-CONTEXTUAL={'TruCMMS Team Membership','TruCMMS Team Site Authorization','TruCMMS Work Execution','TruCMMS Work Event','TruCMMS Work Cycle','TruCMMS Work Allocation','TruCMMS Team Assignment','TruCMMS Execution Adjustment'}
+CONTEXTUAL={'TruCMMS Team Membership','TruCMMS Team Site Authorization','TruCMMS Work Execution','TruCMMS Work Event','TruCMMS Work Cycle','TruCMMS Work Allocation','TruCMMS Team Assignment','TruCMMS Execution Adjustment','TruCMMS Job Plan Revision'}
 MANAGED={target for _,_,entries in GROUPS for _,_,target in entries}|CONTEXTUAL|{'TruCMMS','trucmms-start'}
 
 LEGACY_LABELS={'TruCMMS': ['Home'], 'VB Equipment': ['Equipment'], 'VB Equipment Category': ['Equipment Categories'], 'VB Equipment Location': ['Functional Locations'], 'TruCMMS Site': ['Sites'], 'TruCMMS Maintenance Request': ['Maintenance Requests'], 'TruCMMS Maintenance Work Order': ['Maintenance Work Orders'], 'TruCMMS Work Execution': ['Work Execution'], 'TruCMMS Work Register': ['TruCMMS Work Register'], 'TruCMMS Equipment History': ['TruCMMS Equipment History'], 'TruCMMS Maintenance Team': ['Maintenance Team'], 'TruCMMS Discipline': ['Discipline'], 'TruCMMS Team Membership': ['Team Membership'], 'TruCMMS Team Site Authorization': ['Team Site Authorization'], 'TruCMMS Equipment Profile': ['TruCMMS Equipment Profile'], 'TruCMMS Criticality': ['TruCMMS Criticality'], 'TruCMMS Installation Register': ['TruCMMS Installation Register'], 'trucmms-work': ['Work Views']}

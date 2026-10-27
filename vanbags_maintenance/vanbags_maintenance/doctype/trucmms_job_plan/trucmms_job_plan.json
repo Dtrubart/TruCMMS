@@ -1,0 +1,98 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Job Plan",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "istable": 0,
+ "track_changes": 1,
+ "field_order": [
+  "code",
+  "plan_name",
+  "company",
+  "site",
+  "disabled",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "label": "Código",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "plan_name",
+   "label": "Nombre del procedimiento",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Deshabilitado",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "description",
+   "label": "Descripción",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "autoname": "field:code",
+ "title_field": "plan_name",
+ "search_fields": "plan_name,company,site",
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  }
+ ]
+}

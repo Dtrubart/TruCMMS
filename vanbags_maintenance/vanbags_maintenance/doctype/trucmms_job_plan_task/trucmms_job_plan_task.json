@@ -1,0 +1,61 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Job Plan Task",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "istable": 1,
+ "track_changes": 0,
+ "field_order": [
+  "task_code",
+  "instructions",
+  "discipline",
+  "estimated_minutes",
+  "mandatory",
+  "evidence_required"
+ ],
+ "fields": [
+  {
+   "fieldname": "task_code",
+   "label": "Código tarea",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "instructions",
+   "label": "Instrucciones",
+   "fieldtype": "Small Text",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 5
+  },
+  {
+   "fieldname": "discipline",
+   "label": "Disciplina",
+   "fieldtype": "Link",
+   "options": "TruCMMS Discipline"
+  },
+  {
+   "fieldname": "estimated_minutes",
+   "label": "Minutos estimados",
+   "fieldtype": "Float",
+   "precision": "2"
+  },
+  {
+   "fieldname": "mandatory",
+   "label": "Obligatoria",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "evidence_required",
+   "label": "Requiere evidencia",
+   "fieldtype": "Check"
+  }
+ ]
+}

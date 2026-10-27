@@ -1,0 +1,239 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Job Plan Revision",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "istable": 0,
+ "track_changes": 1,
+ "field_order": [
+  "job_plan",
+  "revision_title",
+  "revision_number",
+  "revision_key",
+  "status",
+  "company",
+  "site",
+  "previous_revision",
+  "change_reason",
+  "safety_notes",
+  "task_section",
+  "tasks",
+  "measurement_section",
+  "measurements",
+  "material_section",
+  "materials",
+  "audit_section",
+  "approved_by",
+  "approved_on",
+  "approval_reason",
+  "retired_by",
+  "retired_on",
+  "retirement_reason",
+  "content_hash",
+  "content_json"
+ ],
+ "fields": [
+  {
+   "fieldname": "job_plan",
+   "label": "Procedimiento",
+   "fieldtype": "Link",
+   "options": "TruCMMS Job Plan",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "revision_title",
+   "label": "Título de revisión",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "revision_number",
+   "label": "Revisión",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "revision_key",
+   "label": "Identidad de revisión",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "unique": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Estado",
+   "fieldtype": "Select",
+   "options": "Draft\nApproved\nRetired",
+   "default": "Draft",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "read_only": 1
+  },
+  {
+   "fieldname": "previous_revision",
+   "label": "Revisión anterior",
+   "fieldtype": "Link",
+   "options": "TruCMMS Job Plan Revision",
+   "read_only": 1
+  },
+  {
+   "fieldname": "change_reason",
+   "label": "Motivo de esta revisión",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "safety_notes",
+   "label": "Precauciones e instrucciones generales",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "task_section",
+   "label": "Tareas",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "tasks",
+   "label": "Tareas",
+   "fieldtype": "Table",
+   "options": "TruCMMS Job Plan Task",
+   "reqd": 1
+  },
+  {
+   "fieldname": "measurement_section",
+   "label": "Mediciones previstas",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "measurements",
+   "label": "Mediciones",
+   "fieldtype": "Table",
+   "options": "TruCMMS Job Plan Measurement"
+  },
+  {
+   "fieldname": "material_section",
+   "label": "Materiales previstos — sin movimiento de inventario",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "materials",
+   "label": "Insumos y repuestos opcionales",
+   "fieldtype": "Table",
+   "options": "TruCMMS Job Plan Material"
+  },
+  {
+   "fieldname": "audit_section",
+   "label": "Aprobación e historial",
+   "fieldtype": "Section Break",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "approved_by",
+   "label": "Aprobado por",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_on",
+   "label": "Fecha de aprobación",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approval_reason",
+   "label": "Motivo de aprobación",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "retired_by",
+   "label": "Retirado por",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "retired_on",
+   "label": "Fecha de retiro",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "retirement_reason",
+   "label": "Motivo de retiro",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "content_hash",
+   "label": "Huella de contenido",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "content_json",
+   "label": "Contenido aprobado",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1,
+   "hidden": 1
+  }
+ ],
+ "autoname": "field:revision_key",
+ "title_field": "revision_title",
+ "search_fields": "job_plan,revision_title,status",
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  }
+ ]
+}

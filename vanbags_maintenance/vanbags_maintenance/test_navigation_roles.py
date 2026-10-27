@@ -8,11 +8,11 @@ class TestTaskNavigation(WorkOrderCase):
     def labels(self,role):
         frappe.set_user(self.users[role]);return [g['label'] for g in nav.groups()]
     def test_requester_has_only_operational_primary_navigation(self):self.assertEqual(self.labels('requester'),['Operación'])
-    def test_technician_has_work_and_assets_without_administration(self):self.assertEqual(self.labels('tech'),['Operación','Activos'])
+    def test_technician_has_work_and_assets_without_administration(self):self.assertEqual(self.labels('tech'),['Operación','Activos','Planes y rutinas'])
     def test_supervisor_sees_resources_and_analysis(self):
         labels=self.labels('supervisor');self.assertIn('Recursos y servicios',labels);self.assertIn('Análisis',labels);self.assertNotIn('Configuración',labels)
     def test_unimplemented_groups_and_technical_entities_are_not_top_level(self):
-        frappe.set_user('Administrator');groups=nav.groups();self.assertNotIn('Planes y rutinas',[g['label'] for g in groups]);self.assertNotIn('Repuestos y costos',[g['label'] for g in groups]);targets={e['target'] for g in groups for e in g['links']};self.assertFalse(targets&nav.CONTEXTUAL)
+        frappe.set_user('Administrator');groups=nav.groups();self.assertIn('Planes y rutinas',[g['label'] for g in groups]);self.assertNotIn('Repuestos y costos',[g['label'] for g in groups]);targets={e['target'] for g in groups for e in g['links']};self.assertIn('TruCMMS Job Plan',targets);self.assertFalse(targets&nav.CONTEXTUAL)
     def test_home_counts_are_permission_scoped(self):
         order=self.assign();frappe.set_user(self.users['other']);data=nav.home();counts={c['label']:c['count'] for c in data['cards']};self.assertEqual(counts.get('Órdenes abiertas'),0)
         frappe.set_user(self.users['tech']);data=nav.home();self.assertTrue(any(a['label']=='Mi trabajo' for a in data['actions']));self.assertFalse(any(a['label']=='Reportar una falla' for a in data['actions']))
