@@ -228,3 +228,11 @@ class TestJobPlans(IntegrationTestCase):
         for field,value in [('code','renamed'),('company',COMPANY_B),('site',SITE_B)]:
             self.plan.reload();self.plan.set(field,value)
             with self.assertRaises(frappe.ValidationError): self.plan.save()
+
+    def test_unversioned_file_attachments_cannot_bypass_procedure_scope(self):
+        from frappe.utils.file_manager import save_file
+        doc=self.approved()
+        for dt,name in [(jp.PLAN,self.plan.name),(jp.REVISION,doc.name)]:
+            for private in (0,1):
+                with self.assertRaises(frappe.PermissionError):
+                    save_file(self.token+'.txt','Unversioned content',dt,name,is_private=private)

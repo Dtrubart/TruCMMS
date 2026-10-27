@@ -82,7 +82,7 @@ def file_query(user=None):
 
 
 def validate_file(doc,method=None):
-    if doc.attached_to_doctype in ("TruCMMS Equipment Installation","TruCMMS Asset Event","TruCMMS Equipment Profile","TruCMMS Criticality","TruCMMS Work Event","TruCMMS Execution Adjustment","TruCMMS Team Assignment","TruCMMS Maintenance Team","TruCMMS Team Membership","TruCMMS Team Site Authorization","TruCMMS Deployment","TruCMMS Work Cycle","TruCMMS Work Allocation"):frappe.throw("Attach evidence to maintenance work records instead of organizational or audit records.",frappe.PermissionError)
+    if doc.attached_to_doctype in ("TruCMMS Equipment Installation","TruCMMS Asset Event","TruCMMS Equipment Profile","TruCMMS Criticality","TruCMMS Work Event","TruCMMS Execution Adjustment","TruCMMS Team Assignment","TruCMMS Maintenance Team","TruCMMS Team Membership","TruCMMS Team Site Authorization","TruCMMS Deployment","TruCMMS Work Cycle","TruCMMS Work Allocation","TruCMMS Job Plan","TruCMMS Job Plan Revision"):frappe.throw("Attach evidence to maintenance work records instead of organizational or audit records.",frappe.PermissionError)
     old=doc.get_doc_before_save()
     if old and old.attached_to_doctype in (REQUEST, "TruCMMS Maintenance Work Order", "TruCMMS Work Execution") and (old.attached_to_doctype,old.attached_to_name)!=(doc.attached_to_doctype,doc.attached_to_name):
         frappe.throw("Request evidence cannot be detached or reassigned.",frappe.PermissionError)
@@ -133,7 +133,7 @@ def setup():
 class RequestFileGuard:
     """Validate before native File methods perform irreversible disk changes."""
     def before_insert(self):
-        if self.attached_to_doctype in ("TruCMMS Work Event","TruCMMS Execution Adjustment","TruCMMS Team Assignment","TruCMMS Maintenance Team","TruCMMS Team Membership","TruCMMS Team Site Authorization","TruCMMS Deployment","TruCMMS Work Cycle","TruCMMS Work Allocation"):frappe.throw("Attach evidence to maintenance work records instead of organizational or audit records.",frappe.PermissionError)
+        if self.attached_to_doctype in ("TruCMMS Work Event","TruCMMS Execution Adjustment","TruCMMS Team Assignment","TruCMMS Maintenance Team","TruCMMS Team Membership","TruCMMS Team Site Authorization","TruCMMS Deployment","TruCMMS Work Cycle","TruCMMS Work Allocation","TruCMMS Job Plan","TruCMMS Job Plan Revision"):frappe.throw("Attach evidence to maintenance work records instead of organizational or audit records.",frappe.PermissionError)
         parent=file_request(self)
         if parent:
             check_evidence_parent(parent,write=True,existing=False)
