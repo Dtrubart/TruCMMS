@@ -6,7 +6,7 @@ import frappe
 from frappe.utils import getdate,get_datetime,now_datetime,cint
 from vanbags_maintenance import r2_records as r,organization as org,teams,job_plans as jp,configuration,meters
 from vanbags_maintenance.timezones import zone
-from vanbags_maintenance.work_contract import atomic
+from vanbags_maintenance.work_contract import atomic,equal
 
 PLAN='TruCMMS PM Plan';OCC='TruCMMS PM Occurrence'
 CONFIG=('code','plan_name','company','site','equipment','component','procedure_revision','schedule_type','calendar_policy','anchor_date','end_date','frequency','interval','time_of_day','duration_minutes','horizon_days','meter','meter_metric_key','trigger_kind','usage_interval','lower_threshold','upper_threshold','release_mode','release_event','release_scope','include_corrective_work','control_group','max_active','lead_days','priority','responsible_team','required_discipline','acceptance_user','automation_enabled','automation_user')
@@ -69,16 +69,26 @@ def automation_identity(doc):
     user=doc.automation_user
     if not user or user=='Administrator' or not frappe.db.get_value('User',user,'enabled') or 'TruCMMS Supervisor' not in frappe.get_roles(user) or not org.in_scope(doc,user):frappe.throw('Automation requires an explicit enabled supervisor identity scoped to this Company/Site; implicit Administrator is not permitted.')
 
-def locked(name):
+def locked(name,require_permission=True):
     scope=frappe.db.get_value(PLAN,name,['company','site'],as_dict=True)
     if not scope:frappe.throw('Preventive plan not found.',frappe.DoesNotExistError)
     # Shared release serialization precedes order locking, including C1 actions.
     teams.locked_sql('SELECT name FROM `tabTruCMMS Site` WHERE name=%s FOR UPDATE',(scope.site,))
-    doc=teams.locked_document(PLAN,name);doc.check_permission('read');return doc
+    doc=teams.locked_document(PLAN,name)
+    if require_permission:doc.check_permission('read')
+    return doc
 
 def lock_order_scope(name):
     plan=frappe.db.get_value('TruCMMS Maintenance Work Order',name,'pm_plan')
-    if plan:locked(plan)
+    if plan:
+        # Acceptance/rework authority comes from the scoped order, not from
+        # permission to browse its planning library (requesters lack that role).
+        order=frappe.get_doc('TruCMMS Maintenance Work Order',name);order.check_permission('read')
+        locked(plan,require_permission=False)
+
+def current_pending(doc):
+    rows=teams.locked_sql(f"SELECT name FROM `tab{OCC}` WHERE plan=%s AND status IN ('Planned','Released') ORDER BY sequence LIMIT 1 FOR UPDATE",(doc.name,),as_dict=True)
+    return rows[0].name if rows else None
 
 def local_day(doc,stamp):
     source=zone(frappe.db.get_single_value('System Settings','time_zone') or 'UTC')
@@ -130,7 +140,7 @@ def _materialize(doc,until=None):
     today=local_today(doc);end=getdate(until) if until else today+timedelta(days=cint(doc.horizon_days))
     if end>today+timedelta(days=366):frappe.throw('Materialization is bounded to one year ahead.')
     if doc.calendar_policy=='After Completion':
-        if frappe.db.exists(OCC,{'plan':doc.name,'status':['in',['Planned','Released']]}):return []
+        if current_pending(doc):return []
         due=getdate(doc.next_due_date or doc.anchor_date)
         if due>end or doc.end_date and due>getdate(doc.end_date):return []
         return [occurrence(doc,doc.next_due_key or 'initial:'+str(due),due).name]
@@ -188,19 +198,19 @@ def violated(doc,value):
 def evaluate_meter(doc):
     meter=meters.meter(doc.meter);reading=meters.latest(meter,fresh=True)
     if doc.baseline_reading and meters.corrected(doc.baseline_reading):frappe.throw('The validated baseline reading was corrected; a reasoned rebase is required.')
-    pending=frappe.db.get_value(OCC,{'plan':doc.name,'status':['in',['Planned','Released']]},'name')
+    pending=current_pending(doc)
     if pending:return [pending]
     if doc.trigger_kind=='Usage':
         if float(reading.total_value)<float(doc.next_trigger_total):return []
         source='usage:'+str(doc.next_trigger_total)+':'+str(doc.baseline_reading)
-        return [occurrence(doc,source,local_today(doc),reading.name,doc.next_trigger_total).name]
+        return [occurrence(doc,source,local_day(doc,reading.actual_on),reading.name,doc.next_trigger_total).name]
     alarm=violated(doc,float(reading.value))
     if not alarm:
         if doc.condition_latched:doc.condition_latched=0;r.save(doc)
         return []
     if doc.condition_latched:return []
     doc.condition_latched=1;r.save(doc)
-    return [occurrence(doc,'condition:'+str(cint(doc.trigger_sequence)+1)+':'+reading.name,local_today(doc),reading.name).name]
+    return [occurrence(doc,'condition:'+str(cint(doc.trigger_sequence)+1)+':'+reading.name,local_day(doc,reading.actual_on),reading.name).name]
 
 @frappe.whitelist(methods=['POST'])
 @atomic
@@ -209,7 +219,7 @@ def rebase(plan,reading,reason):
     if doc.schedule_type!='Meter' or doc.trigger_kind!='Usage':frappe.throw('Only usage plans have an explicit maintenance baseline.')
     source=frappe.get_doc(meters.READING,reading);source.check_permission('read');meter=meters.meter(doc.meter);current=meters.latest(meter,fresh=True)
     if source.meter!=meter.name or meters.corrected(source.name) or source.actual_on>current.actual_on:frappe.throw('Choose a valid reading of this meter.')
-    if frappe.db.exists(OCC,{'plan':doc.name,'status':['in',['Planned','Released']]}):frappe.throw('Resolve pending obligations before rebasing; they must not disappear silently.')
+    if current_pending(doc):frappe.throw('Resolve pending obligations before rebasing; they must not disappear silently.')
     before=doc.baseline_reading;doc.baseline_reading=source.name;doc.baseline_total=source.total_value;doc.next_trigger_total=float(source.total_value)+float(doc.usage_interval);r.save(doc);r.event(doc,'Declare Usage Baseline',reason,previous=before,reading=source.name)
     return doc.as_dict()
 
@@ -218,15 +228,17 @@ def rebase(plan,reading,reason):
 def renew_condition(plan,reason):
     r.supervisor();doc=locked(plan);reason=r.reason(reason)
     if doc.status!='Active' or doc.schedule_type!='Meter' or doc.trigger_kind=='Usage':frappe.throw('Only active condition plans support explicit renewed intervention.')
-    pending=frappe.db.get_value(OCC,{'plan':plan,'status':['in',['Planned','Released']]},'name')
+    pending=current_pending(doc)
     if pending:return {'occurrences':[pending]}
     doc.condition_latched=0;r.save(doc);r.event(doc,'Renew Condition Intervention',reason)
     return {'occurrences':evaluate_meter(doc)}
 
-def get_occurrence(name):
+def get_occurrence(name,require_permission=True):
     plan=frappe.db.get_value(OCC,name,'plan')
     if not plan:frappe.throw('Occurrence not found.',frappe.DoesNotExistError)
-    doc=locked(plan);row=teams.locked_document(OCC,name);row.check_permission('read');return doc,row
+    doc=locked(plan,require_permission=require_permission);row=teams.locked_document(OCC,name)
+    if require_permission:row.check_permission('read')
+    return doc,row
 
 def slot_orders(doc,exclude=None):
     from vanbags_maintenance.work_orders import DT
@@ -273,7 +285,7 @@ def release(occurrence_name,reason,override=0):
     blockers=[]
     if getdate(row.planned_for)>local_today(doc)+timedelta(days=cint(doc.lead_days)):blockers.append('outside anticipation window')
     if len(slot_orders(doc))>=cint(doc.max_active):blockers.append('active-work limit')
-    earlier=frappe.db.exists(OCC,{'plan':doc.name,'sequence':['<',row.sequence],'status':'Planned'})
+    earlier=teams.locked_sql(f"SELECT name FROM `tab{OCC}` WHERE plan=%s AND sequence<%s AND status='Planned' LIMIT 1 FOR UPDATE",(doc.name,row.sequence))
     if earlier:blockers.append('an earlier occurrence is still planned; explicitly skip or resolve it')
     if doc.schedule_type=='Meter':
         reading=meters.latest(meters.meter(doc.meter),fresh=True)
@@ -321,6 +333,10 @@ def validate_order(doc,old):
         elif any(doc.get(k) for k in PM_FIELDS):frappe.throw('Direct/request orders cannot forge preventive provenance.')
     else:
         action=frappe.flags.get('trucmms_c_action') or {}
+        if doc.pm_occurrence:
+            try:changed=any(not equal(doc.get(k),old.get(k),k) for k in ('scheduled_start','scheduled_end'))
+            except (ValueError,TypeError):frappe.throw('Enter valid system-time scheduling datetimes.')
+            if changed and action.get('action')!='Replan Work':frappe.throw('Use reasoned order scheduling so the preventive occurrence follows its order.')
         for field in PM_FIELDS:
             if str(doc.get(field) or '')!=str(old.get(field) or '') and not (action.get('name')==doc.name and field in action.get('allowed',())):frappe.throw('Preventive origin and start audit are immutable.',frappe.PermissionError)
 
@@ -340,10 +356,10 @@ def start_work(work_order,reason):
 def pre_transition(order,action):
     if not order.pm_occurrence:return
     if action in ('Request Rework','Reopen Order'):
-        plan,row=get_occurrence(order.pm_occurrence)
+        plan,row=get_occurrence(order.pm_occurrence,require_permission=False)
         if row.status=='Completed':
             if plan.baseline_occurrence and plan.baseline_occurrence!=row.name:frappe.throw('Later maintenance already advanced the baseline; reconcile it explicitly before reopening this older work.')
-            successors=frappe.get_all(OCC,filters={'plan':plan.name,'source_key':['like','after:'+row.name+':%']},fields=['name','status'])
+            successors=teams.locked_sql(f'SELECT name,status FROM `tab{OCC}` WHERE plan=%s AND source_key LIKE %s FOR UPDATE',(plan.name,'after:'+row.name+':%'),as_dict=True)
             if any(x.status in ('Released','Completed') for x in successors):frappe.throw('Resolve the released successor before reopening this maintenance cycle.')
     if action=='Complete Work':
         from vanbags_maintenance.inspections import check_completion
@@ -355,8 +371,14 @@ def pre_transition(order,action):
 def order_updated(order,method=None):
     if not order.pm_occurrence:return
     old=order.get_doc_before_save()
-    if not old or old.status==order.status:return
-    plan,row=get_occurrence(order.pm_occurrence)
+    if not old:return
+    if not equal(old.scheduled_start,order.scheduled_start,'scheduled_start') and order.scheduled_start:
+        plan,row=get_occurrence(order.pm_occurrence,require_permission=False)
+        row.planned_for=local_day(plan,order.scheduled_start)
+        context=frappe.flags.get('trucmms_c_action') or {};row.last_reason=context.get('reason') or 'Controlled order scheduling'
+        r.save(row);r.event(row,'Follow Order Schedule',row.last_reason,original_due=row.original_due,planned_for=row.planned_for)
+    if old.status==order.status:return
+    plan,row=get_occurrence(order.pm_occurrence,require_permission=False)
     if order.status=='Verified' and row.status!='Completed':
         from vanbags_maintenance.inspections import maintenance_actual
         actual,reading=maintenance_actual(order,plan)
@@ -371,7 +393,7 @@ def order_updated(order,method=None):
     elif order.status=='Cancelled' and row.status!='Cancelled':
         row.status='Cancelled';row.last_reason=order.cancelled_reason;r.save(row);r.event(row,'Cancel Released Occurrence',order.cancelled_reason);next_after_disposition(plan,row,'cancelled')
     elif order.status in ('Assigned','Authorized') and row.status=='Completed':
-        for name in frappe.get_all(OCC,filters={'plan':plan.name,'source_key':['like','after:'+row.name+':%'],'status':'Planned'},pluck='name'):
+        for name in teams.locked_sql(f"SELECT name FROM `tab{OCC}` WHERE plan=%s AND source_key LIKE %s AND status='Planned' FOR UPDATE",(plan.name,'after:'+row.name+':%'),pluck=True):
             successor=frappe.get_doc(OCC,name);successor.status='Cancelled';successor.last_reason='Predecessor reopened/reworked';r.save(successor);r.event(successor,'Cancel Future Occurrence','Predecessor reopened/reworked')
         before=json.loads(row.baseline_before or '{}')
         for field,value in before.items():plan.set(field,value)
@@ -440,9 +462,41 @@ def schedule(from_date,to_date,company=None,site=None,equipment=None,plan=None):
         row['kind']='Programmed' if row.status=='Planned' else row.status
         if row.work_order:
             order=frappe.get_doc('TruCMMS Maintenance Work Order',row.work_order)
-            try:
-                order.check_permission('read')
+            from vanbags_maintenance import work_orders as wo
+            if frappe.has_permission(wo.DT,'read') and wo.can_read(order):
                 active_execution=frappe.db.sql('SELECT e.name FROM `tabTruCMMS Work Execution` e WHERE e.work_order=%s AND NOT EXISTS (SELECT 1 FROM `tabTruCMMS Execution Adjustment` a WHERE a.execution=e.name) LIMIT 1',(order.name,))
                 row['order_status']='In Progress' if (order.pm_started_on or active_execution) and order.status=='Assigned' else order.status
-            except frappe.PermissionError:row.work_order=None
+            else:row.work_order=None
     return {'rows':rows,'truncated':truncated,'from_date':str(start),'to_date':str(end)}
+
+@frappe.whitelist(methods=['GET','POST'])
+def compliance(from_date,to_date,company=None,site=None,equipment=None,plan=None):
+    view=schedule(from_date,to_date,company,site,equipment,plan)
+    rows=view['rows'];names=[x.name for x in rows]
+    details={x.name:x for x in frappe.get_list(OCC,filters={'name':['in',names]},fields=['name','completed_actual_on'],limit_page_length=500)} if names else {}
+    plans={x.name:x for x in frappe.get_list(PLAN,filters={'name':['in',list({x.plan for x in rows})]},fields=['name','status','site','operating_timezone'],limit_page_length=500)} if rows else {}
+    counts={k:0 for k in ('programmed','released','validated','skipped','cancelled','inactive_programmed','overdue','elapsed_due','validated_elapsed','on_time_elapsed','late_validated')};flags={}
+    for row in rows:
+        parent=plans.get(row.plan)
+        if not parent:continue
+        today=local_today(parent);due=getdate(row.original_due)
+        actual=details[row.name].completed_actual_on
+        actual_day=local_day(parent,actual) if actual else None
+        inactive=row.status=='Planned' and parent.status=='Retired'
+        if row.status=='Planned':counts['inactive_programmed' if inactive else 'programmed']+=1
+        for status,key in [('Released','released'),('Completed','validated'),('Skipped','skipped'),('Cancelled','cancelled')]:
+            if row.status==status:counts[key]+=1
+        overdue=row.status in ('Planned','Released') and not inactive and due<today
+        on_time=actual_day<=due if row.status=='Completed' and actual_day else None
+        if overdue:counts['overdue']+=1
+        if row.status=='Completed' and on_time is False:counts['late_validated']+=1
+        if due<today and row.status!='Cancelled' and not inactive:
+            counts['elapsed_due']+=1
+            if row.status=='Completed':
+                counts['validated_elapsed']+=1
+                if on_time:counts['on_time_elapsed']+=1
+        flags[row.name]={'overdue':overdue,'on_time':on_time,'plan_status':parent.status}
+    denominator=counts['elapsed_due']
+    counts['completion_percent']=round(100*counts['validated_elapsed']/denominator,1) if denominator else None
+    counts['on_time_percent']=round(100*counts['on_time_elapsed']/denominator,1) if denominator else None
+    return {'counts':counts,'by_occurrence':flags,'truncated':view['truncated'],'definition':'Only original due dates before the local operating date enter the elapsed-due denominator; skips are not fulfillment, cancellations and unreleased retired obligations are excluded. Rates describe the displayed bounded period.'}

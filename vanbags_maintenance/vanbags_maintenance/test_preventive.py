@@ -50,6 +50,22 @@ class PreventiveCase(WorkOrderCase):
         frappe.set_user(self.users['tech']);return frappe.get_doc(meters.record(meter.name,value,add_to_date(now_datetime(),minutes=minutes),key or uuid.uuid4().hex,'Observed test reading'))
 
 class TestPreventive(PreventiveCase):
+    def test_designated_requester_accepts_pm_without_planning_library_access(self):
+        frappe.set_user('Administrator');site=frappe.get_doc('TruCMMS Site',SITE_A);site.acceptance_policy='Required';site.save()
+        plan=self.plan(acceptance_user=self.users['requester']);order=self.assigned(plan);self.verify(order)
+        frappe.set_user(self.users['requester'])
+        with self.assertRaises(frappe.PermissionError):frappe.get_doc(pm.PLAN,plan.name).check_permission('read')
+        accepted=cycle.perform(order.name,'Accept Work','Requester accepts independently verified preventive work');self.assertEqual(accepted['status'],'Accepted')
+    def test_order_reschedule_moves_occurrence_without_erasing_original_due(self):
+        plan=self.plan();order=self.release(plan);original=self.occurrences(plan)[0].original_due;start=now_datetime()+timedelta(days=2)
+        cycle.replan(order.name,start,start+timedelta(hours=1),start+timedelta(hours=1),'Explicit schedule change')
+        row=frappe.get_doc(pm.OCC,order.pm_occurrence);self.assertEqual(row.original_due,original);self.assertEqual(row.planned_for,pm.local_day(plan,start))
+    def test_skipped_elapsed_work_is_not_compliance(self):
+        plan=self.plan(anchor_date=getdate()-timedelta(days=7),horizon_days=7);pm.change_occurrence(self.occurrences(plan)[0].name,'Skip','Capacity unavailable')
+        result=pm.compliance(str(getdate()-timedelta(days=10)),str(getdate()+timedelta(days=10)),plan=plan.name)['counts'];self.assertEqual(result['elapsed_due'],1);self.assertEqual(result['skipped'],1);self.assertEqual(result['completion_percent'],0)
+    def test_late_validated_work_is_fulfilled_but_not_on_time(self):
+        plan=self.plan(anchor_date=getdate()-timedelta(days=7),horizon_days=7);order=self.assigned(plan);self.verify(order)
+        result=pm.compliance(str(getdate()-timedelta(days=10)),str(getdate()+timedelta(days=10)),plan=plan.name)['counts'];self.assertEqual(result['completion_percent'],100);self.assertEqual(result['on_time_percent'],0);self.assertEqual(result['late_validated'],1)
     def test_automatic_work_events_enqueue_only_after_commit(self):
         plan=self.plan(release_mode='Automatic',automation_enabled=1,automation_user=self.users['supervisor'])
         with patch('frappe.enqueue') as enqueue:
@@ -138,6 +154,8 @@ class TestPreventive(PreventiveCase):
         with self.assertRaises(frappe.ValidationError):self.plan(automation_enabled=1,automation_user='Administrator')
 
 class TestMeters(PreventiveCase):
+    def test_usage_due_date_retains_observation_date_not_late_entry_date(self):
+        meter=self.meter();self.reading(meter,100,minutes=-3000);revision=self.procedure(measurements=[{'task_code':'inspect','metric_key':'hours','metric_name':'Hours','metric_kind':'Cumulative','unit':self.unit,'direction':'Increasing','required':1}]);plan=self.plan(revision=revision,schedule_type='Meter',meter=meter.name,meter_metric_key='hours',usage_interval=10);observed=self.reading(meter,110,minutes=-1500);frappe.set_user(self.users['supervisor']);pm.run_plan(plan.name,'Evaluate fresh but backdated observation');self.assertEqual(self.occurrences(plan)[0].original_due,pm.local_day(plan,observed.actual_on))
     def test_reset_key_is_required_and_conflicting_retries_are_rejected(self):
         meter=self.meter();self.reading(meter,100);frappe.set_user(self.users['supervisor'])
         with self.assertRaises(frappe.ValidationError):meters.reset(meter.name,0,'Replacement','')

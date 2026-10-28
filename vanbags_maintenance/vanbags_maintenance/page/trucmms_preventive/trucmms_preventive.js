@@ -9,8 +9,9 @@ frappe.pages['trucmms-preventive'].on_page_load=function(wrapper){
  for(const def of [{fieldname:'company',label:'Empresa',fieldtype:'Link',options:'Company'},{fieldname:'site',label:'Sede',fieldtype:'Link',options:'TruCMMS Site'},{fieldname:'equipment',label:'Equipo',fieldtype:'Link',options:'VB Equipment'},{fieldname:'plan',label:'Plan',fieldtype:'Link',options:'TruCMMS PM Plan'},{fieldname:'from_date',label:'Desde',fieldtype:'Date',default:today.slice(0,7)+'-01'},{fieldname:'to_date',label:'Hasta',fieldtype:'Date',default:new Date(Date.UTC(Number(today.slice(0,4)),Number(today.slice(5,7)),0)).toISOString().slice(0,10)}])fields[def.fieldname]=page.add_field({...def,change:()=>ready&&load()});
  function args(){return Object.fromEntries(Object.entries(fields).map(([k,v])=>[k,v.get_value()]).filter(([,v])=>v));}
  function button(row,parent){
-  const label=row.order_status==='In Progress'?'En proceso':({Planned:'Programada',Released:'Orden abierta',Completed:'Validada',Skipped:'Omitida',Cancelled:'Cancelada'}[row.status]||row.status);
-  const color={Planned:'#3b82f6',Released:'#f59e0b',Completed:'#16a34a',Skipped:'#94a3b8',Cancelled:'#ef4444'}[row.status];
+  let label=row.order_status==='In Progress'?'En proceso':({Planned:'Programada',Released:'Orden abierta',Completed:'Validada',Skipped:'Omitida',Cancelled:'Cancelada'}[row.status]||row.status);
+  if(row.overdue)label+=' · Vencida';if(row.plan_status==='Paused')label+=' · Plan pausado';if(row.plan_status==='Retired')label+=' · Plan retirado';if(row.on_time===false)label+=' · Fuera de plazo';
+  const color=row.overdue?'#dc2626':{Planned:'#3b82f6',Released:'#f59e0b',Completed:'#16a34a',Skipped:'#94a3b8',Cancelled:'#ef4444'}[row.status];
   const b=$('<button type="button" class="pm-card"></button>').css('border-left-color',color).attr('data-occurrence',row.name).appendTo(parent);
   $('<strong></strong>').text(row.subject).appendTo(b);$('<div></div>').text(row.equipment+' · '+label).appendTo(b);
   if(String(row.original_due)!==String(row.planned_for))$('<small></small>').text('Vencimiento original: '+row.original_due).appendTo(b);
@@ -18,9 +19,9 @@ frappe.pages['trucmms-preventive'].on_page_load=function(wrapper){
  }
  async function load(){
   const request=++seq;notice.text(__('Cargando programación…'));body.empty();
-  try{const {message}=await frappe.call({method:'vanbags_maintenance.preventive.schedule',type:'GET',args:args()});if(request!==seq)return;
+  try{const query=args();const responses=await Promise.all([frappe.call({method:'vanbags_maintenance.preventive.schedule',type:'GET',args:query}),frappe.call({method:'vanbags_maintenance.preventive.compliance',type:'GET',args:query})]);const message=responses[0].message,summary=responses[1].message;if(request!==seq)return;for(const row of message.rows)Object.assign(row,summary.by_occurrence[row.name]||{});
    const rows=message.rows,totals={};for(const row of rows)totals[row.status]=(totals[row.status]||0)+1;
-   counts.text('Programadas: '+(totals.Planned||0)+' · Liberadas: '+(totals.Released||0)+' · Validadas: '+(totals.Completed||0)+' · Omitidas: '+(totals.Skipped||0));
+   counts.text('Programadas: '+(totals.Planned||0)+' · Liberadas: '+(totals.Released||0)+' · Validadas: '+(totals.Completed||0)+' · Omitidas: '+(totals.Skipped||0)+' · Pendientes vencidas: '+summary.counts.overdue+' · Cumplimiento del período vencido: '+(summary.counts.completion_percent===null?'—':summary.counts.completion_percent+'%')+' · A tiempo: '+(summary.counts.on_time_percent===null?'—':summary.counts.on_time_percent+'%'));
    notice.text(message.truncated?'Se muestran 500 ocurrencias; reduce el período.':'Fechas locales de cada sede. Las programadas no son órdenes abiertas. Se muestran ocurrencias materializadas; el plan ofrece vista previa y horizonte configurables.');
    if(mode==='List'){
     const table=$('<table class="table"><thead><tr><th>Fecha prevista</th><th>Vencimiento original</th><th>Trabajo y estado</th></tr></thead><tbody></tbody></table>').appendTo($('<div class="pm-list"></div>').appendTo(body));

@@ -37,3 +37,9 @@ Automation is opt-in per plan, requires an enabled explicitly scoped supervisor 
 ## Verification
 
 The regression suite retains R1/R2.1 coverage and adds calendar anchors, future-obligation/order separation, idempotence, skip/postpone/cancel, slot scope/events/overrides, opt-in automation, effective execution, independent verification, findings/follow-up, meter freshness/corrections/epochs, component positions/transfers and immutable provenance. Site deployment fingerprints are recorded after migration. Candidate evidence and human acceptance are recorded separately from this functional contract.
+
+## Compliance and rescheduling
+
+Reasoned C1 rescheduling moves the occurrence planned date in the approved operating timezone while preserving its original due date. Calendar summaries distinguish overdue pending work, skipped/cancelled work and validated work completed late. Completion/on-time rates use original due dates before the current local operating date, exclude cancellations and unreleased retired obligations, and never count skipped work as performed. Zero elapsed obligations produce no claimed 100% rate. The rates apply only to the displayed bounded period; truncation requires narrowing the query.
+
+Meter-trigger obligations retain the local date of the triggering observation, not the later date of data entry/evaluation. PM compliance is measured against the original civil due date; the separate work-order closure target retains its precise scheduling timestamp. Designated requesters may accept/reject verified PM work through their scoped order authority without gaining access to the planning library.
