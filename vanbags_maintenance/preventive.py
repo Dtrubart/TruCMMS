@@ -434,7 +434,7 @@ def schedule(from_date,to_date,company=None,site=None,equipment=None,plan=None):
     filters={'planned_for':['between',[start,end]]}
     for key,value in [('company',company),('site',site),('equipment',equipment),('plan',plan)]:
         if value:filters[key]=value
-    rows=frappe.get_list(OCC,filters=filters,fields=['name','plan','subject','equipment','component','original_due','planned_for','status','work_order','trigger_total','last_reason'],order_by='planned_for,sequence',limit_page_length=501)
+    rows=frappe.get_list(OCC,filters=filters,fields=['name','plan','subject','equipment','component','original_due','planned_for','status','work_order','trigger_total','last_reason'],order_by='planned_for,plan,sequence,name',limit_page_length=501)
     truncated=len(rows)>500;rows=rows[:500]
     for row in rows:
         row['kind']='Programmed' if row.status=='Planned' else row.status

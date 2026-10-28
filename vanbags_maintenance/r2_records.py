@@ -37,12 +37,16 @@ def permission(doc,user=None,ptype=None):
         target=frappe.db.get_value('VB Equipment',doc.equipment,['company','site'],as_dict=True)
         if target:scoped=frappe._dict(doctype=doc.doctype,**target)
     if not org.in_scope(scoped,user) or not role_allowed(doc.doctype,user):frappe.throw('R2 access requires an authorized Company/Site and role.',frappe.PermissionError)
+    if doc.doctype=='TruCMMS PM Event':
+        for field,dt in [('plan','TruCMMS PM Plan'),('finding','TruCMMS Inspection Finding')]:
+            if doc.get(field) and not frappe.has_permission(dt,'read',doc=frappe.get_doc(dt,doc.get(field)),user=user):frappe.throw('Event access requires access to its planning/inspection parent.',frappe.PermissionError)
     if doc.doctype=='TruCMMS PM Plan' and doc.status=='Draft' and not org.privileged(user) and not set(frappe.get_roles(user))&{'TruCMMS Supervisor','TruCMMS Dispatcher'}:frappe.throw('Draft planning requires an editor.',frappe.PermissionError)
     return True
 
 def query_for(dt,user=None):
     if not role_allowed(dt,user):return '1=0'
     result=org.query(dt,user) or '1=1'
+    if dt=='TruCMMS PM Event' and not org.privileged(user) and not set(frappe.get_roles(user))&{'TruCMMS Supervisor','TruCMMS Dispatcher'}:result+=" AND COALESCE(`tabTruCMMS PM Event`.plan,'')='' AND COALESCE(`tabTruCMMS PM Event`.finding,'')=''"
     if dt=='TruCMMS PM Plan' and not org.privileged(user) and not set(frappe.get_roles(user))&{'TruCMMS Supervisor','TruCMMS Dispatcher'}:result+=f" AND `tab{dt}`.status!='Draft'"
     return result
 

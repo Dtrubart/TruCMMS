@@ -16,7 +16,7 @@
   equipment:scope,
   refresh(frm){
    if(frm.is_new())return;
-   if(frm.doc.status!=='Draft')frm.disable_save();
+   if(frm.doc.status!=='Draft'){frm.disable_save();for(const field of frm.meta.fields)frm.set_df_property(field.fieldname,'read_only',1);}
    frm.add_custom_button(__('Ocurrencias'),()=>frappe.set_route('List','TruCMMS PM Occurrence',{plan:frm.doc.name}));
    frm.add_custom_button(__('Vista previa'),async()=>{const {message}=await frappe.call({method:'vanbags_maintenance.preventive.preview',args:{plan:frm.doc.name}});frappe.msgprint({title:__('Vista previa sin crear órdenes'),message:message.rows.map(r=>frappe.utils.escape_html(r.due+' · '+r.equipment)).join('<br>')||frappe.utils.escape_html(message.message||'Sin fechas previstas')});});
    if(supervisor()){
@@ -40,12 +40,14 @@
   }
  }});
  frappe.ui.form.on('TruCMMS Meter',{equipment:scope,component(frm){if(frm.doc.component&&frm.is_new())frappe.db.get_doc('TruCMMS Component',frm.doc.component).then(c=>frm.set_value({equipment:c.equipment,company:c.company,site:c.site}));},refresh(frm){if(frm.is_new()){if(frm.doc.component&&!frm.doc.equipment)frappe.db.get_doc('TruCMMS Component',frm.doc.component).then(c=>frm.set_value({equipment:c.equipment,company:c.company,site:c.site}));else if(frm.doc.equipment&&!frm.doc.company)scope(frm);return;}
+  for(const field of ['code','company','site','equipment','component','unit','metric_kind','direction'])frm.set_df_property(field,'read_only',1);
   frm.add_custom_button(__('Lecturas'),()=>frappe.set_route('List','TruCMMS Meter Reading',{meter:frm.doc.name}));
   if(!frm.doc.disabled&&role(['TruCMMS Technician','TruCMMS Supervisor','VB Maintenance Manager','System Manager']))action(frm,'Registrar lectura','meters.record',{meter_name:frm.doc.name,key:'AUTO'},[{fieldname:'value',label:__('Valor ('+frm.doc.unit+')'),fieldtype:'Data',reqd:1},{fieldname:'actual_on',label:__('Fecha de medición'),fieldtype:'Datetime',reqd:1},why]);
   if(assetEditor())action(frm,'Reinicio / reemplazo de medidor','meters.reset',{meter_name:frm.doc.name,key:'AUTO'},[{fieldname:'initial_value',label:__('Lectura inicial'),fieldtype:'Data',reqd:1},why]);
  }});
  frappe.ui.form.on('TruCMMS Meter Reading',{refresh(frm){frm.disable_save();if(!frm.is_new()&&assetEditor())action(frm,'Corregir última lectura','meters.correct',{reading:frm.doc.name,key:'AUTO'},[{fieldname:'value',label:__('Valor corregido'),fieldtype:'Data',reqd:1},why]);}});
  frappe.ui.form.on('TruCMMS Component',{equipment:scope,refresh(frm){if(frm.is_new())return;
+  for(const field of ['code','company','site','equipment','position'])frm.set_df_property(field,'read_only',1);
   frm.add_custom_button(__('Historial de instalaciones'),()=>frappe.set_route('List','TruCMMS Component Installation',{component:frm.doc.name}));
   frm.add_custom_button(__('Medidores del componente'),()=>frappe.set_route('List','TruCMMS Meter',{component:frm.doc.name}));
   if(assetEditor())action(frm,'Instalar / mover / retirar','components.place',{component:frm.doc.name},[{fieldname:'equipment',label:__('Equipo destino (vacío para retirar)'),fieldtype:'Link',options:'VB Equipment'},{fieldname:'position',label:__('Posición destino'),fieldtype:'Data'},why]);

@@ -178,6 +178,11 @@ class TestMeters(PreventiveCase):
         with self.assertRaises(frappe.PermissionError):row.save(ignore_permissions=True)
 
 class TestComponents(PreventiveCase):
+    def test_asset_only_role_cannot_read_planning_audit_events(self):
+        plan=self.plan();frappe.set_user('Administrator');user=frappe.get_doc({'doctype':'User','email':self.token+'asset@example.com','first_name':'Asset-only role','send_welcome_email':0,'roles':[{'role':'VB Maintenance Manager'}]}).insert();grant_scope(user.name)
+        event=frappe.db.get_value('TruCMMS PM Event',{'plan':plan.name,'action':'Activate Plan'},'name');frappe.set_user(user.name)
+        with self.assertRaises(frappe.PermissionError):frappe.get_doc('TruCMMS PM Event',event).check_permission('read')
+        self.assertNotIn(event,frappe.get_list('TruCMMS PM Event',pluck='name'))
     def test_repeated_identical_component_placement_is_a_noop(self):
         component=self.component();components.place(component.name,self.eq.name,'LEFT','Retry current location');self.assertEqual(len(components.history(component.name)),1)
     def test_equipment_transfer_carries_components_and_meter_scope(self):
