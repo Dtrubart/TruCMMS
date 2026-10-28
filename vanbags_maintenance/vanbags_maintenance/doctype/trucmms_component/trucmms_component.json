@@ -1,0 +1,140 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Component",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "track_changes": 1,
+ "istable": 0,
+ "autoname": "field:code",
+ "field_order": [
+  "code",
+  "component_name",
+  "company",
+  "site",
+  "equipment",
+  "position",
+  "serial_number",
+  "criticality",
+  "disabled",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "label": "Código",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "length": 64,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "component_name",
+   "label": "Componente",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1
+  },
+  {
+   "fieldname": "equipment",
+   "label": "Equipo instalado",
+   "fieldtype": "Link",
+   "options": "VB Equipment",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "position",
+   "label": "Posición",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "serial_number",
+   "label": "Serie",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "criticality",
+   "label": "Criticidad",
+   "fieldtype": "Link",
+   "options": "TruCMMS Criticality"
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Retirado",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "description",
+   "label": "Descripción",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "title_field": "component_name",
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "VB Maintenance User",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  }
+ ]
+}

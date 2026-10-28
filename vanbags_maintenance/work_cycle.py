@@ -21,6 +21,8 @@ def public_snapshot(data):
 
 
 def locked_order(name):
+    from vanbags_maintenance.preventive import lock_order_scope
+    lock_order_scope(name)
     teams.locked_sql(f'SELECT name FROM `tab{wo.DT}` WHERE name=%s FOR UPDATE',(name,))
     doc=teams.locked_document(wo.DT,name);doc.check_permission('read');return doc
 
@@ -44,6 +46,10 @@ def validate_action(doc,action,reason):
     if not org.in_scope(doc,user) or not wo.can_read(doc,user):frappe.throw('Company/Site and order access required.',frappe.PermissionError)
     if not (reason or '').strip():frappe.throw('A reason or summary is required.')
     supervisor=wo.supervisor();requester='TruCMMS Requester' in frappe.get_roles() and user==doc.acceptance_user
+    if action=='Start Preventive Work':
+        if not doc.pm_occurrence or doc.status!='Assigned' or wo.TECHNICIAN not in frappe.get_roles():frappe.throw('Assigned preventive work and a technician role are required.',frappe.PermissionError)
+        allocations.execution_context(doc,user)
+        return 'Assigned'
     if action=='Complete Work':
         if doc.status!='Assigned':frappe.throw('Complete only assigned work.')
         if user!=doc.assigned_to or wo.TECHNICIAN not in frappe.get_roles():frappe.throw('Primary assigned technician required.',frappe.PermissionError)
@@ -108,10 +114,16 @@ def validate_change(doc,old):
 @frappe.whitelist(methods=['POST'])
 @contract.atomic
 def perform(work_order,action,reason):
+    if action=='Start Preventive Work':
+        from vanbags_maintenance.preventive import start_work
+        return start_work(work_order,reason)
     from vanbags_maintenance import lifecycle as old_policy
     doc=locked_order(work_order)
     if doc.lifecycle_policy!='C1' and action!='Reopen Order':return old_policy.perform(work_order,action,reason)
-    target=validate_action(doc,action,reason);before=doc.status;snapshot=doc.as_dict();stamp=now_datetime();user=frappe.session.user
+    target=validate_action(doc,action,reason)
+    from vanbags_maintenance.preventive import pre_transition
+    pre_transition(doc,action)
+    before=doc.status;snapshot=doc.as_dict();stamp=now_datetime();user=frappe.session.user
     prefixes={'Complete Work':'completed','Verify Work':'verified','Accept Work':'accepted','Accept on Behalf':'accepted','Close Order':'closed','Request Rework':'rework','Hold Work':'held','Resume Work':'resumed','Cancel Order':'cancelled','Reopen Order':'reopened'}
     allowed=set(old_policy.AUDIT+AUDIT+('execution_cycle','has_review_history','hold_from_state'))
     rows=allocations.active(doc,lock=True) if doc.lifecycle_policy=='C1' else []
@@ -245,7 +257,7 @@ def validate_share(doc,method=None):
 def designate_acceptor(work_order,user,reason):
     doc=locked_order(work_order)
     if not wo.supervisor():frappe.throw('Supervisor designation required.',frappe.PermissionError)
-    if doc.lifecycle_policy!='C1' or doc.origin_type!='Direct' or doc.status!='Authorized':frappe.throw('Designate an acceptor for authorized direct work before execution.')
+    if doc.lifecycle_policy!='C1' or doc.origin_type not in ('Direct','Preventive','Inspection') or doc.status!='Authorized':frappe.throw('Designate an acceptor for authorized non-request work before execution.')
     if not (reason or '').strip():frappe.throw('Designation reason required.')
     snapshot=doc.as_dict();doc.acceptance_user=user;contract.valid_acceptor(doc)
     save(doc,'Designate Acceptor',reason,('acceptance_user',));event(doc,'Designate Acceptor',doc.status,reason,snapshot);return doc.as_dict()

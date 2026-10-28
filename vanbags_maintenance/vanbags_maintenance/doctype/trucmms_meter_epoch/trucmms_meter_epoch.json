@@ -1,0 +1,153 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Meter Epoch",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "track_changes": 1,
+ "istable": 0,
+ "autoname": "field:epoch_key",
+ "field_order": [
+  "epoch_key",
+  "meter",
+  "company",
+  "site",
+  "old_epoch",
+  "new_epoch",
+  "initial_value",
+  "continuity_offset",
+  "effective_on",
+  "reason",
+  "recorded_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "epoch_key",
+   "label": "Identidad",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "meter",
+   "label": "Medidor",
+   "fieldtype": "Link",
+   "options": "TruCMMS Meter",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "old_epoch",
+   "label": "Época anterior",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_epoch",
+   "label": "Época nueva",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "initial_value",
+   "label": "Lectura inicial",
+   "fieldtype": "Float",
+   "precision": "6",
+   "read_only": 1
+  },
+  {
+   "fieldname": "continuity_offset",
+   "label": "Ajuste de continuidad",
+   "fieldtype": "Float",
+   "precision": "6",
+   "read_only": 1
+  },
+  {
+   "fieldname": "effective_on",
+   "label": "Fecha efectiva",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Motivo",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_by",
+   "label": "Actor",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "VB Maintenance User",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  }
+ ]
+}

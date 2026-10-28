@@ -1,0 +1,146 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS PM Event",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "track_changes": 1,
+ "istable": 0,
+ "autoname": "hash",
+ "field_order": [
+  "company",
+  "site",
+  "plan",
+  "occurrence",
+  "meter",
+  "component",
+  "finding",
+  "action",
+  "reason",
+  "actor",
+  "recorded_on",
+  "details"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "plan",
+   "label": "Plan",
+   "fieldtype": "Link",
+   "options": "TruCMMS PM Plan",
+   "read_only": 1
+  },
+  {
+   "fieldname": "occurrence",
+   "label": "Ocurrencia",
+   "fieldtype": "Link",
+   "options": "TruCMMS PM Occurrence",
+   "read_only": 1
+  },
+  {
+   "fieldname": "meter",
+   "label": "Medidor",
+   "fieldtype": "Link",
+   "options": "TruCMMS Meter",
+   "read_only": 1
+  },
+  {
+   "fieldname": "component",
+   "label": "Componente",
+   "fieldtype": "Link",
+   "options": "TruCMMS Component",
+   "read_only": 1
+  },
+  {
+   "fieldname": "finding",
+   "label": "Hallazgo",
+   "fieldtype": "Link",
+   "options": "TruCMMS Inspection Finding",
+   "read_only": 1
+  },
+  {
+   "fieldname": "action",
+   "label": "Acción",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Motivo",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actor",
+   "label": "Actor",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_on",
+   "label": "Registrado el",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "details",
+   "label": "Detalle conservado",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  }
+ ]
+}

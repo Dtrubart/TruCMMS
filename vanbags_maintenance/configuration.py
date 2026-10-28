@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfoNotFoundError
 from vanbags_maintenance.timezones import zone as ZoneInfo
 import frappe
 from frappe.utils import get_datetime
-POLICY_VERSION = 'R2.1'
+POLICY_VERSION = 'R2'
 
 def validate_zone(value):
     try:ZoneInfo(value)

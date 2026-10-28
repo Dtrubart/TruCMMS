@@ -1,33 +1,39 @@
-# R2 — preventive maintenance, approved design and incremental delivery
+# R2 — native preventive maintenance
 
-R2 extends TruCMMS as an installable native Frappe/ERPNext app. The human-approved design includes diverse measurements, a clear separation between planned occurrences and open orders, controlled release policies, optional planned materials, and component-level follow-up. It does not replace the R1 work-order lifecycle.
+R2 extends the same TruCMMS/Frappe/ERPNext app and the R1 authorization, assignment, execution and independent verification lifecycle. Company/Site boundaries remain mandatory. No separate execution engine, stock ledger or invented maintenance request is introduced.
 
-## R2.1 — procedure library
+## Functional scope
 
-Native documents: **TruCMMS Job Plan** (stable procedure identity and Company/Site scope), **TruCMMS Job Plan Revision**, and child tables for tasks, measurement definitions and planned materials.
+| Block | Implemented contract |
+| --- | --- |
+| Procedure library | Scoped, versioned tasks, numeric measurement definitions and optional Item/UOM material estimates. Approved JSON/SHA-256 snapshot remains immutable; retirement retains history. |
+| Calendar plans | Anchored day/week/month intervals, month-end clamping without fixed-calendar drift, or next due from validated actual execution. Approved operating timezone is frozen. Bounded preview/materialization creates occurrences, not orders. |
+| Occurrences | Stable source identity, original due date, independent planned date, planned/released/validated/skipped/cancelled dispositions. Reasoned postponement never erases original lateness. Omission does not count as performed maintenance. |
+| Order release | Manual or automatic release into Draft, preserving normal authorization and eligibility. Slot gates on start/verification/closure; scope plan/equipment/component/explicit Company-Site group. Equipment scope can explicitly include corrective work. Supervisor reasoned exceptions are audited. |
+| Preventive execution | Genuine Preventive origin, frozen procedure/material provenance, task codes, mandatory tasks/measurements and discipline/evidence gates. Explicit start audit or effective execution indicates progress while the compatible C1 status remains Assigned. |
+| Completion | Independent verification advances the preventive baseline using actual effective execution and, for meter plans, the recorded maintenance reading. Rework/reopen preserve cycles; released successors/later validated baselines require explicit reconciliation. |
+| Meters | Cumulative counters, condition and rates with native UOM; chronological finite readings, retry keys, append-only latest-reading corrections and explicit reset/replacement epochs. Cumulative continuity survives counter reset. Stale data blocks unattended decisions. |
+| Condition/usage | One primary trigger per plan; many independent plans per asset. Usage increments, below/above/outside thresholds, condition latching, and supervisor renewal after a skipped persistent condition. Corrected baselines require explicit rebase. |
+| Components | Stable identities, exclusive equipment positions, append-only installation/removal, scoped rotation/transfer. Meter history follows component identity. Active plans/open work must be reconciled rather than silently retargeted. Whole-equipment site transfers carry current component/meter scope and preserve old reading/install contexts. |
+| Inspections | Numeric results outside approved limits create findings. Supervisor review is required before verification. Action Required findings generate retry-safe genuine Inspection follow-up orders, still requiring authorization. Resolution requires closed follow-up work. |
+| Native navigation | Plans/routines: Procedures, Plans, Preventive Schedule, Meters and Findings. Components under Assets. Readings, occurrence details, histories and events remain contextual. Calendar distinguishes programmed obligations, open/in-progress orders and validated/omitted/cancelled work. |
 
-- Dispatchers and supervisors edit drafts within authorized Company and Site. Supervisors approve and retire revisions with a mandatory reason. Technicians read approved/retired revisions in scope; requesters have no library access. Sharing, import, export and deletion are disabled.
-- Revision numbers are allocated under the parent row lock. Approval freezes a canonical JSON snapshot and SHA-256 hash, instructions, task flags, measurements, material labels and Item-specific UOM conversion. A new revision copies the procedure and links its ancestor; no edit rewrites an approved revision. Retirement preserves the approved snapshot for history.
-- Unversioned File attachments to procedures/revisions are blocked before writing files, including public uploads. Execution evidence remains on the existing private work records. Controlled procedure-document attachments are not part of R2.1.
-- Procedures may contain tasks only. Optional numeric definitions distinguish cumulative measurements (hours, distance, energy, total volume), condition (including decreasing tread depth) and rates (such as flow). Units use native ERPNext UOM, with explicit optional lower/upper limits so zero remains meaningful. These are definitions, not meter readings, threshold triggers or execution enforcement yet.
-- Optional Item-linked material estimates require positive quantities and an Item-specific valid UOM. Template/disabled Items are rejected. Approval rechecks catalog state. Converted stock quantity is a planning value only; no stock reservation, purchase request, stock entry or costing transaction is created. Dispatchers/supervisors receive catalog select permission only, not stock/finance write permission.
-- Procedure scope is one Company/Site. Reuse across equipment within that scope does not require duplicate procedures. Cross-site/global template publication is not implied by membership or sharing and needs an explicit future policy.
-- Native navigation: Planes y rutinas → Procedimientos → Revisiones. Revisions remain contextual, not a second top-level module. Existing work orders and execution rules are unchanged.
+## Governance and automation
 
-## Approved remaining increments
+Draft procedures/plans are edited by dispatchers/supervisors, with supervisor activation and reasoned dispositions. Technicians read approved planning data within scope, record eligible execution/readings, and cannot grant themselves authority. Asset managers maintain components/meters. Sharing, import/export and deletion do not bypass server boundaries. Unversioned attachments to planning/audit records are blocked before writing files; execution evidence stays private on work records.
 
-| Increment | Scope | Acceptance target |
-| --- | --- | --- |
-| R2.2 | Calendar plans, fixed calendar vs interval from validated maintenance, preview and stable future occurrences | Weekly work can be mapped months ahead without creating months of open orders. |
-| R2.3 | Controlled manual/automatic release, predecessor event and active-order limits per plan/equipment/component or explicit control group | Retry-safe generation; manual overrides, omissions, postponements and cancellations retain distinct reasons/history. |
-| R2.4 | Preventive execution through R1 orders, closure, next due and compliance | Original due dates remain auditable; skipped work never counts as performed maintenance. |
-| R2.5 | Meter readings, cumulative/condition/rate rules, corrections and replacement history | Hours/km/kWh/flow/wear remain semantically distinct; stale data is visible. |
-| R2.6 | Maintainable components, inspections, findings and reviewed intervention recommendations | Component identity, installation position and measurement history remain separate; findings lead to traceable corrective work. |
+Plan configuration is frozen after activation; retire the plan and create a replacement when its rule changes. Existing obligations and order snapshots retain their original source. Procedure retirement/disablement blocks new releases against that revision. A calendar plan's approval fixes its timezone; nonexistent/ambiguous wall times require explicit valid scheduling rather than silent timestamp shifts.
 
-Future occurrences and released work orders are separate objects. Release does not bypass authorization, eligibility, assignment or execution. Initial recommended control is one active order per plan/equipment, with broader locking optional; final policy settings are implemented and tested in R2.3. A major PM replacing a minor PM requires an explicit approved rule; no silent suppression is assumed.
+Automation is opt-in per plan, requires an enabled explicitly scoped supervisor identity and never uses implicit Administrator authority. Committed start/execution/lifecycle events enqueue evaluation after commit; an hourly bounded reconciliation handles missed events and future windows. Every evaluation rechecks identity, active state, meter freshness and release constraints. Scheduled processing rotates its cursor to avoid starvation. Repeated/concurrent generation and readings use current locking reads and stable unique identities. Automatic work is opened as Draft, never automatically authorized or assigned. TEST scheduler is not enabled by this implementation; explicitly enqueued worker jobs still operate for opted-in demo plans.
 
-Predictive remaining-life models, advanced combined calendar/meter scheduling and transactional ERPNext stock/procurement/costing remain separately scoped deliveries. Condition recommendations are not a claim of validated prediction. Site scheduler activation and production deployment require their own operational decisions.
+## Temporal and functional limits
 
-## Verification and rollout
+- Preview at most 367 inclusive days, calendar queries at most 94 inclusive days/500 rows with visible truncation, materialization at most one year ahead. Forecast preview and persisted occurrences are distinct. After-completion plans project only the next established obligation, not fictitious future completion dates.
+- Readings are chronological; corrections target the latest uncorrected reading, with a mandatory reason. Replacement/reset starts a new epoch. Arbitrary retroactive history editing is not supported.
+- Combined calendar/meter AND/OR policies, advanced resource optimization and predictive remaining-life models remain separately scoped future work. Condition-triggered recommendations are not validated prediction.
+- Planned Item quantities are estimates. No stock reservation, purchase, consumption, return or financial posting is performed; R3 will use native ERPNext transactions.
+- No specialized regulatory calibration certification, offline/mobile certification or production approval is claimed. Human pilot acceptance remains separate from tests.
 
-R2.1 integration tests cover task-only content, approval authority, immutable revisions, retirement, ancestry/numbering, Company/Site boundaries, forged fields, catalog conversions, diverse metric definitions, disabled catalog rechecks, no order/stock side effects and native permission restrictions. Existing R1 tests remain regression coverage. DEV receives schema/configuration only; synthetic examples belong to TEST. Human acceptance remains separate from automatic tests.
+## Verification
+
+The regression suite retains R1/R2.1 coverage and adds calendar anchors, future-obligation/order separation, idempotence, skip/postpone/cancel, slot scope/events/overrides, opt-in automation, effective execution, independent verification, findings/follow-up, meter freshness/corrections/epochs, component positions/transfers and immutable provenance. Site deployment fingerprints are recorded after migration. Candidate evidence and human acceptance are recorded separately from this functional contract.

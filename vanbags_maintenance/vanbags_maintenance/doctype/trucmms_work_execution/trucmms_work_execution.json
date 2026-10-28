@@ -117,6 +117,12 @@
    "fieldtype": "Data",
    "hidden": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "pm_measurements",
+   "label": "Mediciones del procedimiento",
+   "fieldtype": "Table",
+   "options": "TruCMMS PM Measurement Result"
   }
  ],
  "field_order": [
@@ -135,7 +141,8 @@
   "discipline",
   "team",
   "submission_key",
-  "submission_digest"
+  "submission_digest",
+  "pm_measurements"
  ],
  "autoname": "format:EXE-{YYYY}-{#####}",
  "track_changes": 1,

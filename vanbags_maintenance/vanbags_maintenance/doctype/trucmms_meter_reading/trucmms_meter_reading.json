@@ -1,0 +1,187 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Meter Reading",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "track_changes": 1,
+ "istable": 0,
+ "autoname": "field:reading_key",
+ "field_order": [
+  "reading_key",
+  "meter",
+  "company",
+  "site",
+  "equipment",
+  "component",
+  "value",
+  "total_value",
+  "actual_on",
+  "epoch",
+  "correction_of",
+  "reason",
+  "payload_hash",
+  "recorded_by",
+  "recorded_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "reading_key",
+   "label": "Identidad",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "meter",
+   "label": "Medidor",
+   "fieldtype": "Link",
+   "options": "TruCMMS Meter",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "equipment",
+   "label": "Equipo al medir",
+   "fieldtype": "Link",
+   "options": "VB Equipment",
+   "read_only": 1
+  },
+  {
+   "fieldname": "component",
+   "label": "Componente",
+   "fieldtype": "Link",
+   "options": "TruCMMS Component",
+   "read_only": 1
+  },
+  {
+   "fieldname": "value",
+   "label": "Lectura",
+   "fieldtype": "Float",
+   "precision": "6",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_value",
+   "label": "Uso acumulado continuo",
+   "fieldtype": "Float",
+   "precision": "6",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_on",
+   "label": "Fecha efectiva",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "epoch",
+   "label": "Época",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "correction_of",
+   "label": "Corrige a",
+   "fieldtype": "Link",
+   "options": "TruCMMS Meter Reading",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Motivo / observación",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payload_hash",
+   "label": "Huella",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_by",
+   "label": "Registrado por",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_on",
+   "label": "Registrado el",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "VB Maintenance User",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  }
+ ]
+}

@@ -26,12 +26,19 @@
    "fieldtype": "Small Text",
    "reqd": 1,
    "in_list_view": 1
+  },
+  {
+   "fieldname": "procedure_task_code",
+   "label": "Código de tarea del procedimiento",
+   "fieldtype": "Data",
+   "in_list_view": 1
   }
  ],
  "field_order": [
   "task",
   "result",
-  "findings"
+  "findings",
+  "procedure_task_code"
  ],
  "istable": 1
 }

@@ -10,7 +10,7 @@ class TestTruCMMSNavigation(IntegrationTestCase):
 		self.assertEqual(workspace.app, "vanbags_maintenance")
 		self.assertTrue(workspace.public)
 		targets = {row.link_to for row in workspace.links if row.type == "Link" and row.link_type == "DocType"}
-		self.assertEqual(targets, {"Company", "VB Equipment", "VB Equipment Category", "VB Equipment Location", "TruCMMS Site", "TruCMMS Maintenance Request", "TruCMMS Maintenance Work Order", "TruCMMS Maintenance Team", "TruCMMS Discipline", "TruCMMS Equipment Profile", "TruCMMS Criticality", "TruCMMS Job Plan"})
+		self.assertEqual(targets, {"Company", "VB Equipment", "VB Equipment Category", "VB Equipment Location", "TruCMMS Site", "TruCMMS Maintenance Request", "TruCMMS Maintenance Work Order", "TruCMMS Maintenance Team", "TruCMMS Discipline", "TruCMMS Equipment Profile", "TruCMMS Criticality", "TruCMMS Job Plan", "TruCMMS Component", "TruCMMS PM Plan", "TruCMMS Meter", "TruCMMS Inspection Finding"})
 		self.assertTrue(any(row.link_type=="Page" and row.link_to=="trucmms-work" for row in workspace.links))
 		for target in targets:
 			self.assertTrue(frappe.db.exists("DocType", target))

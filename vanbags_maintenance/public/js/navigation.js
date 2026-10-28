@@ -10,7 +10,7 @@
         // top-level sidebar link, so native module fallback would select the old
         // module sidebar. Run after native refresh using its standard setup API.
         if (['Form', 'List'].includes(route[0]) &&
-            ['TruCMMS Job Plan', 'TruCMMS Job Plan Revision'].includes(route[1])) {
+            ['TruCMMS Job Plan', 'TruCMMS Job Plan Revision','TruCMMS PM Plan','TruCMMS PM Occurrence','TruCMMS Meter','TruCMMS Meter Reading','TruCMMS Meter Epoch','TruCMMS Component','TruCMMS Component Installation','TruCMMS Inspection Finding','TruCMMS PM Event'].includes(route[1])) {
             queueMicrotask(() => {
                 const current = frappe.get_route() || [];
                 if (current[0] !== route[0] || current[1] !== route[1]) return;

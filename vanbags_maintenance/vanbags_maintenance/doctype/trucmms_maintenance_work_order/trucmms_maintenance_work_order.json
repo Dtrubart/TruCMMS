@@ -68,7 +68,14 @@
   "reopened_by",
   "reopened_on",
   "reopened_reason",
-  "equipment_snapshot"
+  "equipment_snapshot",
+  "pm_section",
+  "pm_plan",
+  "pm_occurrence",
+  "pm_finding",
+  "pm_procedure_snapshot",
+  "pm_started_on",
+  "pm_started_by"
  ],
  "fields": [
   {
@@ -84,7 +91,7 @@
    "fieldname": "origin_type",
    "label": "Origin Type",
    "fieldtype": "Select",
-   "options": "Maintenance Request\nDirect",
+   "options": "Maintenance Request\nDirect\nPreventive\nInspection",
    "default": "Maintenance Request",
    "read_only": 1,
    "reqd": 1
@@ -481,6 +488,54 @@
    "fieldname": "equipment_snapshot",
    "label": "Equipment Context at Creation",
    "fieldtype": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pm_section",
+   "label": "Origen preventivo / inspección",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "pm_plan",
+   "label": "Plan preventivo",
+   "fieldtype": "Link",
+   "options": "TruCMMS PM Plan",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pm_occurrence",
+   "label": "Ocurrencia",
+   "fieldtype": "Link",
+   "options": "TruCMMS PM Occurrence",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "pm_finding",
+   "label": "Hallazgo de origen",
+   "fieldtype": "Link",
+   "options": "TruCMMS Inspection Finding",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "pm_procedure_snapshot",
+   "label": "Procedimiento y materiales previstos",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pm_started_on",
+   "label": "Inicio registrado",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pm_started_by",
+   "label": "Inicio por",
+   "fieldtype": "Link",
+   "options": "User",
    "read_only": 1
   }
  ],

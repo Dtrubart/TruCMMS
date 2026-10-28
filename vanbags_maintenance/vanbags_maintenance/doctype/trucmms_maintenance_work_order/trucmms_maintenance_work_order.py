@@ -24,6 +24,8 @@ class TruCMMSMaintenanceWorkOrder(Document):
         org.validate_context(self)
         if self.target_closure:self.target_closure=get_datetime(self.target_closure)
         old=self.get_doc_before_save()
+        from vanbags_maintenance.preventive import validate_order
+        validate_order(self,old)
         from vanbags_maintenance import lifecycle,work_contract
         work_contract.validate(self,old)
         from vanbags_maintenance import teams
@@ -34,10 +36,10 @@ class TruCMMSMaintenanceWorkOrder(Document):
                 return
         for f in ('subject','scope'):self.set(f,(self.get(f) or '').strip())
         if not self.subject or not self.scope:frappe.throw('Subject and scope are required.')
-        if self.origin_type not in ('Maintenance Request','Direct'):frappe.throw('Unsupported work order origin.')
+        if self.origin_type not in ('Maintenance Request','Direct','Preventive','Inspection'):frappe.throw('Unsupported work order origin.')
         if self.priority not in ('Low','Medium','High','Critical'):frappe.throw('Invalid work order priority.')
         if not old:
-            if self.origin_type=='Direct':
+            if self.origin_type in ('Direct','Preventive','Inspection'):
                 if self.maintenance_request:frappe.throw('Direct work cannot masquerade as a request conversion.')
                 work_contract.validate_direct_context(self)
                 if self.assigned_to:frappe.throw('Authorize before assigning.')

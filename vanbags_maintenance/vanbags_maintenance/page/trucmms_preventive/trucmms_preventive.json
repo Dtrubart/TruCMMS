@@ -1,0 +1,23 @@
+{
+ "doctype": "Page",
+ "name": "trucmms-preventive",
+ "page_name": "trucmms-preventive",
+ "title": "Programación preventiva",
+ "module": "Vanbags Maintenance",
+ "standard": "Yes",
+ "system_page": 0,
+ "roles": [
+  {
+   "role": "TruCMMS Dispatcher"
+  },
+  {
+   "role": "TruCMMS Supervisor"
+  },
+  {
+   "role": "TruCMMS Technician"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
+}

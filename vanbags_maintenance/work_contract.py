@@ -40,7 +40,7 @@ def initialize(doc):
     for prefix in ('verified','held','resumed','reopened'):
         for suffix in ('by','on','reason'):doc.set(prefix+'_'+suffix,None)
     doc.hold_from_state=None
-    if doc.origin_type=='Direct':
+    if doc.origin_type in ('Direct','Preventive','Inspection'):
         creation=frappe.flags.get('trucmms_direct_creation')
         if not creation:frappe.throw('Create direct orders through the authorized service.',frappe.PermissionError)
         doc.direct_key=creation['key'];doc.direct_payload_hash=creation['hash'];doc.direct_reason=creation['reason']
@@ -94,19 +94,27 @@ def validate_direct_context(doc):
 @frappe.whitelist(methods=['POST'])
 @atomic
 def create_direct(company,site,subject,scope,priority,key,reason,equipment=None,functional_location=None,acceptance_user=None):
+    return create_origin(company,site,subject,scope,priority,key,reason,equipment,functional_location,acceptance_user)
+
+
+def create_origin(company,site,subject,scope,priority,key,reason,equipment=None,functional_location=None,acceptance_user=None,provider=None):
     if not (wo.supervisor() or wo.DISPATCHER in frappe.get_roles()):frappe.throw('Dispatcher or supervisor required.',frappe.PermissionError)
     if not (key or '').strip() or len(key)>100 or not (reason or '').strip():frappe.throw('A stable request key and direct-work reason are required.')
     payload={'company':company,'site':site,'subject':(subject or '').strip(),'scope':(scope or '').strip(),'priority':priority,'equipment':equipment or None,'functional_location':functional_location or None,'acceptance_user':acceptance_user or None,'reason':reason.strip()}
-    doc=frappe.get_doc({'doctype':wo.DT,'origin_type':'Direct',**{k:v for k,v in payload.items() if k!='reason'}})
+    origin=provider.get('origin') if provider else 'Direct'
+    if origin not in ('Direct','Preventive','Inspection'):frappe.throw('Unsupported origin provider.')
+    values={k:v for k,v in (provider or {}).items() if k!='origin'}
+    doc=frappe.get_doc({'doctype':wo.DT,'origin_type':origin,**{k:v for k,v in payload.items() if k!='reason'},**values})
     org.validate_context(doc);validate_direct_context(doc)
-    identity='DIRECT-'+hashlib.sha256(json.dumps([company,site,key.strip()]).encode()).hexdigest()
-    digest=hashlib.sha256(json.dumps(payload,sort_keys=True).encode()).hexdigest()
+    identity=('DIRECT' if origin=='Direct' else origin.upper())+'-'+hashlib.sha256(json.dumps([company,site,key.strip()]).encode()).hexdigest()
+    if provider:payload['provider']=provider
+    digest=hashlib.sha256(json.dumps(payload,sort_keys=True,default=str).encode()).hexdigest()
     teams.locked_sql('SELECT name FROM `tabTruCMMS Site` WHERE name=%s FOR UPDATE',(site,))
     rows=teams.locked_sql(f'SELECT name,direct_payload_hash FROM `tab{wo.DT}` WHERE direct_key=%s FOR UPDATE',(identity,),as_dict=True)
     if rows:
-        existing=frappe.get_doc(wo.DT,rows[0].name);existing.check_permission('read')
+        existing=teams.locked_document(wo.DT,rows[0].name);existing.check_permission('read')
         if rows[0].direct_payload_hash!=digest:frappe.throw('This origin key already belongs to different input.')
         return existing.as_dict()
-    previous=frappe.flags.get('trucmms_direct_creation');frappe.flags.trucmms_direct_creation={'key':identity,'hash':digest,'reason':reason.strip()}
+    previous=frappe.flags.get('trucmms_direct_creation');old_provider=frappe.flags.get('trucmms_origin_provider');frappe.flags.trucmms_direct_creation={'key':identity,'hash':digest,'reason':reason.strip()};frappe.flags.trucmms_origin_provider=provider
     try:doc.insert();return doc.as_dict()
-    finally:frappe.flags.trucmms_direct_creation=previous
+    finally:frappe.flags.trucmms_direct_creation=previous;frappe.flags.trucmms_origin_provider=old_provider

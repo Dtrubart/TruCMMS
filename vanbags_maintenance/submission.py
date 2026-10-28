@@ -8,15 +8,30 @@ EX='TruCMMS Work Execution'
 
 def normalize(payload):
     payload=frappe.parse_json(payload) if isinstance(payload,str) else payload
-    if not isinstance(payload,dict) or set(payload)-{'work_order','actual_start','actual_end','findings','tasks'}:frappe.throw('Unsupported execution payload.')
+    if not isinstance(payload,dict) or set(payload)-{'work_order','actual_start','actual_end','findings','tasks','pm_measurements'}:frappe.throw('Unsupported execution payload.')
     if not all(isinstance(payload.get(k),str) and payload[k].strip() for k in ('work_order','actual_start','actual_end','findings')):frappe.throw('Work order, actual start/end and findings are required.')
     tasks=payload.get('tasks')
     if not isinstance(tasks,list) or not 1<=len(tasks)<=100:frappe.throw('Supply between 1 and 100 performed tasks.')
     values=[]
     for row in tasks:
-        if not isinstance(row,dict) or set(row)-{'task','result','findings'} or not all(isinstance(row.get(k),str) for k in ('task','result','findings')):frappe.throw('Each task requires task, result and findings.')
-        values.append({k:row[k].strip() for k in ('task','result','findings')})
-    return {'work_order':payload['work_order'],'actual_start':str(get_datetime(payload['actual_start'])),'actual_end':str(get_datetime(payload['actual_end'])),'findings':payload['findings'].strip(),'tasks':values}
+        if not isinstance(row,dict) or set(row)-{'task','result','findings','procedure_task_code'} or not all(isinstance(row.get(k),str) for k in ('task','result','findings')):frappe.throw('Each task requires task, result and findings.')
+        item={k:row[k].strip() for k in ('task','result','findings')}
+        if row.get('procedure_task_code'):
+            if not isinstance(row['procedure_task_code'],str):frappe.throw('Invalid procedure task code.')
+            item['procedure_task_code']=row['procedure_task_code'].strip()
+        values.append(item)
+    result={'work_order':payload['work_order'],'actual_start':str(get_datetime(payload['actual_start'])),'actual_end':str(get_datetime(payload['actual_end'])),'findings':payload['findings'].strip(),'tasks':values}
+    if payload.get('pm_measurements'):
+        rows=payload['pm_measurements']
+        if not isinstance(rows,list) or len(rows)>100:frappe.throw('Supply at most 100 measurements.')
+        result['pm_measurements']=[]
+        from vanbags_maintenance.job_plans import finite
+        for row in rows:
+            if not isinstance(row,dict) or set(row)-{'metric_key','value','meter_reading'} or not isinstance(row.get('metric_key'),str) or 'value' not in row:frappe.throw('Invalid measurement payload.')
+            value={'metric_key':row['metric_key'],'value':str(finite(row['value'],'Measured value'))}
+            if row.get('meter_reading'):value['meter_reading']=row['meter_reading']
+            result['pm_measurements'].append(value)
+    return result
 
 @frappe.whitelist(methods=['POST'])
 @atomic

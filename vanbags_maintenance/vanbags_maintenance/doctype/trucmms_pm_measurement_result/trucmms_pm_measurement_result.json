@@ -1,0 +1,63 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS PM Measurement Result",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "track_changes": 0,
+ "istable": 1,
+ "autoname": "hash",
+ "field_order": [
+  "metric_key",
+  "value",
+  "metric_label",
+  "unit",
+  "meter_reading",
+  "out_of_range"
+ ],
+ "fields": [
+  {
+   "fieldname": "metric_key",
+   "label": "Clave de medición",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "value",
+   "label": "Valor",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "metric_label",
+   "label": "Medición",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "unit",
+   "label": "Unidad",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "meter_reading",
+   "label": "Lectura asociada",
+   "fieldtype": "Link",
+   "options": "TruCMMS Meter Reading",
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "out_of_range",
+   "label": "Fuera de límites",
+   "fieldtype": "Check",
+   "read_only": 1
+  }
+ ]
+}

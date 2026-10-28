@@ -226,9 +226,12 @@ def place(equipment,site,location=None,reason=None,effective_on=None):
     no_open_work(doc,when)
     if doc.status=='Retired':frappe.throw('Retired equipment cannot receive a new placement.')
     context(doc.company,site,location)
+    from vanbags_maintenance.components import before_equipment_transfer,follow_equipment_transfer
+    before_equipment_transfer(doc,site,when)
     before=doc.as_dict();close_placement(doc,when,reason)
     with controlled():
         doc.site=site;doc.location=location;doc.save();insert_placement(doc,when,reason,'Transfer' if before['site']!=site else 'Install')
+    if before['site']!=site:follow_equipment_transfer(doc,when,reason)
     event(doc,'Place Equipment',reason,when,before);return doc.as_dict()
 
 @frappe.whitelist(methods=['POST'])

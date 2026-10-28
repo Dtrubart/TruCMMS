@@ -1,0 +1,195 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Inspection Finding",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "track_changes": 1,
+ "istable": 0,
+ "autoname": "field:finding_key",
+ "field_order": [
+  "finding_key",
+  "company",
+  "site",
+  "equipment",
+  "component",
+  "work_order",
+  "execution",
+  "metric_key",
+  "description",
+  "observed_value",
+  "expected_range",
+  "status",
+  "followup_order",
+  "review_reason",
+  "reviewed_by",
+  "reviewed_on",
+  "recorded_by",
+  "recorded_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "finding_key",
+   "label": "Identidad",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "equipment",
+   "label": "Equipo",
+   "fieldtype": "Link",
+   "options": "VB Equipment",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "component",
+   "label": "Componente",
+   "fieldtype": "Link",
+   "options": "TruCMMS Component",
+   "read_only": 1
+  },
+  {
+   "fieldname": "work_order",
+   "label": "Orden inspeccionada",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Work Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "execution",
+   "label": "Ejecución",
+   "fieldtype": "Link",
+   "options": "TruCMMS Work Execution",
+   "read_only": 1
+  },
+  {
+   "fieldname": "metric_key",
+   "label": "Clave de medición",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "description",
+   "label": "Hallazgo",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "observed_value",
+   "label": "Valor observado",
+   "fieldtype": "Float",
+   "precision": "6",
+   "read_only": 1
+  },
+  {
+   "fieldname": "expected_range",
+   "label": "Límite esperado",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Disposición",
+   "fieldtype": "Select",
+   "options": "Open\nAction Required\nAccepted Deviation\nResolved",
+   "default": "Open",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "followup_order",
+   "label": "Orden de seguimiento",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Work Order",
+   "unique": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "review_reason",
+   "label": "Motivo de revisión",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reviewed_by",
+   "label": "Revisado por",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reviewed_on",
+   "label": "Revisado el",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_by",
+   "label": "Registrado por",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_on",
+   "label": "Registrado el",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  }
+ ]
+}

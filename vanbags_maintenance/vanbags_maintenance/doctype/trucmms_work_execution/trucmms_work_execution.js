@@ -31,7 +31,8 @@ frappe.ui.form.on("TruCMMS Work Execution", {
     if(frm.trucmms_submitting)return;
     frm.trucmms_submitting=true;
     try {
-     const payload={work_order:frm.doc.work_order,actual_start:frm.doc.actual_start,actual_end:frm.doc.actual_end,findings:frm.doc.findings,tasks:(frm.doc.tasks||[]).filter(r=>r.task || r.findings || (r.result && r.result!=="Completed")).map(r=>({task:r.task,result:r.result,findings:r.findings}))};
+     const payload={work_order:frm.doc.work_order,actual_start:frm.doc.actual_start,actual_end:frm.doc.actual_end,findings:frm.doc.findings,tasks:(frm.doc.tasks||[]).filter(r=>r.task || r.findings || (r.result && r.result!=="Completed")).map(r=>({task:r.task,result:r.result,findings:r.findings,...(r.procedure_task_code?{procedure_task_code:r.procedure_task_code}:{})}))};
+     if((frm.doc.pm_measurements||[]).length)payload.pm_measurements=frm.doc.pm_measurements.map(r=>({metric_key:r.metric_key,value:r.value,...(r.meter_reading?{meter_reading:r.meter_reading}:{})}));
      const result=await frappe.call({method:"vanbags_maintenance.submission.submit",type:"POST",args:{payload:JSON.stringify(payload),key:frm.trucmms_submission_key},freeze:true});
      frappe.model.sync(result.message);frm.doc.__unsaved=0;frappe.set_route("Form","TruCMMS Work Execution",result.message.name);
     } finally {frm.trucmms_submitting=false;}

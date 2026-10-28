@@ -44,6 +44,8 @@ class TruCMMSWorkExecution(Document):
         if frappe.db.sql('select name from `tabTruCMMS Work Execution` where technician=%s and actual_start<%s and actual_end>%s and not exists (select 1 from `tabTruCMMS Execution Adjustment` a where a.execution=`tabTruCMMS Work Execution`.name) for update',(self.technician,end,start)):
             frappe.throw('Actual time overlaps another execution entry for this technician.')
         self.actual_minutes=(end-start).total_seconds()/60
+        from vanbags_maintenance.inspections import validate_execution
+        validate_execution(self,order)
 
     def on_trash(self):
         frappe.throw('Execution history cannot be deleted.',frappe.PermissionError)

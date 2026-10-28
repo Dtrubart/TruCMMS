@@ -342,7 +342,7 @@ after_install="vanbags_maintenance.work_views.setup"
 after_migrate="vanbags_maintenance.work_views.setup"
 
 # Current IANA rules for native Desk Datetime controls, using the supported Moment API.
-app_include_js=["/assets/vanbags_maintenance/js/timezone_rules.js","/assets/vanbags_maintenance/js/navigation.js"]
+app_include_js=["/assets/vanbags_maintenance/js/timezone_rules.js","/assets/vanbags_maintenance/js/navigation.js","/assets/vanbags_maintenance/js/r2_forms.js"]
 
 # R1 candidate: approved task-oriented navigation, with native permissions preserved.
 after_install="vanbags_maintenance.navigation.setup"
@@ -356,3 +356,14 @@ for dt,method in [("TruCMMS Job Plan","plan_query"),("TruCMMS Job Plan Revision"
     has_permission[dt]="vanbags_maintenance.job_plans.permission"
     permission_query_conditions[dt]="vanbags_maintenance.job_plans."+method
 doc_events["DocShare"]["validate"].append("vanbags_maintenance.job_plans.validate_share")
+
+# Complete R2: explicit future obligations, controlled providers and scoped meters.
+after_install="vanbags_maintenance.r2_records.setup"
+after_migrate="vanbags_maintenance.r2_records.setup"
+for dt,method in [("TruCMMS PM Plan","plan_query"),("TruCMMS PM Occurrence","occurrence_query"),("TruCMMS PM Event","event_query"),("TruCMMS Meter","meter_query"),("TruCMMS Meter Reading","reading_query"),("TruCMMS Meter Epoch","epoch_query"),("TruCMMS Component","component_query"),("TruCMMS Component Installation","installation_query"),("TruCMMS Inspection Finding","finding_query")]:
+    has_permission[dt]="vanbags_maintenance.r2_records.permission"
+    permission_query_conditions[dt]="vanbags_maintenance.r2_records."+method
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.r2_records.validate_share")
+doc_events["TruCMMS Maintenance Work Order"]={"on_update":"vanbags_maintenance.preventive.order_updated"}
+doc_events["TruCMMS Work Execution"]={"after_insert":"vanbags_maintenance.inspections.recorded"}
+scheduler_events={"hourly":["vanbags_maintenance.preventive.scheduler"]}

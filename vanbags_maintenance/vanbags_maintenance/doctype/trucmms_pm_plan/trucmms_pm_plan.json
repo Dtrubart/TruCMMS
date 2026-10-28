@@ -1,0 +1,468 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS PM Plan",
+ "module": "Vanbags Maintenance",
+ "engine": "InnoDB",
+ "allow_rename": 0,
+ "allow_import": 0,
+ "track_changes": 1,
+ "istable": 0,
+ "autoname": "field:code",
+ "field_order": [
+  "code",
+  "plan_name",
+  "company",
+  "site",
+  "equipment",
+  "component",
+  "procedure_revision",
+  "status",
+  "schedule_type",
+  "calendar_policy",
+  "anchor_date",
+  "end_date",
+  "frequency",
+  "interval",
+  "time_of_day",
+  "duration_minutes",
+  "horizon_days",
+  "meter",
+  "meter_metric_key",
+  "trigger_kind",
+  "usage_interval",
+  "lower_threshold",
+  "upper_threshold",
+  "release_section",
+  "release_mode",
+  "release_event",
+  "release_scope",
+  "include_corrective_work",
+  "control_group",
+  "max_active",
+  "lead_days",
+  "priority",
+  "responsible_team",
+  "required_discipline",
+  "acceptance_user",
+  "automation_enabled",
+  "automation_user",
+  "audit_section",
+  "operating_timezone",
+  "configuration_snapshot",
+  "procedure_snapshot",
+  "approved_by",
+  "approved_on",
+  "last_reason",
+  "last_evaluated_on",
+  "last_error",
+  "baseline_reading",
+  "baseline_total",
+  "next_trigger_total",
+  "condition_latched",
+  "trigger_sequence",
+  "next_due_date",
+  "next_due_key",
+  "baseline_occurrence"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "label": "Código",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "length": 64
+  },
+  {
+   "fieldname": "plan_name",
+   "label": "Plan",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1
+  },
+  {
+   "fieldname": "equipment",
+   "label": "Equipo físico",
+   "fieldtype": "Link",
+   "options": "VB Equipment",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "component",
+   "label": "Componente",
+   "fieldtype": "Link",
+   "options": "TruCMMS Component"
+  },
+  {
+   "fieldname": "procedure_revision",
+   "label": "Procedimiento aprobado",
+   "fieldtype": "Link",
+   "options": "TruCMMS Job Plan Revision",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Estado",
+   "fieldtype": "Select",
+   "options": "Draft\nActive\nPaused\nRetired",
+   "default": "Draft",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "schedule_type",
+   "label": "Disparador",
+   "fieldtype": "Select",
+   "options": "Calendar\nMeter",
+   "default": "Calendar",
+   "reqd": 1
+  },
+  {
+   "fieldname": "calendar_policy",
+   "label": "Regla de calendario",
+   "fieldtype": "Select",
+   "options": "Fixed\nAfter Completion",
+   "default": "Fixed",
+   "depends_on": "eval:doc.schedule_type=='Calendar'"
+  },
+  {
+   "fieldname": "anchor_date",
+   "label": "Fecha inicial",
+   "fieldtype": "Date",
+   "depends_on": "eval:doc.schedule_type=='Calendar'"
+  },
+  {
+   "fieldname": "end_date",
+   "label": "Fin de vigencia",
+   "fieldtype": "Date",
+   "depends_on": "eval:doc.schedule_type=='Calendar'"
+  },
+  {
+   "fieldname": "frequency",
+   "label": "Frecuencia",
+   "fieldtype": "Select",
+   "options": "Days\nWeeks\nMonths",
+   "default": "Weeks",
+   "depends_on": "eval:doc.schedule_type=='Calendar'"
+  },
+  {
+   "fieldname": "interval",
+   "label": "Intervalo",
+   "fieldtype": "Int",
+   "default": "1",
+   "depends_on": "eval:doc.schedule_type=='Calendar'"
+  },
+  {
+   "fieldname": "time_of_day",
+   "label": "Hora local",
+   "fieldtype": "Time",
+   "default": "09:00:00",
+   "depends_on": "eval:doc.schedule_type=='Calendar'"
+  },
+  {
+   "fieldname": "duration_minutes",
+   "label": "Duración prevista (min)",
+   "fieldtype": "Int",
+   "default": "60"
+  },
+  {
+   "fieldname": "horizon_days",
+   "label": "Horizonte a materializar (días)",
+   "fieldtype": "Int",
+   "default": "90",
+   "depends_on": "eval:doc.schedule_type=='Calendar'"
+  },
+  {
+   "fieldname": "meter",
+   "label": "Medidor disparador",
+   "fieldtype": "Link",
+   "options": "TruCMMS Meter",
+   "depends_on": "eval:doc.schedule_type=='Meter'"
+  },
+  {
+   "fieldname": "meter_metric_key",
+   "label": "Clave de medición en procedimiento",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.schedule_type=='Meter'"
+  },
+  {
+   "fieldname": "trigger_kind",
+   "label": "Regla de medición",
+   "fieldtype": "Select",
+   "options": "Usage\nBelow\nAbove\nOutside",
+   "default": "Usage",
+   "depends_on": "eval:doc.schedule_type=='Meter'"
+  },
+  {
+   "fieldname": "usage_interval",
+   "label": "Incremento de uso",
+   "fieldtype": "Float",
+   "precision": "6",
+   "depends_on": "eval:doc.schedule_type=='Meter'"
+  },
+  {
+   "fieldname": "lower_threshold",
+   "label": "Umbral inferior",
+   "fieldtype": "Float",
+   "precision": "6",
+   "depends_on": "eval:doc.schedule_type=='Meter'"
+  },
+  {
+   "fieldname": "upper_threshold",
+   "label": "Umbral superior",
+   "fieldtype": "Float",
+   "precision": "6",
+   "depends_on": "eval:doc.schedule_type=='Meter'"
+  },
+  {
+   "fieldname": "release_section",
+   "label": "Liberación de trabajo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "release_mode",
+   "label": "Liberación",
+   "fieldtype": "Select",
+   "options": "Manual\nAutomatic",
+   "default": "Manual"
+  },
+  {
+   "fieldname": "release_event",
+   "label": "Libera cupo al",
+   "fieldtype": "Select",
+   "options": "Started\nVerified\nClosed",
+   "default": "Closed"
+  },
+  {
+   "fieldname": "release_scope",
+   "label": "Control de cupo por",
+   "fieldtype": "Select",
+   "options": "Plan\nEquipment\nComponent\nGroup",
+   "default": "Plan"
+  },
+  {
+   "fieldname": "include_corrective_work",
+   "label": "Incluir órdenes correctivas en cupo por equipo",
+   "fieldtype": "Check",
+   "depends_on": "eval:doc.release_scope=='Equipment'"
+  },
+  {
+   "fieldname": "control_group",
+   "label": "Grupo explícito",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.release_scope=='Group'"
+  },
+  {
+   "fieldname": "max_active",
+   "label": "Máximo en espera del evento",
+   "fieldtype": "Int",
+   "default": "1"
+  },
+  {
+   "fieldname": "lead_days",
+   "label": "Anticipación (días)",
+   "fieldtype": "Int",
+   "default": "7"
+  },
+  {
+   "fieldname": "priority",
+   "label": "Prioridad",
+   "fieldtype": "Select",
+   "options": "Low\nMedium\nHigh\nCritical",
+   "default": "Medium"
+  },
+  {
+   "fieldname": "responsible_team",
+   "label": "Equipo responsable",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Team"
+  },
+  {
+   "fieldname": "required_discipline",
+   "label": "Disciplina",
+   "fieldtype": "Link",
+   "options": "TruCMMS Discipline"
+  },
+  {
+   "fieldname": "acceptance_user",
+   "label": "Aceptación por",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "automation_enabled",
+   "label": "Automatización habilitada",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "automation_user",
+   "label": "Supervisor de automatización",
+   "fieldtype": "Link",
+   "options": "User",
+   "depends_on": "automation_enabled"
+  },
+  {
+   "fieldname": "audit_section",
+   "label": "Aprobación y diagnóstico",
+   "fieldtype": "Section Break",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "operating_timezone",
+   "label": "Zona horaria aprobada",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "configuration_snapshot",
+   "label": "Configuración aprobada",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "procedure_snapshot",
+   "label": "Procedimiento conservado",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "approved_by",
+   "label": "Aprobado por",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_on",
+   "label": "Aprobado el",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_reason",
+   "label": "Último motivo",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_evaluated_on",
+   "label": "Última evaluación",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error",
+   "label": "Diagnóstico",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "baseline_reading",
+   "label": "Lectura de mantenimiento validado",
+   "fieldtype": "Link",
+   "options": "TruCMMS Meter Reading",
+   "read_only": 1
+  },
+  {
+   "fieldname": "baseline_total",
+   "label": "Base validada de uso",
+   "fieldtype": "Float",
+   "precision": "6",
+   "read_only": 1
+  },
+  {
+   "fieldname": "next_trigger_total",
+   "label": "Próximo umbral de uso",
+   "fieldtype": "Float",
+   "precision": "6",
+   "read_only": 1
+  },
+  {
+   "fieldname": "condition_latched",
+   "label": "Condición ya notificada",
+   "fieldtype": "Check",
+   "read_only": 1
+  },
+  {
+   "fieldname": "trigger_sequence",
+   "label": "Secuencia de disparo",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "next_due_date",
+   "label": "Próximo vencimiento por ejecución",
+   "fieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "next_due_key",
+   "label": "Clave del siguiente ciclo",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "baseline_occurrence",
+   "label": "Último mantenimiento validado",
+   "fieldtype": "Link",
+   "options": "TruCMMS PM Occurrence",
+   "read_only": 1
+  }
+ ],
+ "title_field": "plan_name",
+ "permissions": [
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "report": 1,
+   "create": 1,
+   "write": 1
+  }
+ ]
+}
