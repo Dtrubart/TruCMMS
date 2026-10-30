@@ -11,7 +11,8 @@ GROUPS=[
   ('Procedimientos','DocType','TruCMMS Job Plan'),('Planes preventivos','DocType','TruCMMS PM Plan'),('Programación preventiva','Page','trucmms-preventive'),('Medidores','DocType','TruCMMS Meter'),('Hallazgos de inspección','DocType','TruCMMS Inspection Finding')]),
  ('Recursos y servicios',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
   ('Equipos de mantenimiento','DocType','TruCMMS Maintenance Team')]),
- ('Repuestos y costos',set(),[]),
+ ('Repuestos y costos',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
+  ('Proyección de materiales','Page','trucmms-material-planning'),('Almacenes por sede','DocType','TruCMMS Site Warehouse')]),
  ('Análisis',{'VB Maintenance Manager','TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
   ('Registro de trabajo','Report','TruCMMS Work Register'),('Historial de equipos','Report','TruCMMS Equipment History')]),
  ('Configuración',{'VB Maintenance Manager','System Manager'},[
@@ -32,6 +33,8 @@ def authorized(doctype,ptype='read'):
     return bool(frappe.has_permission(doctype,ptype))
 
 def allowed_link(kind,target):
+    if target=='TruCMMS Site Warehouse' and not authorized('Warehouse'):return False
+    if target=='trucmms-material-planning':return authorized('TruCMMS PM Plan')
     if kind=='DocType':return authorized(target)
     if kind=='Report':
         doc=frappe.get_doc('Report',target)

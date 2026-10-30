@@ -1,0 +1,89 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Site Warehouse",
+ "module": "Vanbags Maintenance",
+ "autoname": "field:binding_key",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "title_field": "warehouse",
+ "search_fields": "warehouse,company,site",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "field_order": [
+  "binding_key",
+  "company",
+  "site",
+  "warehouse",
+  "disabled",
+  "change_reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "binding_key",
+   "label": "Identidad",
+   "fieldtype": "Data",
+   "unique": 1,
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "warehouse",
+   "label": "Almacén ERPNext",
+   "fieldtype": "Link",
+   "options": "Warehouse",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Deshabilitado",
+   "fieldtype": "Check",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "change_reason",
+   "label": "Motivo de autorización / cambio",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  }
+ ]
+}

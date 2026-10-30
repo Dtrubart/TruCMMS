@@ -366,4 +366,18 @@ for dt,method in [("TruCMMS PM Plan","plan_query"),("TruCMMS PM Occurrence","occ
 doc_events["DocShare"]["validate"].append("vanbags_maintenance.r2_records.validate_share")
 doc_events["TruCMMS Maintenance Work Order"]={"on_update":"vanbags_maintenance.preventive.order_updated"}
 doc_events["TruCMMS Work Execution"]={"after_insert":"vanbags_maintenance.inspections.recorded"}
+
+# R3.1 native catalog context; no stock/financial permission grants.
+after_install="vanbags_maintenance.logistics.setup"
+after_migrate="vanbags_maintenance.logistics.setup"
+has_permission["TruCMMS Site Warehouse"]="vanbags_maintenance.logistics.permission"
+permission_query_conditions["TruCMMS Site Warehouse"]="vanbags_maintenance.logistics.query"
+doc_events["DocShare"]["validate"].append("vanbags_maintenance.logistics.validate_share")
+app_include_js.append("/assets/vanbags_maintenance/js/logistics_forms.js")
+doc_events['Material Request']={'validate':'vanbags_maintenance.materials.guard_native',
+    'before_cancel':'vanbags_maintenance.materials.guard_native','on_cancel':'vanbags_maintenance.materials.cancelled'}
+has_permission['Material Request']='vanbags_maintenance.materials.native_permission'
+permission_query_conditions['Material Request']='vanbags_maintenance.materials.native_query'
+doc_events['Stock Entry']={'validate':'vanbags_maintenance.materials.guard_stock_entry','before_cancel':'vanbags_maintenance.materials.guard_stock_entry'}
+doc_events['DocShare']['validate'].append('vanbags_maintenance.materials.validate_share')
 scheduler_events={"hourly":["vanbags_maintenance.preventive.scheduler"]}

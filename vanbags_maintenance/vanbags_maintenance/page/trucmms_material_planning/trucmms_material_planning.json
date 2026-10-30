@@ -1,0 +1,5 @@
+{
+ "doctype": "Page", "name": "trucmms-material-planning", "page_name": "trucmms-material-planning",
+ "title": "Proyección de materiales", "module": "Vanbags Maintenance", "standard": "Yes", "system_page": 0,
+ "roles": [{"role":"TruCMMS Supervisor"},{"role":"TruCMMS Dispatcher"},{"role":"System Manager"}]
+}
