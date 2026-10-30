@@ -378,6 +378,7 @@ doc_events['Material Request']={'validate':'vanbags_maintenance.materials.guard_
     'before_cancel':'vanbags_maintenance.materials.guard_native','on_cancel':'vanbags_maintenance.materials.cancelled'}
 has_permission['Material Request']='vanbags_maintenance.materials.native_permission'
 permission_query_conditions['Material Request']='vanbags_maintenance.materials.native_query'
+permission_query_conditions['TruCMMS Material Source']='vanbags_maintenance.materials.source_query'
 doc_events['Stock Entry']={'validate':'vanbags_maintenance.materials.guard_stock_entry','before_cancel':'vanbags_maintenance.materials.guard_stock_entry'}
 doc_events['DocShare']['validate'].append('vanbags_maintenance.materials.validate_share')
 scheduler_events={"hourly":["vanbags_maintenance.preventive.scheduler"]}

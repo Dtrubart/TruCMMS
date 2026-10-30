@@ -1,6 +1,7 @@
 import json,uuid
 from datetime import timedelta
 import frappe
+from unittest.mock import patch
 from frappe.utils import getdate
 from frappe.model.workflow import apply_workflow
 from vanbags_maintenance import materials as mat, logistics, job_plans as jp, preventive as pm
@@ -62,11 +63,18 @@ class TestMaterialHandoff(PreventiveCase):
         self.assertEqual(self.report()['rows'],[])
 
     def test_purchase_handoff_is_native_draft_with_source_links(self):
-        self.material_plan();result=self.buy();doc=frappe.get_doc('Material Request',result['name'])
+        self.material_plan()
+        original=frappe.db.get_single_value
+        def settings(dt,field,*args,**kwargs):
+            if (dt,field)==('Buying Settings','allow_multiple_items'):return 0
+            return original(dt,field,*args,**kwargs)
+        with patch.object(frappe.db,'get_single_value',side_effect=settings):result=self.buy()
+        doc=frappe.get_doc('Material Request',result['name'])
         self.assertEqual(doc.material_request_type,'Purchase');self.assertEqual(doc.docstatus,0)
         self.assertEqual(doc.company,COMPANY_A);self.assertEqual(doc.trucmms_site,SITE_A)
-        self.assertEqual(len(doc.items),5)
-        self.assertTrue(all(r.trucmms_occurrence and r.trucmms_source_key==r.trucmms_active_key for r in doc.items))
+        self.assertEqual(len(doc.items),1);self.assertEqual(doc.items[0].qty,10)
+        self.assertEqual(len(doc.trucmms_sources),5)
+        self.assertTrue(all(r.occurrence and r.source_key==r.active_key for r in doc.trucmms_sources))
         self.assertEqual(self.report()['totals'][0]['unrequested_quantity'],0)
 
     def test_exact_purchase_retry_returns_same_native_document(self):
@@ -90,9 +98,14 @@ class TestMaterialHandoff(PreventiveCase):
     def test_native_cancellation_preserves_source_and_allows_new_handoff(self):
         self.material_plan();keys=[r['key'] for r in self.report()['rows']]
         result=self.buy(keys);doc=frappe.get_doc('Material Request',result['name'])
-        frappe.set_user('Administrator');doc.submit();doc.cancel()
-        self.assertTrue(all(r.trucmms_occurrence for r in doc.items))
+        frappe.set_user('Administrator');doc.submit()
+        binding=frappe.db.get_value(logistics.DT,{'warehouse':self.warehouse},'name')
+        frappe.db.set_value(logistics.DT,binding,'disabled',1)
+        doc.cancel()
+        self.assertTrue(all(r.occurrence for r in doc.trucmms_sources))
         self.assertEqual(self.report()['totals'][0]['unrequested_quantity'],10)
+        frappe.set_user('Administrator');frappe.db.set_value(logistics.DT,binding,'disabled',0)
+        frappe.set_user(self.users['supervisor'])
         second=self.buy(keys);self.assertNotEqual(second['name'],doc.name)
 
     def test_missing_native_create_permission_blocks_handoff(self):
@@ -125,9 +138,10 @@ class TestMaterialHandoff(PreventiveCase):
 
     def test_native_draft_provenance_is_frozen_but_quantity_can_be_reviewed(self):
         self.material_plan();doc=frappe.get_doc('Material Request',self.buy()['name'])
+        doc=frappe.get_doc(json.loads(frappe.as_json(doc.as_dict())))
         doc.items[0].qty=3;doc.save()
         self.assertEqual(doc.items[0].qty,3)
-        doc.items[0].trucmms_source_key='forged'
+        doc.trucmms_sources[0].source_key='forged'
         with self.assertRaises(frappe.ValidationError):doc.save()
 
     def test_issue_request_links_authorized_order_and_native_stock_workflow(self):
@@ -165,6 +179,7 @@ class TestMaterialHandoff(PreventiveCase):
             frappe.get_doc({'doctype':'DocShare','share_doctype':'Material Request','share_name':doc.name,'user':self.users['supervisor'],'read':1}).insert()
         frappe.set_user(self.users['supervisor'])
         self.assertNotIn(doc.name,frappe.get_list('Material Request',pluck='name'))
+        self.assertEqual(frappe.get_list('TruCMMS Material Source',parent_doctype='Material Request',pluck='name'),[])
         with self.assertRaises(frappe.PermissionError):frappe.get_doc('Material Request',doc.name).check_permission('read')
 
     def test_normal_native_request_keeps_native_access_without_cmms_site(self):
@@ -186,3 +201,25 @@ class TestMaterialHandoff(PreventiveCase):
         frappe.set_user('Administrator');doc.submit();doc.cancel()
         amendment=frappe.copy_doc(doc);amendment.docstatus=0;amendment.amended_from=doc.name
         with self.assertRaises(frappe.ValidationError):amendment.insert()
+
+    def test_direct_source_mutations_are_blocked_even_for_native_buyer(self):
+        self.material_plan();doc=frappe.get_doc('Material Request',self.buy()['name'])
+        source=doc.trucmms_sources[0]
+        child=frappe.get_doc(source.doctype,source.name)
+        child.quantity=99
+        with self.assertRaises(frappe.PermissionError):child.save()
+        duplicate=frappe.copy_doc(source)
+        duplicate.parent=doc.name;duplicate.parenttype=doc.doctype;duplicate.parentfield='trucmms_sources'
+        duplicate.source_key=duplicate.active_key=uuid.uuid4().hex
+        with self.assertRaises(frappe.PermissionError):duplicate.insert()
+        with self.assertRaises(frappe.PermissionError):frappe.delete_doc(source.doctype,source.name)
+        self.assertEqual(frappe.db.get_value(source.doctype,source.name,'quantity'),source.quantity)
+
+    def test_parent_save_and_delete_preserve_native_lifecycle(self):
+        self.material_plan();doc=frappe.get_doc('Material Request',self.buy()['name'])
+        source_names=[r.name for r in doc.trucmms_sources]
+        doc.items[0].qty=8;doc.save()
+        self.assertEqual(self.report()['totals'][0]['already_requested'],8)
+        frappe.set_user('Administrator');frappe.delete_doc(doc.doctype,doc.name)
+        self.assertEqual(frappe.db.count('TruCMMS Material Source',{'name':['in',source_names]}),0)
+        self.assertEqual(self.report()['totals'][0]['unrequested_quantity'],10)

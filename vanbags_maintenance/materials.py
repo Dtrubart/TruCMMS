@@ -63,10 +63,10 @@ def source_key(occurrence, item, unit):
 def purchase_lines(keys):
     if not keys: return {}
     # Current locking read also protects repeat requests under REPEATABLE READ.
-    rows = frappe.db.sql('''SELECT i.trucmms_source_key, i.stock_qty, i.parent
-        FROM `tabMaterial Request Item` i INNER JOIN `tabMaterial Request` p ON p.name=i.parent
-        WHERE i.trucmms_active_key IN %(keys)s AND p.docstatus<2 FOR UPDATE''', {'keys':tuple(keys)}, as_dict=True)
-    return {row.trucmms_source_key:row for row in rows}
+    rows = frappe.db.sql('''SELECT s.source_key, s.parent FROM `tabTruCMMS Material Source` s
+        INNER JOIN `tabMaterial Request` p ON p.name=s.parent
+        WHERE s.active_key IN %(keys)s AND p.docstatus<2 FOR UPDATE''', {'keys':tuple(keys)}, as_dict=True)
+    return {row.source_key:row for row in rows}
 
 
 @frappe.whitelist(methods=['GET'])
@@ -100,9 +100,13 @@ def forecast(company, site, from_date, to_date):
     keys=[r['key'] for r in details]
     requested={}
     if keys:
-        requested={r.trucmms_source_key:r for r in frappe.db.sql('''SELECT i.trucmms_source_key,i.stock_qty,i.parent
-            FROM `tabMaterial Request Item` i INNER JOIN `tabMaterial Request` p ON p.name=i.parent
-            WHERE i.trucmms_active_key IN %(keys)s AND p.docstatus<2''',{'keys':tuple(keys)},as_dict=True)}
+        requested={r.source_key:r for r in frappe.db.sql('''SELECT s.source_key,s.parent,
+            (SELECT COALESCE(SUM(i.stock_qty),0) FROM `tabMaterial Request Item` i
+             WHERE i.parent=s.parent AND i.item_code=s.item AND i.stock_uom=s.stock_uom)
+            * s.quantity / NULLIF((SELECT SUM(t.quantity) FROM `tabTruCMMS Material Source` t
+             WHERE t.parent=s.parent AND t.item=s.item AND t.stock_uom=s.stock_uom),0) AS stock_qty
+            FROM `tabTruCMMS Material Source` s INNER JOIN `tabMaterial Request` p ON p.name=s.parent
+            WHERE s.active_key IN %(keys)s AND p.docstatus<2''',{'keys':tuple(keys)},as_dict=True)}
     totals={}
     for row in details:
         existing=requested.get(row['key'])
@@ -150,12 +154,13 @@ def native_item(item,unit,quantity,warehouse,needed_on,**refs):
         warehouse=warehouse,schedule_date=str(max(getdate(needed_on),getdate())),**refs)
 
 
-def insert_request(company,site,purpose,items,identity,digest,reason,order=None):
+def insert_request(company,site,purpose,items,identity,digest,reason,order=None,sources=None):
     with internal():
         doc=frappe.get_doc(dict(doctype='Material Request',company=company,material_request_type=purpose,
             transaction_date=nowdate(),schedule_date=min(r['schedule_date'] for r in items),items=items,
             trucmms_origin=ORIGIN,trucmms_site=site,trucmms_work_order=order,
-            trucmms_request_key=identity,trucmms_payload_hash=digest,trucmms_reason=reason)).insert()
+            trucmms_request_key=identity,trucmms_payload_hash=digest,trucmms_reason=reason,
+            trucmms_sources=sources or [])).insert()
     return {'doctype':doc.doctype,'name':doc.name,'docstatus':doc.docstatus,'created':True}
 
 
@@ -177,9 +182,16 @@ def purchase_request(company,site,from_date,to_date,warehouse,keys,key,reason):
     if any(k not in candidates for k in keys):frappe.throw('Forecast changed; reload and select current requirements.')
     previous=purchase_lines(keys)
     if previous:frappe.throw('Some requirements already have a live purchase request. Reload the forecast.')
-    items=[native_item(candidates[k]['item'],candidates[k]['stock_uom'],candidates[k]['quantity'],warehouse,candidates[k]['needed_on'],
-        trucmms_source_key=k,trucmms_active_key=k,trucmms_occurrence=candidates[k]['occurrence']) for k in keys]
-    return insert_request(company,site,'Purchase',items,identity,digest,reason)
+    grouped={};sources=[]
+    for key in keys:
+        row=candidates[key];group=(row['item'],row['stock_uom'])
+        entry=grouped.setdefault(group,{'quantity':Decimal(0),'needed_on':row['needed_on']})
+        entry['quantity']+=Decimal(str(row['quantity']))
+        entry['needed_on']=min(entry['needed_on'],row['needed_on'])
+        sources.append(dict(source_key=key,active_key=key,occurrence=row['occurrence'],item=row['item'],
+            stock_uom=row['stock_uom'],quantity=row['quantity'],needed_on=row['needed_on']))
+    items=[native_item(item,unit,row['quantity'],warehouse,row['needed_on']) for (item,unit),row in sorted(grouped.items())]
+    return insert_request(company,site,'Purchase',items,identity,digest,reason,sources=sources)
 
 
 @frappe.whitelist(methods=['POST'])
@@ -218,6 +230,11 @@ def guard_native(doc,method=None):
         if any(doc.get(k)!=old.get(k) for k in HEADER) or doc.company!=old.company or doc.material_request_type!=old.material_request_type:
             frappe.throw('Maintenance request origin and Company are permanent.')
         old_rows={r.name:r for r in old.items}
+        fields=('name','source_key','active_key','occurrence','item','stock_uom')
+        def origin(rows):
+            return [tuple(r.get(k) for k in fields)+(Decimal(str(r.quantity)),str(getdate(r.needed_on))) for r in rows]
+        if origin(doc.get('trucmms_sources',[])) != origin(old.get('trucmms_sources',[])):
+            frappe.throw('Frozen maintenance demand sources cannot be changed.')
         for row in doc.items:
             previous=old_rows.get(row.name)
             if previous and previous.trucmms_source_key:
@@ -225,18 +242,24 @@ def guard_native(doc,method=None):
                     frappe.throw('Frozen maintenance material provenance cannot be changed.')
             elif any(row.get(k) for k in (*LINE,'trucmms_active_key')):
                 frappe.throw('Use the maintenance service for forecast material provenance.')
-    elif any(doc.get(k) for k in HEADER) or any(row.get(k) for row in doc.items for k in (*LINE,'trucmms_active_key')):
+    elif any(doc.get(k) for k in HEADER) or doc.get('trucmms_sources') or any(row.get(k) for row in doc.items for k in (*LINE,'trucmms_active_key')):
         if not frappe.flags.get('trucmms_material_request'):
             frappe.throw('Use the controlled maintenance material service.',frappe.PermissionError)
     if not linked:return
     if doc.trucmms_origin!=ORIGIN:frappe.throw('Invalid maintenance request origin.')
+    if method=='before_cancel':
+        native_permission(doc)
+        return
     scope(doc.company,doc.trucmms_site)
     for row in doc.items:warehouse_for(doc.company,doc.trucmms_site,row.warehouse)
+    current_items={(r.item_code,r.stock_uom) for r in doc.items}
+    if any((r.item,r.stock_uom) not in current_items for r in doc.get('trucmms_sources',[])):
+        frappe.throw('Keep the source Items in this request; cancel and regenerate to remove planned requirements.')
 
 
 def cancelled(doc,method=None):
     if doc.get('trucmms_origin')==ORIGIN:
-        frappe.db.sql('UPDATE `tabMaterial Request Item` SET trucmms_active_key=NULL WHERE parent=%s',(doc.name,))
+        frappe.db.sql('UPDATE `tabTruCMMS Material Source` SET active_key=NULL WHERE parent=%s',(doc.name,))
 
 
 def native_permission(doc,user=None,ptype=None):
@@ -254,6 +277,19 @@ def native_query(user=None):
     if not clause:return ''
     clause=clause.replace('`.`site`','`.`trucmms_site`')
     return f"(COALESCE(`tabMaterial Request`.trucmms_origin,'')!='TruCMMS' OR ({clause}))"
+
+
+def source_query(user=None):
+    user=user or frappe.session.user
+    if not frappe.has_permission('Material Request','read',user=user):return '1=0'
+    original=frappe.session.user
+    try:
+        if original!=user:frappe.set_user(user)
+        parents=frappe.get_list('Material Request',pluck='name',limit_page_length=0)
+    finally:
+        if original!=user:frappe.set_user(original)
+    if not parents:return '1=0'
+    return '`tabTruCMMS Material Source`.parent IN ('+','.join(frappe.db.escape(name) for name in parents)+')'
 
 
 def guard_stock_entry(doc,method=None):
@@ -281,7 +317,8 @@ def setup():
         field('trucmms_origin','Origen TruCMMS'),field('trucmms_site','Sede TruCMMS','Link','TruCMMS Site',ignore_user_permissions=1),
         field('trucmms_work_order','Orden TruCMMS','Link',wo.DT),
         field('trucmms_request_key','Identidad de solicitud TruCMMS',unique=1,hidden=1),
-        field('trucmms_payload_hash','Huella TruCMMS',hidden=1),field('trucmms_reason','Motivo TruCMMS','Small Text')],
+        field('trucmms_payload_hash','Huella TruCMMS',hidden=1),field('trucmms_reason','Motivo TruCMMS','Small Text'),
+        field('trucmms_sources','Detalle de demanda TruCMMS','Table','TruCMMS Material Source')],
         'Material Request Item':[
         field('trucmms_source_key','Demanda original TruCMMS',hidden=1),
         field('trucmms_active_key','Demanda vigente TruCMMS',unique=1,hidden=1),

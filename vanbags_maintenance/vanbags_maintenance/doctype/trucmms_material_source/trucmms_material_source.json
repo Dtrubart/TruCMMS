@@ -1,0 +1,13 @@
+{
+ "doctype":"DocType", "name":"TruCMMS Material Source", "module":"Vanbags Maintenance", "istable":1,
+ "field_order":["source_key","active_key","occurrence","item","stock_uom","quantity","needed_on"],
+ "fields":[
+  {"fieldname":"source_key","label":"Identidad de demanda","fieldtype":"Data","hidden":1},
+  {"fieldname":"active_key","label":"Demanda vigente","fieldtype":"Data","unique":1,"hidden":1},
+  {"fieldname":"occurrence","label":"Ocurrencia","fieldtype":"Link","options":"TruCMMS PM Occurrence","in_list_view":1},
+  {"fieldname":"item","label":"Artículo","fieldtype":"Link","options":"Item","in_list_view":1},
+  {"fieldname":"stock_uom","label":"Unidad","fieldtype":"Link","options":"UOM"},
+  {"fieldname":"quantity","label":"Cantidad prevista","fieldtype":"Float","precision":"6","in_list_view":1},
+  {"fieldname":"needed_on","label":"Fecha de necesidad","fieldtype":"Date","in_list_view":1}
+ ], "permissions":[]
+}
