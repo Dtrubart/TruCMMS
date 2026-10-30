@@ -4,7 +4,7 @@ import frappe
 from frappe.utils import getdate
 from frappe.model.workflow import apply_workflow
 from vanbags_maintenance import materials as mat, logistics, job_plans as jp, preventive as pm
-from vanbags_maintenance.test_support import COMPANY_A,SITE_A,SITE_A2,SITE_B,COMPANY_B,stock_catalog
+from vanbags_maintenance.test_support import COMPANY_A,SITE_A,SITE_A2,SITE_B,COMPANY_B,stock_catalog,stock_transaction_context
 from vanbags_maintenance.vanbags_maintenance.test_preventive import PreventiveCase
 
 
@@ -12,6 +12,7 @@ class TestMaterialHandoff(PreventiveCase):
     def setUp(self):
         super().setUp()
         group=stock_catalog()
+        stock_transaction_context()
         self.item=frappe.get_doc({'doctype':'Item','item_code':self.token+'PART','item_name':'Synthetic spare',
             'item_group':group,'stock_uom':'Nos','is_stock_item':1}).insert().name
         self.warehouse=frappe.get_doc({'doctype':'Warehouse','warehouse_name':self.token,'company':COMPANY_A}).insert().name

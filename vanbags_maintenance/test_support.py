@@ -19,6 +19,19 @@ def stock_catalog():
     return group
 
 
+def stock_transaction_context(company=COMPANY_A):
+    """Provide a current fiscal period only for isolated native transaction tests."""
+    if not frappe.in_test:
+        raise RuntimeError('Fiscal test context must not be created outside tests.')
+    from frappe.utils import getdate
+    from erpnext.accounts.utils import get_fiscal_year
+    today=getdate()
+    if not get_fiscal_year(today, company=company, verbose=0, raise_on_missing=False):
+        frappe.get_doc({'doctype':'Fiscal Year','year':f'TruCMMS Stock Test {company} {today.year}',
+            'year_start_date':today.replace(month=1,day=1),'year_end_date':today.replace(month=12,day=31),
+            'companies':[{'company':company}]}).insert()
+
+
 def prepare_organization():
     original=frappe.session.user
     frappe.set_user("Administrator")
