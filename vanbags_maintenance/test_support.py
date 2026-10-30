@@ -7,6 +7,18 @@ SITE_A2 = "CMMS-TEST-A2"
 SITE_B = "CMMS-TEST-B1"
 
 
+def stock_catalog():
+    """Test-only prerequisites for headless installs without setup-wizard data."""
+    if not frappe.in_test:
+        raise RuntimeError('Stock test catalogs must not be seeded outside tests.')
+    group = frappe.db.get_value('Item Group', {'parent_item_group':['is','not set']}, 'name')
+    if not group:
+        group = frappe.get_doc({'doctype':'Item Group','item_group_name':'TruCMMS Stock Test Root','is_group':1}).insert().name
+    if not frappe.db.exists('UOM','Nos'):
+        frappe.get_doc({'doctype':'UOM','uom_name':'Nos','must_be_whole_number':1}).insert()
+    return group
+
+
 def prepare_organization():
     original=frappe.session.user
     frappe.set_user("Administrator")

@@ -1,7 +1,7 @@
 """R3.1 integration: both maintenance and native ERPNext permissions apply."""
 import frappe
 from vanbags_maintenance import logistics as log
-from vanbags_maintenance.test_support import COMPANY_A, COMPANY_B, SITE_A, SITE_A2, SITE_B, grant_scope
+from vanbags_maintenance.test_support import COMPANY_A, COMPANY_B, SITE_A, SITE_A2, SITE_B, grant_scope, stock_catalog
 from vanbags_maintenance.vanbags_maintenance.test_work_orders import WorkOrderCase
 
 
@@ -10,6 +10,7 @@ class TestLogistics(WorkOrderCase):
         super().setUp()
         self.order = self.make()
         frappe.set_user('Administrator')
+        self.group = stock_catalog()
         self.warehouse = self.new_warehouse('MAIN')
         self.second = self.new_warehouse('SECOND')
         self.foreign = self.new_warehouse('OTHER', company=COMPANY_B)
@@ -25,7 +26,7 @@ class TestLogistics(WorkOrderCase):
 
     def new_item(self, suffix, **values):
         return frappe.get_doc({'doctype':'Item','item_code':self.token+suffix,'item_name':self.token+suffix,
-            'item_group':'All Item Groups','stock_uom':'Nos','is_stock_item':1,**values}).insert().name
+            'item_group':self.group,'stock_uom':'Nos','is_stock_item':1,**values}).insert().name
 
     def stock_role(self, actor='supervisor'):
         frappe.set_user('Administrator')
