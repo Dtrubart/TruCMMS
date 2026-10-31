@@ -9,7 +9,7 @@ from vanbags_maintenance.test_support import COMPANY_A,SITE_A,SITE_A2,SITE_B,COM
 from vanbags_maintenance.vanbags_maintenance.test_preventive import PreventiveCase
 
 
-class TestMaterialHandoff(PreventiveCase):
+class MaterialCase(PreventiveCase):
     def setUp(self):
         super().setUp()
         group=stock_catalog()
@@ -40,6 +40,7 @@ class TestMaterialHandoff(PreventiveCase):
     def issue(self,order,key=None,items=None):
         return mat.issue_request(order.name,self.warehouse,items or [{'item':self.item,'quantity':2,'stock_uom':'Nos'}],key or uuid.uuid4().hex,'Materials required for authorized maintenance')
 
+class TestMaterialHandoff(MaterialCase):
     def test_forecast_uses_frozen_materials_and_aggregates_stock_units(self):
         plan=self.material_plan();report=self.report()
         self.assertEqual(len(report['rows']),5)

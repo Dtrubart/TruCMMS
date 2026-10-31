@@ -12,14 +12,24 @@ This increment uses native ERPNext catalogs and Material Requests. It does not i
 - Existing native procurement workflows continue from the draft. Material issue drafts do not deduct stock. Actual fulfillment remains in native warehouse transactions. Native linked Stock Entries must respect the maintenance request Company/Site and authorized warehouses.
 - Native requests without a TruCMMS origin retain native behavior and visibility. TruCMMS requests require explicit Company/Site scope; document sharing cannot expand this access. Frozen origin fields cannot be forged through normal document/API writes.
 
-## Limits of this first R3 delivery
+## R3 completion: native fulfillment, estimates and costs
 
-The projection currently covers material estimates in R2 preventive snapshots, not manual estimates for every direct/corrective work order. Issue requests can nevertheless be entered for authorized direct/corrective work.
+The projection covers frozen preventive snapshots and explicit additional Material Estimates for open direct/corrective work orders. Estimates on preventive orders are supplementary, never replacements for frozen procedure requirements. Handed-off estimates retain their source identity and quantities.
 
 The interface currently sends all unrequested lines in the displayed projection; the API also supports a selected subset. Buyers may review native draft quantities; the report allocates the consolidated quantity proportionally across its demand sources. Source details cannot be inserted, changed or deleted directly through child document operations. Normal parent saves and draft deletion remain supported. Existing requests remain visibly linked rather than automatically generating extra requests when a buyer adjusts a quantity.
 
 After cancellation, regenerate the request from the forecast/work order. Native amendment of a TruCMMS request is blocked until provenance-preserving amendment support is implemented; ordinary ERPNext requests are unaffected.
 
-Still pending within the approved R3 roadmap: stock-aware net purchase proposals, export templates/external-purchase receipt scenarios, dedicated collection acknowledgment/signature and vale reconciliation, material returns/consumption summaries/cost reconciliation, and the final representative logistics pilot with candidate recovery. Native procurement and fulfillment documents are available, but those end-to-end R3 experiences are not certified complete by this increment.
+- A submitted native issue request can prepare a native Stock Entry / Material Issue draft. Native save/submit permissions and workflows remain authoritative. Partial delivery is supported; competing submissions cannot exceed the requested quantity.
+- The assigned technician or scoped supervisor confirms collection of a submitted issue using their authenticated account. The immutable acknowledgment stores receiver, server timestamp, reason and material snapshot. A printable collection receipt is provided. This is account-based confirmation, not an external electronic-signature integration.
+- Returns are native Material Receipt drafts tied to the original issue and detail. Partial quantities, original serials/batches and valuation are validated; submitted returns cannot exceed the issued units. Cancellation requires reversing submitted returns first. Acknowledgments survive as historical evidence when an issue is cancelled.
+- Work order reconciliation separates requested, issued, returned and net issued quantities. Draft/cancelled stock movements do not count. Net issued is an inventory-based measure, not a separate measurement of physical consumption.
+- Native non-stock Purchase Invoice lines and Employee Timesheet lines can reference the maintenance order. Credit notes preserve references. Cost summaries use native stock valuation, invoice net amounts and timesheet costing in Company currency; taxes, forecasts and payment status are excluded. Missing native permissions produce an explicitly incomplete total, never a misleading zero.
+- The advisory availability view uses current native stock less native reserved_stock, then compares it with unrequested forecast demand. It does not allocate future supply, reserve stock or automatically reduce purchase drafts; procurement reviews the suggestion.
+- A controlled CSV shopping list supports external purchasing. Goods received outside the procurement workflow are entered using the normal native Material Receipt form, with the required warehouse, quantity, valuation and serial/batch data. No parallel inventory is introduced.
+
+## Acceptance boundary
+
+Technical verification, populated recovery, concurrent request handling and browser evidence are recorded separately with their exact revision in the project implementation report. Human acceptance and production deployment remain separate from technical completion. Advanced resource optimization belongs to R4; prediction/reliability to R5; offline mobile to R6.
 
 No new synthetic users, warehouse authorizations, purchases, stock balances or demo logistics transactions are installed by app migration. Existing maintenance users are not silently assigned Stock User/Purchase User roles. Configure legitimate logistics users and Site/Warehouse authorizations explicitly.

@@ -382,3 +382,33 @@ permission_query_conditions['TruCMMS Material Source']='vanbags_maintenance.mate
 doc_events['Stock Entry']={'validate':'vanbags_maintenance.materials.guard_stock_entry','before_cancel':'vanbags_maintenance.materials.guard_stock_entry'}
 doc_events['DocShare']['validate'].append('vanbags_maintenance.materials.validate_share')
 scheduler_events={"hourly":["vanbags_maintenance.preventive.scheduler"]}
+
+# R3 fulfillment preserves native posting and approval workflows.
+doc_events['Stock Entry']['before_validate']='vanbags_maintenance.fulfillment.prepare_stock'
+doc_events['Stock Entry']['validate']=['vanbags_maintenance.materials.guard_stock_entry','vanbags_maintenance.fulfillment.validate_stock']
+doc_events['Stock Entry']['before_submit']='vanbags_maintenance.fulfillment.validate_stock'
+doc_events['Stock Entry']['before_cancel']=['vanbags_maintenance.materials.guard_stock_entry','vanbags_maintenance.fulfillment.before_cancel']
+doc_events['Stock Entry']['on_cancel']='vanbags_maintenance.fulfillment.after_cancel'
+has_permission['Stock Entry']='vanbags_maintenance.fulfillment.stock_permission'
+permission_query_conditions['Stock Entry']='vanbags_maintenance.fulfillment.stock_query'
+has_permission['TruCMMS Material Acknowledgment']='vanbags_maintenance.fulfillment.ack_permission'
+permission_query_conditions['TruCMMS Material Acknowledgment']='vanbags_maintenance.fulfillment.ack_query'
+doc_events['DocShare']['validate'].append('vanbags_maintenance.fulfillment.validate_share')
+
+has_permission['TruCMMS Material Estimate']='vanbags_maintenance.resource_planning.permission'
+permission_query_conditions['TruCMMS Material Estimate']='vanbags_maintenance.resource_planning.query'
+doc_events['DocShare']['validate'].append('vanbags_maintenance.resource_planning.validate_share')
+for dt in ('Purchase Invoice','Timesheet'):
+    doc_events.setdefault(dt,{})['validate']='vanbags_maintenance.resource_costs.validate_links'
+    doc_events[dt]['before_update_after_submit']='vanbags_maintenance.resource_costs.validate_links'
+
+doc_events['Stock Entry Detail']={'before_update_after_submit':'vanbags_maintenance.fulfillment.guard_child','before_validate':'vanbags_maintenance.fulfillment.guard_child','on_trash':'vanbags_maintenance.fulfillment.guard_child'}
+
+for dt in ('Purchase Invoice Item','Timesheet Detail'):
+    doc_events[dt]={'before_validate':'vanbags_maintenance.resource_costs.guard_cost_child','on_trash':'vanbags_maintenance.resource_costs.guard_cost_child'}
+
+for dt,query in [('Purchase Invoice','invoice_query'),('Timesheet','timesheet_query')]:
+    has_permission[dt]='vanbags_maintenance.resource_costs.native_permission'
+    permission_query_conditions[dt]='vanbags_maintenance.resource_costs.'+query
+    doc_events[dt]['before_cancel']='vanbags_maintenance.resource_costs.before_cancel'
+doc_events['DocShare']['validate'].append('vanbags_maintenance.resource_costs.validate_share')

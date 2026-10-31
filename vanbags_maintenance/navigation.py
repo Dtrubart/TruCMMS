@@ -12,7 +12,7 @@ GROUPS=[
  ('Recursos y servicios',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
   ('Equipos de mantenimiento','DocType','TruCMMS Maintenance Team')]),
  ('Repuestos y costos',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
-  ('Proyección de materiales','Page','trucmms-material-planning'),('Almacenes por sede','DocType','TruCMMS Site Warehouse')]),
+  ('Proyección de materiales','Page','trucmms-material-planning'),('Estimaciones por orden','DocType','TruCMMS Material Estimate'),('Vales recibidos','DocType','TruCMMS Material Acknowledgment'),('Almacenes por sede','DocType','TruCMMS Site Warehouse')]),
  ('Análisis',{'VB Maintenance Manager','TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
   ('Registro de trabajo','Report','TruCMMS Work Register'),('Historial de equipos','Report','TruCMMS Equipment History')]),
  ('Configuración',{'VB Maintenance Manager','System Manager'},[

@@ -94,6 +94,8 @@ def forecast(company, site, from_date, to_date):
             details.append(dict(key=source_key(row.name,item,unit),occurrence=row.name,plan=row.plan,
                 work_order=row.work_order,equipment=row.equipment,needed_on=str(row.planned_for),
                 item=item,stock_uom=unit,quantity=float(quantity)))
+    from vanbags_maintenance.resource_planning import forecast_rows
+    details.extend(forecast_rows(company,site,start,end))
     if len(details)>1000:frappe.throw('Forecast exceeds 1000 material lines; use a shorter period.')
     # Read endpoints must not take write locks. This view is advisory; creation
     # repeats the source/duplicate checks under the Site lock.
@@ -188,7 +190,7 @@ def purchase_request(company,site,from_date,to_date,warehouse,keys,key,reason):
         entry=grouped.setdefault(group,{'quantity':Decimal(0),'needed_on':row['needed_on']})
         entry['quantity']+=Decimal(str(row['quantity']))
         entry['needed_on']=min(entry['needed_on'],row['needed_on'])
-        sources.append(dict(source_key=key,active_key=key,occurrence=row['occurrence'],item=row['item'],
+        sources.append(dict(source_key=key,active_key=key,occurrence=row['occurrence'],estimate=row.get('estimate'),item=row['item'],
             stock_uom=row['stock_uom'],quantity=row['quantity'],needed_on=row['needed_on']))
     items=[native_item(item,unit,row['quantity'],warehouse,row['needed_on']) for (item,unit),row in sorted(grouped.items())]
     return insert_request(company,site,'Purchase',items,identity,digest,reason,sources=sources)
@@ -230,7 +232,7 @@ def guard_native(doc,method=None):
         if any(doc.get(k)!=old.get(k) for k in HEADER) or doc.company!=old.company or doc.material_request_type!=old.material_request_type:
             frappe.throw('Maintenance request origin and Company are permanent.')
         old_rows={r.name:r for r in old.items}
-        fields=('name','source_key','active_key','occurrence','item','stock_uom')
+        fields=('name','source_key','active_key','occurrence','estimate','item','stock_uom')
         def origin(rows):
             return [tuple(r.get(k) for k in fields)+(Decimal(str(r.quantity)),str(getdate(r.needed_on))) for r in rows]
         if origin(doc.get('trucmms_sources',[])) != origin(old.get('trucmms_sources',[])):

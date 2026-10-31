@@ -53,3 +53,73 @@
   }
  });
 })();
+
+(function(){
+ const esc=v=>frappe.utils.escape_html(String(v??''));
+ const api=(method,args)=>frappe.call({method:'vanbags_maintenance.'+method,args,type:method.endsWith('reconciliation')||method.endsWith('summary')?'GET':'POST',freeze:true});
+ frappe.ui.form.on('Material Request',{refresh(frm){
+  if(frm.doc.trucmms_origin==='TruCMMS'&&frm.doc.material_request_type==='Material Issue'&&frm.doc.docstatus===1&&frappe.model.can_create('Stock Entry')){
+   frm.add_custom_button(__('Preparar vale de salida'),async()=>{
+    const {message}=await api('fulfillment.delivery',{request:frm.doc.name,key:crypto.randomUUID()});
+    frappe.set_route('Form','Stock Entry',message.name);
+   },__('TruCMMS'));
+  }
+ }});
+ frappe.ui.form.on('Stock Entry',{refresh(frm){
+  if(!frm.doc.trucmms_work_order)return;
+  frm.set_intro(__('Movimiento vinculado a mantenimiento. La confirmación de recogida se registra desde la orden; este documento conserva la aprobación y contabilización nativas.'));
+  if(frm.doc.docstatus===1&&frm.doc.purpose==='Material Issue'&&frappe.model.can_create('Stock Entry')){
+   frm.add_custom_button(__('Preparar devolución'),async()=>{
+    const {message}=await api('fulfillment.return_draft',{issue:frm.doc.name,key:crypto.randomUUID()});
+    frappe.set_route('Form','Stock Entry',message.name);
+    frappe.show_alert({message:__('Revisa la cantidad que realmente devuelves antes de enviar el documento.'),indicator:'orange'});
+   },__('TruCMMS'));
+  }
+ }});
+ frappe.ui.form.on('TruCMMS Maintenance Work Order',{refresh(frm){
+  if(frm.is_new())return;
+  frm.add_custom_button(__('Entregas y devoluciones'),async()=>{
+   const {message:data}=await api('fulfillment.reconciliation',{order:frm.doc.name});
+   const dialog=new frappe.ui.Dialog({title:__('Materiales de la orden'),size:'large',fields:[{fieldname:'content',fieldtype:'HTML'}]});
+   const root=dialog.fields_dict.content.$wrapper;
+   root.html('<p>'+__('Salida neta = entregado menos devuelto. Los borradores y anulados no suman.')+'</p>');
+   const wrap=$('<div style="overflow-x:auto"></div>').appendTo(root);
+   const table=$('<table class="table table-bordered"><thead><tr><th>Artículo</th><th>Unidad</th><th>Solicitado</th><th>Entregado</th><th>Devuelto</th><th>Salida neta</th></tr></thead><tbody></tbody></table>').appendTo(wrap);
+   for(const row of data.rows)$('<tr>').html(['item','stock_uom','requested','issued','returned','net_issued'].map(k=>'<td>'+esc(row[k])+'</td>').join('')).appendTo(table.find('tbody'));
+   for(const movement of data.movements){
+    const line=$('<div class="mb-3"></div>').appendTo(root);
+    $('<span>').text(movement.name+' · '+movement.purpose+' · '+['Borrador','Enviado','Anulado'][movement.docstatus]).appendTo(line);
+    if(movement.can_open)$('<button class="btn btn-xs btn-default ml-2">').text(__('Abrir vale')).appendTo(line).on('click',()=>frappe.set_route('Form','Stock Entry',movement.name));
+    if(movement.acknowledgment){
+     $('<p>').text(__('Recogida confirmada por ')+movement.acknowledgment.received_by+' · '+movement.acknowledgment.received_on).appendTo(line);
+     $('<button class="btn btn-xs btn-default">').text(__('Ver constancia')).appendTo(line).on('click',()=>frappe.set_route('Form','TruCMMS Material Acknowledgment',movement.acknowledgment.name));
+    }else if(movement.docstatus===1&&movement.purpose==='Material Issue'&&frappe.user.has_role(['TruCMMS Technician','TruCMMS Supervisor','System Manager'])){
+     $('<button class="btn btn-sm btn-primary ml-2">').text(__('Confirmar recogida')).appendTo(line).on('click',()=>{
+      const details=movement.items.map(r=>`${r.item_code}: ${r.transfer_qty} ${r.stock_uom}`).join('; ');
+      frappe.prompt([{fieldname:'reason',label:__('Confirmo haber recibido: ')+details,fieldtype:'Small Text',reqd:1}],async values=>{
+       await api('fulfillment.acknowledge',{stock_entry:movement.name,reason:values.reason});dialog.hide();frappe.show_alert({message:__('Recogida registrada con tu usuario y fecha.'),indicator:'green'});
+      },__('Validar recogida completa del vale'));
+     });
+    }
+   }
+   dialog.show();
+  },__('Materiales'));
+  if(frappe.model.can_create('TruCMMS Material Estimate'))frm.add_custom_button(__('Agregar estimación'),()=>frappe.new_doc('TruCMMS Material Estimate',{work_order:frm.doc.name,needed_on:frappe.datetime.get_today()}),__('Materiales'));
+  if(frappe.user.has_role(['TruCMMS Supervisor','TruCMMS Dispatcher','System Manager']))frm.add_custom_button(__('Costos vinculados'),async()=>{
+   const {message:data}=await api('resource_costs.summary',{order:frm.doc.name});
+   const labels={materials:__('Materiales netos'),services:__('Servicios facturados'),labor:__('Mano de obra interna')};
+   let html='<p>'+esc(data.currency)+'</p>';
+   for(const [name,row] of Object.entries(data.components))html+='<p>'+esc(labels[name])+': '+(row.available?esc(row.amount):__('No disponible con tus permisos'))+'</p>';
+   html+='<p>'+__('Total: ')+(data.complete?esc(data.total):__('Incompleto por permisos'))+'</p><p>'+__('Valores de documentos enviados; se excluyen impuestos, borradores y anulados. La salida neta se valora con el libro de inventario nativo.')+'</p>';
+   frappe.msgprint({title:__('Costos de la orden'),message:html});
+  },__('Materiales'));
+ }});
+})();
+
+frappe.ui.form.on('TruCMMS Material Acknowledgment',{refresh(frm){
+ frm.set_df_property('items_snapshot','hidden',1);
+ const esc=v=>frappe.utils.escape_html(String(v??''));
+ let rows=[];try{rows=JSON.parse(frm.doc.items_snapshot||'[]');}catch(error){return;}
+ frm.dashboard.add_section('<div style="overflow-x:auto"><table class="table table-bordered"><thead><tr><th>Artículo</th><th>Cantidad</th><th>Unidad</th><th>Almacén</th></tr></thead><tbody>'+rows.map(r=>'<tr>'+['item','quantity','stock_uom','warehouse'].map(k=>'<td>'+esc(r[k])+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>',__('Materiales recibidos'));
+ frm.add_custom_button(__('Imprimir constancia'),()=>frappe.set_route('print',frm.doc.doctype,frm.doc.name));
+}});

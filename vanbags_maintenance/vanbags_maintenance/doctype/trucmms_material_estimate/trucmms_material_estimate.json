@@ -1,0 +1,124 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Material Estimate",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "track_changes": 1,
+ "field_order": [
+  "work_order",
+  "company",
+  "site",
+  "item",
+  "stock_uom",
+  "quantity",
+  "needed_on",
+  "disabled",
+  "reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "label": "Orden",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Work Order",
+   "reqd": 1,
+   "read_only": 0,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 0,
+   "read_only": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 0,
+   "read_only": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "item",
+   "label": "Art\u00edculo",
+   "fieldtype": "Link",
+   "options": "Item",
+   "reqd": 1,
+   "read_only": 0,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "stock_uom",
+   "label": "Unidad de inventario",
+   "fieldtype": "Link",
+   "options": "UOM",
+   "reqd": 0,
+   "read_only": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "quantity",
+   "label": "Cantidad adicional prevista",
+   "fieldtype": "Float",
+   "options": null,
+   "reqd": 1,
+   "read_only": 0,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "needed_on",
+   "label": "Fecha de necesidad",
+   "fieldtype": "Date",
+   "options": null,
+   "reqd": 1,
+   "read_only": 0,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Deshabilitado",
+   "fieldtype": "Check",
+   "options": null,
+   "reqd": 0,
+   "read_only": 0,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "reason",
+   "label": "Motivo",
+   "fieldtype": "Small Text",
+   "options": null,
+   "reqd": 1,
+   "read_only": 0,
+   "in_list_view": 0
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  }
+ ]
+}

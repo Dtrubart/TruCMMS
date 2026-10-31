@@ -1,0 +1,110 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Material Acknowledgment",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "field_order": [
+  "stock_entry",
+  "work_order",
+  "company",
+  "site",
+  "received_by",
+  "received_on",
+  "reason",
+  "items_snapshot"
+ ],
+ "fields": [
+  {
+   "fieldname": "stock_entry",
+   "label": "Vale de salida",
+   "fieldtype": "Link",
+   "options": "Stock Entry",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "work_order",
+   "label": "Orden",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Work Order",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "received_by",
+   "label": "Recibido por",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "received_on",
+   "label": "Fecha de recepci\u00f3n",
+   "fieldtype": "Datetime",
+   "options": null,
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Confirmaci\u00f3n",
+   "fieldtype": "Small Text",
+   "options": null,
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "items_snapshot",
+   "label": "Materiales recibidos",
+   "fieldtype": "Long Text",
+   "options": null,
+   "read_only": 1,
+   "reqd": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "print": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "print": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "print": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "print": 1
+  }
+ ]
+}

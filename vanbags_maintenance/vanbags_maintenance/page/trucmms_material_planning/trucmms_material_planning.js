@@ -42,6 +42,18 @@ frappe.pages['trucmms-material-planning'].on_page_load = function(wrapper) {
   const escape=frappe.utils.escape_html;
   frappe.msgprint({title:__('Origen de la demanda'),message:report.rows.map(r=>`<p>${escape(r.needed_on)} · ${escape(r.equipment)} · ${escape(r.item)}: ${escape(String(r.quantity))} ${escape(r.stock_uom)} · ${escape(r.occurrence)}</p>`).join('')||__('Sin materiales.')});
  });
+ page.add_inner_button(__('Descargar lista de compras'),()=>{
+  if(!valid()){frappe.msgprint(__('Selecciona empresa, sede y período.'));return;}
+  window.open('/api/method/vanbags_maintenance.resource_planning.shopping_csv?'+new URLSearchParams(filters()).toString(),'_blank','noopener');
+ });
+ page.add_inner_button(__('Consultar existencias'),()=>{
+  if(!valid()){frappe.msgprint(__('Selecciona empresa, sede y período.'));return;}
+  frappe.prompt([{fieldname:'warehouse',label:__('Almacén autorizado'),fieldtype:'Link',options:'Warehouse',reqd:1,get_query:()=>({filters:{company:company.get_value(),disabled:0,is_group:0}})}],async values=>{
+   const {message:data}=await frappe.call({method:'vanbags_maintenance.resource_planning.availability',type:'GET',args:{...filters(),...values}});
+   const esc=v=>frappe.utils.escape_html(String(v??''));
+   frappe.msgprint({title:__('Disponibilidad orientativa'),message:'<p>'+__('Consulta actual, sin reserva ni garantía de disponibilidad futura. La propuesta descuenta stock disponible de las necesidades aún no requeridas.')+'</p>'+data.totals.map(r=>'<p>'+esc(r.item)+' · '+__('Disponible: ')+esc(r.available_now)+' · '+__('Compra sugerida: ')+esc(r.suggested_purchase)+' '+esc(r.stock_uom)+'</p>').join('')});
+  },__('Consultar stock nativo'));
+ });
  const options=frappe.route_options||{};frappe.route_options=null;
  for(const [field,key] of [[company,'company'],[site,'site'],[from,'from_date'],[until,'to_date']])if(options[key])field.set_value(options[key]);
 };

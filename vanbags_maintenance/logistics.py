@@ -131,8 +131,10 @@ def item_choices(order, search="", kind="All", limit=20):
 
 
 def setup():
-    from vanbags_maintenance import r2_records, configuration, materials
+    from vanbags_maintenance import r2_records, configuration, materials, fulfillment, resource_costs
     materials.setup()
+    fulfillment.setup()
+    resource_costs.setup()
     r2_records.setup()
     frappe.db.add_index(DT, ["company", "site", "disabled"], "site_warehouse_scope")
     configuration.record_deployment()
