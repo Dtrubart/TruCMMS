@@ -80,7 +80,9 @@ def prepare_stock(doc, method=None):
 
 def validate_stock(doc, method=None):
     if not doc.get('trucmms_work_order'): return
+    order=teams.locked_document(wo.DT,doc.trucmms_work_order)
     context(doc)
+    if doc.purpose=='Material Issue' and order.status not in ('Authorized','Assigned'):frappe.throw('Work order is no longer active for delivery.')
     if doc.get('trucmms_return_against'):
         source = teams.locked_document('Stock Entry', doc.trucmms_return_against)
         if source.docstatus != 1: frappe.throw('Original issue must remain submitted.')
@@ -121,7 +123,9 @@ def validate_stock(doc, method=None):
     elif method == 'before_submit':
         # Serialize competing deliveries even when native over-delivery tolerance is enabled.
         for request in sorted({r.material_request for r in doc.items}):
-            teams.locked_document('Material Request', request)
+            current=teams.locked_document('Material Request', request)
+            if current.docstatus!=1 or current.status in ('Stopped','Cancelled') or current.material_request_type!='Material Issue':
+                frappe.throw('Material request is no longer active for delivery.')
         totals = {}
         for row in doc.items:
             key = (row.material_request, row.material_request_item)
@@ -130,7 +134,7 @@ def validate_stock(doc, method=None):
             expected = frappe.db.get_value('Material Request Item', {'name':detail, 'parent':request}, 'stock_qty')
             delivered = frappe.db.sql("""SELECT COALESCE(SUM(d.transfer_qty),0) FROM `tabStock Entry Detail` d
                 JOIN `tabStock Entry` p ON p.name=d.parent WHERE p.docstatus=1 AND p.purpose='Material Issue'
-                AND d.material_request=%s AND d.material_request_item=%s AND p.name!=%s""", (request, detail, doc.name))[0][0]
+                AND d.material_request=%s AND d.material_request_item=%s AND p.name!=%s FOR UPDATE""", (request, detail, doc.name))[0][0]
             if expected is None or quantity + Decimal(str(delivered)) > Decimal(str(expected)):
                 frappe.throw('Delivery exceeds the submitted material request quantity.')
 
@@ -144,7 +148,7 @@ def before_cancel(doc, method=None):
     if [[r.get(k) for k in fields] for r in stored.items]!=[[r.get(k) for k in fields] for r in doc.items]:
         frappe.throw('Do not change submitted movement lines while cancelling.')
     context(stored)
-    if frappe.db.exists('Stock Entry', {'trucmms_return_against':doc.name, 'docstatus':1}):
+    if frappe.db.sql('SELECT name FROM `tabStock Entry` WHERE trucmms_return_against=%s AND docstatus=1 FOR UPDATE',doc.name):
         frappe.throw('Cancel the linked returns before cancelling this issue.')
 
 
@@ -156,7 +160,8 @@ def after_cancel(doc, method=None):
 def idempotent(key, source, kind):
     if not isinstance(key, str) or not 8 <= len(key) <= 100: frappe.throw('Provide a stable request key (8-100 characters).')
     identity = hashlib.sha256(json.dumps([frappe.session.user, kind, source, key]).encode()).hexdigest()
-    name = frappe.db.get_value('Stock Entry', {'trucmms_delivery_key':identity}, 'name')
+    matches=frappe.db.sql('SELECT name FROM `tabStock Entry` WHERE trucmms_delivery_key=%s FOR UPDATE',identity)
+    name=matches[0][0] if matches else None
     if name: frappe.get_doc('Stock Entry', name).check_permission('read')
     return identity, name
 
@@ -234,7 +239,8 @@ def acknowledge(stock_entry, reason):
         frappe.throw('An authorized technician or supervisor must confirm collection.',frappe.PermissionError)
     # Work order permission limits technicians to their current allocations.
     reason = job_plans.reason(reason)
-    existing = frappe.db.get_value(ACK, {'stock_entry':stock.name}, 'name')
+    matches=frappe.db.sql(f'SELECT name FROM `tab{ACK}` WHERE stock_entry=%s FOR UPDATE',stock.name)
+    existing=matches[0][0] if matches else None
     if existing: return {'name':existing,'created':False}
     snapshot = json.dumps([dict(item=r.item_code,quantity=r.transfer_qty,stock_uom=r.stock_uom,warehouse=r.s_warehouse) for r in stock.items],sort_keys=True)
     with mat.internal():
@@ -301,8 +307,7 @@ def guard_child(doc,method=None):
 def trace_data(row):
     result={}
     if row.get('serial_and_batch_bundle'):
-        entries=frappe.get_all('Serial and Batch Entry',filters={'parent':row.serial_and_batch_bundle},
-            fields=['serial_no','batch_no','qty','stock_value_difference'])
+        entries=frappe.db.sql('SELECT serial_no,batch_no,qty,stock_value_difference FROM `tabSerial and Batch Entry` WHERE parent=%s FOR UPDATE',row.serial_and_batch_bundle,as_dict=True)
         for entry in entries:
             key=(entry.serial_no or None,entry.batch_no or None);qty=abs(Decimal(str(entry.qty)))
             if not qty:continue
@@ -321,7 +326,7 @@ def trace_data(row):
 
 def returned(issue,detail,exclude=''):
     rows=frappe.db.sql("""SELECT d.* FROM `tabStock Entry Detail` d JOIN `tabStock Entry` p ON p.name=d.parent
-        WHERE p.docstatus=1 AND p.trucmms_return_against=%s AND d.trucmms_issue_detail=%s AND p.name!=%s""",
+        WHERE p.docstatus=1 AND p.trucmms_return_against=%s AND d.trucmms_issue_detail=%s AND p.name!=%s FOR UPDATE""",
         (issue,detail,exclude or ''),as_dict=True)
     total=Decimal(0);trace={}
     for row in rows:
