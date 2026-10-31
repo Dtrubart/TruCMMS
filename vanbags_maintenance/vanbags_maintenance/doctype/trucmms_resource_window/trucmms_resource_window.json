@@ -1,0 +1,114 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Resource Window",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "track_changes": 1,
+ "allow_rename": 0,
+ "fields": [
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "technician",
+   "label": "T\u00e9cnico",
+   "fieldtype": "Link",
+   "options": "User",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "kind",
+   "label": "Tipo",
+   "fieldtype": "Select",
+   "options": "Working\nUnavailable",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "starts_on",
+   "label": "Desde",
+   "fieldtype": "Datetime",
+   "options": null,
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "ends_on",
+   "label": "Hasta (exclusivo)",
+   "fieldtype": "Datetime",
+   "options": null,
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Deshabilitado",
+   "fieldtype": "Check",
+   "options": null,
+   "reqd": 0,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "reason",
+   "label": "Motivo",
+   "fieldtype": "Small Text",
+   "options": null,
+   "reqd": 1,
+   "in_list_view": 0
+  }
+ ],
+ "field_order": [
+  "company",
+  "site",
+  "technician",
+  "kind",
+  "starts_on",
+  "ends_on",
+  "disabled",
+  "reason"
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  }
+ ]
+}

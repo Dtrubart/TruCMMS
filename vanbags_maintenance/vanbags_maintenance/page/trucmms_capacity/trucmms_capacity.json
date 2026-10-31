@@ -1,0 +1,22 @@
+{
+ "doctype": "Page",
+ "name": "trucmms-capacity",
+ "page_name": "trucmms-capacity",
+ "title": "Capacidad y disponibilidad",
+ "module": "Vanbags Maintenance",
+ "standard": "Yes",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "TruCMMS Supervisor"
+  },
+  {
+   "role": "TruCMMS Dispatcher"
+  },
+  {
+   "role": "TruCMMS Technician"
+  }
+ ]
+}

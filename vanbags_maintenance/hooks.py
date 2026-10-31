@@ -412,3 +412,12 @@ for dt,query in [('Purchase Invoice','invoice_query'),('Timesheet','timesheet_qu
     permission_query_conditions[dt]='vanbags_maintenance.resource_costs.'+query
     doc_events[dt]['before_cancel']='vanbags_maintenance.resource_costs.before_cancel'
 doc_events['DocShare']['validate'].append('vanbags_maintenance.resource_costs.validate_share')
+
+# R4.1 explicit capacity; assignment and safety policies stay authoritative.
+after_install='vanbags_maintenance.capacity.setup'
+after_migrate='vanbags_maintenance.capacity.setup'
+has_permission['TruCMMS Resource Window']='vanbags_maintenance.capacity.permission'
+permission_query_conditions['TruCMMS Resource Window']='vanbags_maintenance.capacity.query'
+doc_events['DocShare']['validate'].append('vanbags_maintenance.capacity.validate_share')
+
+app_include_js.append('/assets/vanbags_maintenance/js/capacity_forms.js')
