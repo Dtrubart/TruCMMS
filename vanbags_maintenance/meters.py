@@ -13,6 +13,7 @@ def validate_meter(doc):
     if not frappe.flags.get('trucmms_r2_write'):r.editor(asset=True)
     old=doc.get_doc_before_save();internal=frappe.flags.get('trucmms_r2_write')
     if not doc.code or len(doc.code)>64 or not (doc.meter_name or '').strip():frappe.throw('Meter code (maximum 64 characters) and name are required.')
+    if doc.get('measurement_point') and (doc.equipment or doc.component):frappe.throw('Choose equipment/component or a facility measurement point, not both.')
     if doc.component:
         component=frappe.get_doc('TruCMMS Component',doc.component);component.check_permission('read')
         if not component.equipment and not internal:frappe.throw('Install the component before configuring a meter.')
@@ -22,13 +23,18 @@ def validate_meter(doc):
         equipment=frappe.get_doc('VB Equipment',doc.equipment);equipment.check_permission('read')
         if doc.is_new():doc.company,doc.site=equipment.company,equipment.site
         if (doc.company,doc.site)!=(equipment.company,equipment.site):frappe.throw('Meter and equipment Company/Site must match.')
-    elif not (internal and doc.disabled):frappe.throw('An operational meter needs installed equipment.')
+    elif doc.get('measurement_point'):
+        point=frappe.get_doc('TruCMMS Measurement Point',doc.measurement_point);point.check_permission('read')
+        if point.disabled and not (internal and doc.disabled):frappe.throw('Choose an enabled measurement point.')
+        if doc.is_new():doc.company,doc.site=point.company,point.site
+        if (doc.company,doc.site)!=(point.company,point.site):frappe.throw('Meter and measurement point Company/Site must match.')
+    elif not (internal and doc.disabled):frappe.throw('An operational meter needs equipment or a measurement point.')
     org.validate_context(doc)
     if doc.metric_kind not in ('Cumulative','Condition','Rate') or doc.direction not in ('Increasing','Decreasing','Variable'):frappe.throw('Invalid measurement semantics.')
     if doc.metric_kind=='Cumulative' and doc.direction!='Increasing':frappe.throw('Use Condition for decreasing wear measurements.')
     finite(doc.max_age_hours,'Maximum reading age',positive=True)
     if old and not internal:
-        if any(doc.get(k)!=old.get(k) for k in ('code','company','site','equipment','component','unit','metric_kind','direction','epoch','epoch_offset','last_reading')):frappe.throw('Meter identity, units and history are permanent; use replacement/reset services.')
+        if any(doc.get(k)!=old.get(k) for k in ('code','company','site','equipment','component','measurement_point','unit','metric_kind','direction','epoch','epoch_offset','last_reading')):frappe.throw('Meter identity, units and history are permanent; use replacement/reset services.')
     if not old and not internal:
         if doc.last_reading or doc.epoch_offset or doc.epoch not in (None,0,1):frappe.throw('Meter history is server controlled.')
         doc.epoch=1;doc.epoch_offset=0
@@ -36,12 +42,17 @@ def validate_meter(doc):
 def meter(name,lock=True):
     doc=teams.locked_document(DT,name) if lock else frappe.get_doc(DT,name)
     doc.check_permission('read')
-    if doc.disabled or not doc.equipment:frappe.throw('Choose an enabled, installed meter.')
-    equipment=frappe.get_doc('VB Equipment',doc.equipment);equipment.check_permission('read')
-    if (equipment.company,equipment.site)!=(doc.company,doc.site):frappe.throw('Reconcile meter scope after equipment movement.')
-    if doc.component:
-        component=frappe.get_doc('TruCMMS Component',doc.component);component.check_permission('read')
-        if component.equipment!=doc.equipment:frappe.throw('Meter component is not installed on this equipment.')
+    if doc.disabled:frappe.throw('Choose an enabled meter.')
+    if doc.get('measurement_point'):
+        point=frappe.get_doc('TruCMMS Measurement Point',doc.measurement_point);point.check_permission('read')
+        if point.disabled or (point.company,point.site)!=(doc.company,doc.site):frappe.throw('Reconcile the measurement point scope/status.')
+    elif doc.equipment:
+        equipment=frappe.get_doc('VB Equipment',doc.equipment);equipment.check_permission('read')
+        if (equipment.company,equipment.site)!=(doc.company,doc.site):frappe.throw('Reconcile meter scope after equipment movement.')
+        if doc.component:
+            component=frappe.get_doc('TruCMMS Component',doc.component);component.check_permission('read')
+            if component.equipment!=doc.equipment:frappe.throw('Meter component is not installed on this equipment.')
+    else:frappe.throw('Choose an installed equipment meter or a facility measurement point meter.')
     return doc
 
 def timestamp(value):
@@ -89,7 +100,7 @@ def _record(doc,value,actual_on,key,reason,correction_of=None,reset=False):
         placements=teams.locked_sql('SELECT name FROM `tabTruCMMS Component Installation` WHERE component=%s AND equipment=%s AND company=%s AND site=%s AND effective_from<=%s AND (effective_until IS NULL OR effective_until>%s) FOR UPDATE',(context.component,context.equipment,context.company,context.site,actual_on,actual_on))
         if not placements:frappe.throw('Reading time must belong to a recorded installation of this component on the measured equipment/site.')
     total=finite(value+Decimal(str(doc.epoch_offset or 0)) if doc.metric_kind=='Cumulative' else value,'Continuous reading')
-    row=r.create(READING,reading_key=identity,meter=doc.name,company=context.company,site=context.site,equipment=context.equipment,component=context.component,value=float(value),total_value=float(total),actual_on=actual_on,epoch=doc.epoch,correction_of=correction_of,reason=reason,payload_hash=digest,recorded_by=frappe.session.user,recorded_on=now_datetime())
+    row=r.create(READING,reading_key=identity,meter=doc.name,company=context.company,site=context.site,equipment=context.equipment,component=context.component,measurement_point=context.get('measurement_point'),value=float(value),total_value=float(total),actual_on=actual_on,epoch=doc.epoch,correction_of=correction_of,reason=reason,payload_hash=digest,recorded_by=frappe.session.user,recorded_on=now_datetime())
     doc.last_reading=row.name;r.save(doc)
     return row
 
@@ -126,7 +137,7 @@ def reset(meter_name,initial_value,reason,key,actual_on=None):
     if doc.metric_kind=='Cumulative' and initial<0:frappe.throw('Initial cumulative reading cannot be negative.')
     old_epoch=doc.epoch;doc.epoch+=1
     doc.epoch_offset=float(Decimal(str(old.total_value))-initial) if doc.metric_kind=='Cumulative' else 0
-    row=r.create('TruCMMS Meter Epoch',epoch_key=epoch_key,meter=doc.name,company=doc.company,site=doc.site,old_epoch=old_epoch,new_epoch=doc.epoch,initial_value=float(initial),continuity_offset=doc.epoch_offset,effective_on=when,reason=reason,recorded_by=frappe.session.user)
+    row=r.create('TruCMMS Meter Epoch',epoch_key=epoch_key,meter=doc.name,company=doc.company,site=doc.site,measurement_point=doc.get('measurement_point'),old_epoch=old_epoch,new_epoch=doc.epoch,initial_value=float(initial),continuity_offset=doc.epoch_offset,effective_on=when,reason=reason,recorded_by=frappe.session.user)
     _record(doc,initial,when,'reset-'+str(key),reason,reset=True)
     r.event(doc,'Reset/Replace Meter',reason,old_epoch=old_epoch,new_epoch=doc.epoch)
     return {'name':row.name,'meter':doc.name,'epoch':doc.epoch}

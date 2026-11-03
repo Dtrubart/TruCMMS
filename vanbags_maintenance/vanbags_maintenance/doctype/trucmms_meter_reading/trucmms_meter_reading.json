@@ -14,6 +14,7 @@
   "company",
   "site",
   "equipment",
+  "measurement_point",
   "component",
   "value",
   "total_value",
@@ -63,7 +64,8 @@
    "label": "Equipo al medir",
    "fieldtype": "Link",
    "options": "VB Equipment",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 0
   },
   {
    "fieldname": "component",
@@ -96,7 +98,7 @@
   },
   {
    "fieldname": "epoch",
-   "label": "Época",
+   "label": "\u00c9poca",
    "fieldtype": "Int",
    "read_only": 1
   },
@@ -109,7 +111,7 @@
   },
   {
    "fieldname": "reason",
-   "label": "Motivo / observación",
+   "label": "Motivo / observaci\u00f3n",
    "fieldtype": "Small Text",
    "read_only": 1
   },
@@ -131,6 +133,13 @@
    "fieldname": "recorded_on",
    "label": "Registrado el",
    "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "measurement_point",
+   "label": "Punto de medici\u00f3n de instalaciones",
+   "fieldtype": "Link",
+   "options": "TruCMMS Measurement Point",
    "read_only": 1
   }
  ],

@@ -75,7 +75,13 @@
   "pm_finding",
   "pm_procedure_snapshot",
   "pm_started_on",
-  "pm_started_by"
+  "pm_started_by",
+  "scope_section",
+  "scope_policy",
+  "scope_location",
+  "scope_revision",
+  "work_targets",
+  "scope_snapshot"
  ],
  "fields": [
   {
@@ -492,7 +498,7 @@
   },
   {
    "fieldname": "pm_section",
-   "label": "Origen preventivo / inspección",
+   "label": "Origen preventivo / inspecci\u00f3n",
    "fieldtype": "Section Break"
   },
   {
@@ -537,6 +543,48 @@
    "fieldtype": "Link",
    "options": "User",
    "read_only": 1
+  },
+  {
+   "fieldname": "scope_section",
+   "label": "Alcance y puntos de trabajo",
+   "fieldtype": "Section Break",
+   "options": null
+  },
+  {
+   "fieldname": "scope_policy",
+   "label": "Contrato de alcance",
+   "fieldtype": "Data",
+   "options": null,
+   "read_only": 1
+  },
+  {
+   "fieldname": "scope_location",
+   "label": "Ubicaci\u00f3n de alcance",
+   "fieldtype": "Link",
+   "options": "VB Equipment Location",
+   "read_only": 1
+  },
+  {
+   "fieldname": "scope_revision",
+   "label": "Revisi\u00f3n de alcance",
+   "fieldtype": "Link",
+   "options": "TruCMMS Scope Revision",
+   "read_only": 1
+  },
+  {
+   "fieldname": "work_targets",
+   "label": "Puntos de trabajo",
+   "fieldtype": "Table",
+   "options": "TruCMMS Work Target",
+   "read_only": 1
+  },
+  {
+   "fieldname": "scope_snapshot",
+   "label": "Lecturas de referencia al autorizar",
+   "fieldtype": "Long Text",
+   "options": null,
+   "read_only": 1,
+   "hidden": 1
   }
  ],
  "permissions": [

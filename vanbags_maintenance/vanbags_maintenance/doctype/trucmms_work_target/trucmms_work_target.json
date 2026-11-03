@@ -1,0 +1,73 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Work Target",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "field_order": [
+  "target_id",
+  "kind",
+  "label",
+  "functional_location",
+  "equipment",
+  "component",
+  "measurement_point",
+  "context_snapshot"
+ ],
+ "fields": [
+  {
+   "fieldname": "target_id",
+   "label": "Identidad",
+   "fieldtype": "Data",
+   "options": null,
+   "read_only": 1
+  },
+  {
+   "fieldname": "kind",
+   "label": "Tipo",
+   "fieldtype": "Select",
+   "options": "Equipment\nComponent\nLocation\nMeasurement Point\nReference",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "label",
+   "label": "Punto de trabajo",
+   "fieldtype": "Data",
+   "options": null,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "functional_location",
+   "label": "Ubicaci\u00f3n",
+   "fieldtype": "Link",
+   "options": "VB Equipment Location"
+  },
+  {
+   "fieldname": "equipment",
+   "label": "Equipo",
+   "fieldtype": "Link",
+   "options": "VB Equipment"
+  },
+  {
+   "fieldname": "component",
+   "label": "Componente",
+   "fieldtype": "Link",
+   "options": "TruCMMS Component"
+  },
+  {
+   "fieldname": "measurement_point",
+   "label": "Punto de medici\u00f3n",
+   "fieldtype": "Link",
+   "options": "TruCMMS Measurement Point"
+  },
+  {
+   "fieldname": "context_snapshot",
+   "label": "Contexto hist\u00f3rico",
+   "fieldtype": "Long Text",
+   "options": null,
+   "hidden": 1
+  }
+ ],
+ "permissions": [],
+ "istable": 1
+}

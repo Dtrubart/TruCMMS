@@ -1,0 +1,107 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Measurement Point",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "field_order": [
+  "code",
+  "point_name",
+  "company",
+  "site",
+  "functional_location",
+  "disabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "label": "C\u00f3digo",
+   "fieldtype": "Data",
+   "options": null,
+   "reqd": 1,
+   "unique": 1,
+   "length": 64
+  },
+  {
+   "fieldname": "point_name",
+   "label": "Punto de medici\u00f3n",
+   "fieldtype": "Data",
+   "options": null,
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "reqd": 1
+  },
+  {
+   "fieldname": "functional_location",
+   "label": "Ubicaci\u00f3n",
+   "fieldtype": "Link",
+   "options": "VB Equipment Location",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Deshabilitado",
+   "fieldtype": "Check",
+   "options": null
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "VB Maintenance User",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  }
+ ],
+ "track_changes": 1
+}

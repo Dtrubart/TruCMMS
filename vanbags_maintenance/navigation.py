@@ -8,7 +8,7 @@ GROUPS=[
  ('Activos',{'VB Maintenance User','VB Maintenance Manager','TruCMMS Dispatcher','TruCMMS Supervisor','TruCMMS Technician','System Manager'},[
   ('Equipos físicos','DocType','VB Equipment'),('Componentes','DocType','TruCMMS Component'),('Ubicaciones funcionales','DocType','VB Equipment Location'),('Instalaciones y reemplazos','Report','TruCMMS Installation Register')]),
  ('Planes y rutinas',{'TruCMMS Dispatcher','TruCMMS Supervisor','TruCMMS Technician','System Manager'},[
-  ('Procedimientos','DocType','TruCMMS Job Plan'),('Planes preventivos','DocType','TruCMMS PM Plan'),('Programación preventiva','Page','trucmms-preventive'),('Medidores','DocType','TruCMMS Meter'),('Hallazgos de inspección','DocType','TruCMMS Inspection Finding')]),
+  ('Procedimientos','DocType','TruCMMS Job Plan'),('Planes preventivos','DocType','TruCMMS PM Plan'),('Programación preventiva','Page','trucmms-preventive'),('Medidores','DocType','TruCMMS Meter'),('Puntos de medición','DocType','TruCMMS Measurement Point'),('Hallazgos de inspección','DocType','TruCMMS Inspection Finding')]),
  ('Recursos y servicios',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
   ('Equipos de mantenimiento','DocType','TruCMMS Maintenance Team'),('Capacidad y disponibilidad','Page','trucmms-capacity'),('Ventanas y ausencias','DocType','TruCMMS Resource Window')]),
  ('Repuestos y costos',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[

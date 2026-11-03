@@ -4,7 +4,7 @@ Dirección acordada con el usuario. Los criterios orientan el detalle de impleme
 
 | Incremento | Entregables y criterio | Estado |
 | --- | --- | --- |
-| **R4.0 Alcance y puntos** | Ubicación de alcance; activos opcionales; múltiples áreas/activos/componentes/puntos. Una intervención o ronda mantiene trazabilidad individual sin activos ficticios | Desarrollo local sin verificación final |
+| **R4.0 Alcance y puntos** | Ubicación de alcance; activos opcionales; múltiples áreas/activos/componentes/puntos. Una intervención o ronda mantiene trazabilidad individual sin activos ficticios | Implementado en DEV/TEST; regresión final y puertas de publicación/recuperación en validación. [Detalle](../02-version-actual/06-r4-alcance-local.md) |
 | **R4.1 Disponibilidad** | Calendarios, turnos/patrones, ausencias y capacidad; identificar disponibilidad, carga y conflictos | Ventanas explícitas verificadas; recurrencia/generación pendientes |
 | **R4.2 Competencias** | Habilidades, certificados, vigencias y requisitos; elegibilidad y excepciones auditadas | Pendiente; reutilizar equipos/disciplinas |
 | **R4.3 Procedimientos y formatos** | Plantillas versionadas, editor, recorridos, mediciones, condiciones/evidencias; adaptación sin código y ejecución con versión conservada | Pendiente |
@@ -26,5 +26,7 @@ Comenzar con propuestas explicables confirmadas por el planificador. Separar res
 ## Alcance transversal y exclusiones
 
 Con R4.0 se revisa el prototipo; R4.3–R4.4 aportan captura/documentos; R4.5 completa dedicaciones y asignaciones por actividad; R4.7 valida el recorrido completo. No se espera al final para diseñar la interfaz.
+
+Propuesta visual para revisión: [orden de cinco pantallas](prototipos/r4-orden-cinco-pantallas.html). Ejemplo sintético con AHU1, AHU2, punto de agua y referencia de área. La simulación no guarda datos ni demuestra implementación de las funciones futuras mostradas.
 
 Predicción/confiabilidad avanzada queda en R5 y offline en R6. Power BI, cálculos metrológicos y otras extensiones sectoriales requieren alcance propio. Un formato genérico no acredita certificación normativa.

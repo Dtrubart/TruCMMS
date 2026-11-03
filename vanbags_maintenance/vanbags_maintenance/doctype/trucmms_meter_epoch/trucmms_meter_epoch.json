@@ -19,7 +19,8 @@
   "continuity_offset",
   "effective_on",
   "reason",
-  "recorded_by"
+  "recorded_by",
+  "measurement_point"
  ],
  "fields": [
   {
@@ -56,13 +57,13 @@
   },
   {
    "fieldname": "old_epoch",
-   "label": "Época anterior",
+   "label": "\u00c9poca anterior",
    "fieldtype": "Int",
    "read_only": 1
   },
   {
    "fieldname": "new_epoch",
-   "label": "Época nueva",
+   "label": "\u00c9poca nueva",
    "fieldtype": "Int",
    "read_only": 1
   },
@@ -97,6 +98,13 @@
    "label": "Actor",
    "fieldtype": "Link",
    "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "measurement_point",
+   "label": "Punto de medici\u00f3n de instalaciones",
+   "fieldtype": "Link",
+   "options": "TruCMMS Measurement Point",
    "read_only": 1
   }
  ],

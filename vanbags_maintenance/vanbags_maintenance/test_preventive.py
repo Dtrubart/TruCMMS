@@ -13,7 +13,7 @@ class PreventiveCase(WorkOrderCase):
     def setUp(self):
         super().setUp();frappe.set_user('Administrator')
         self.category=frappe.get_doc({'doctype':'VB Equipment Category','category_name':self.token}).insert().name
-        self.eq=frappe.get_doc({'doctype':'VB Equipment','equipment_code':self.token,'equipment_name':'Preventive target','category':self.category,'company':COMPANY_A,'site':SITE_A}).insert()
+        self.eq=frappe.get_doc({'doctype':'VB Equipment','equipment_code':self.token,'equipment_name':'Preventive target','location':self.location.name,'category':self.category,'company':COMPANY_A,'site':SITE_A}).insert()
         if not frappe.db.exists('UOM','Hour'):frappe.get_doc({'doctype':'UOM','uom_name':'Hour'}).insert()
         self.unit='Hour';self.number=0
     def procedure(self,measurements=None,evidence=0):

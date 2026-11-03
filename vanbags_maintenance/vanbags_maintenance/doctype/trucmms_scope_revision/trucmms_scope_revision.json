@@ -1,0 +1,114 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Scope Revision",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "field_order": [
+  "work_order",
+  "company",
+  "site",
+  "request_key",
+  "payload_hash",
+  "snapshot",
+  "reason",
+  "recorded_by",
+  "recorded_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "label": "Orden",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Work Order",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "request_key",
+   "label": "Identidad",
+   "fieldtype": "Data",
+   "options": null,
+   "unique": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "payload_hash",
+   "label": "Huella",
+   "fieldtype": "Data",
+   "options": null,
+   "hidden": 1
+  },
+  {
+   "fieldname": "snapshot",
+   "label": "Alcance versionado",
+   "fieldtype": "Long Text",
+   "options": null,
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Motivo",
+   "fieldtype": "Small Text",
+   "options": null,
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_by",
+   "label": "Registrado por",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_on",
+   "label": "Fecha",
+   "fieldtype": "Datetime",
+   "options": null,
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1,
+   "select": 1
+  }
+ ]
+}

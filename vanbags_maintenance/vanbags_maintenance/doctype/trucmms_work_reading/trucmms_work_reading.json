@@ -1,0 +1,106 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Work Reading",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "field_order": [
+  "work_order",
+  "company",
+  "site",
+  "target_id",
+  "meter",
+  "meter_reading",
+  "recorded_by",
+  "recorded_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "work_order",
+   "label": "Orden",
+   "fieldtype": "Link",
+   "options": "TruCMMS Maintenance Work Order",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "options": "Company",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "options": "TruCMMS Site",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "target_id",
+   "label": "Punto de trabajo",
+   "fieldtype": "Data",
+   "options": null,
+   "read_only": 1
+  },
+  {
+   "fieldname": "meter",
+   "label": "Medidor",
+   "fieldtype": "Link",
+   "options": "TruCMMS Meter",
+   "read_only": 1
+  },
+  {
+   "fieldname": "meter_reading",
+   "label": "Lectura",
+   "fieldtype": "Link",
+   "options": "TruCMMS Meter Reading",
+   "unique": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_by",
+   "label": "Registrado por",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_on",
+   "label": "Fecha",
+   "fieldtype": "Datetime",
+   "options": null,
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1,
+   "select": 1
+  }
+ ]
+}

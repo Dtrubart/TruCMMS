@@ -421,3 +421,16 @@ permission_query_conditions['TruCMMS Resource Window']='vanbags_maintenance.capa
 doc_events['DocShare']['validate'].append('vanbags_maintenance.capacity.validate_share')
 
 app_include_js.append('/assets/vanbags_maintenance/js/capacity_forms.js')
+
+# R4.0: explicit work targets and facility meters, preserving legacy orders.
+after_install='vanbags_maintenance.work_scope.setup'
+after_migrate='vanbags_maintenance.work_scope.setup'
+has_permission['TruCMMS Measurement Point']='vanbags_maintenance.work_scope.point_permission'
+permission_query_conditions['TruCMMS Measurement Point']='vanbags_maintenance.work_scope.point_query'
+permission_query_conditions['TruCMMS Work Target']='vanbags_maintenance.work_scope.target_query'
+for dt,query in [('TruCMMS Scope Revision','revision_query'),('TruCMMS Work Reading','reading_query')]:
+    has_permission[dt]='vanbags_maintenance.work_scope.related_permission'
+    permission_query_conditions[dt]='vanbags_maintenance.work_scope.'+query
+doc_events['DocShare']['validate'].append('vanbags_maintenance.work_scope.validate_share')
+
+app_include_js.append("/assets/vanbags_maintenance/js/work_scope_forms.js")
