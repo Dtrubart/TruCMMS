@@ -1,6 +1,6 @@
 # Diccionario de DocTypes de la versión verificada
 
-Fuente: `2c5f9ee59b25bbe5a820869c530e3165cd0c49ba`. Metadatos propios; no contiene datos operativos. Los campos custom en documentos nativos se explican en el contrato R3.
+Fuente: `edd2353b2fd6e53528393762ababee8a4bfb9ae3`. Metadatos propios; no contiene datos operativos. Los campos custom en documentos nativos se explican en el contrato R3.
 
 ## TruCMMS Asset Event
 
@@ -444,6 +444,12 @@ Tipo: documento. Identidad: `format:MWO-{YYYY}-{#####}`.
 | pm_procedure_snapshot | Code | JSON |  | 1 |
 | pm_started_on | Datetime |  |  | 1 |
 | pm_started_by | Link | User |  | 1 |
+| scope_section | Section Break |  |  |  |
+| scope_policy | Data |  |  | 1 |
+| scope_location | Link | VB Equipment Location |  | 1 |
+| scope_revision | Link | TruCMMS Scope Revision |  | 1 |
+| work_targets | Table | TruCMMS Work Target |  | 1 |
+| scope_snapshot | Long Text |  |  | 1 |
 
 Roles definidos: TruCMMS Dispatcher: read, create, write, report; TruCMMS Supervisor: read, create, write, report; TruCMMS Technician: read, report; System Manager: read, create, write, delete, report, export, share; TruCMMS Requester: read, report. Los hooks pueden restringir más estos permisos.
 
@@ -499,6 +505,21 @@ Tipo: tabla hija. Identidad: `nativa`.
 
 Roles definidos: . Los hooks pueden restringir más estos permisos.
 
+## TruCMMS Measurement Point
+
+Tipo: documento. Identidad: `hash`.
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| code | Data |  | 1 |  |
+| point_name | Data |  | 1 |  |
+| company | Link | Company | 1 |  |
+| site | Link | TruCMMS Site | 1 |  |
+| functional_location | Link | VB Equipment Location | 1 |  |
+| disabled | Check |  |  |  |
+
+Roles definidos: System Manager: read, select, create, write; TruCMMS Supervisor: read, select, create, write; TruCMMS Dispatcher: read, select; TruCMMS Technician: read, select; VB Maintenance Manager: read, select, create, write; VB Maintenance User: read, select. Los hooks pueden restringir más estos permisos.
+
 ## TruCMMS Meter
 
 Tipo: documento. Identidad: `field:code`.
@@ -509,7 +530,7 @@ Tipo: documento. Identidad: `field:code`.
 | meter_name | Data |  | 1 |  |
 | company | Link | Company | 1 |  |
 | site | Link | TruCMMS Site | 1 |  |
-| equipment | Link | VB Equipment |  |  |
+| equipment | Link | VB Equipment | 0 |  |
 | component | Link | TruCMMS Component |  |  |
 | unit | Link | UOM | 1 |  |
 | metric_kind | Select | Cumulative<br>Condition<br>Rate | 1 |  |
@@ -519,6 +540,7 @@ Tipo: documento. Identidad: `field:code`.
 | epoch | Int |  |  | 1 |
 | epoch_offset | Float |  |  | 1 |
 | last_reading | Link | TruCMMS Meter Reading |  | 1 |
+| measurement_point | Link | TruCMMS Measurement Point |  | 0 |
 
 Roles definidos: TruCMMS Dispatcher: read, select, report; TruCMMS Supervisor: read, select, create, write, report; TruCMMS Technician: read, select, report; System Manager: read, select, create, write, report; VB Maintenance Manager: read, select, create, write, report; VB Maintenance User: read, select, report. Los hooks pueden restringir más estos permisos.
 
@@ -539,6 +561,7 @@ Tipo: documento. Identidad: `field:epoch_key`.
 | effective_on | Datetime |  |  | 1 |
 | reason | Small Text |  |  | 1 |
 | recorded_by | Link | User |  | 1 |
+| measurement_point | Link | TruCMMS Measurement Point |  | 1 |
 
 Roles definidos: TruCMMS Dispatcher: read, select, report; TruCMMS Supervisor: read, select, report; TruCMMS Technician: read, select, report; System Manager: read, select, report; VB Maintenance Manager: read, select, report; VB Maintenance User: read, select, report. Los hooks pueden restringir más estos permisos.
 
@@ -552,7 +575,7 @@ Tipo: documento. Identidad: `field:reading_key`.
 | meter | Link | TruCMMS Meter |  | 1 |
 | company | Link | Company | 1 | 1 |
 | site | Link | TruCMMS Site | 1 | 1 |
-| equipment | Link | VB Equipment |  | 1 |
+| equipment | Link | VB Equipment | 0 | 1 |
 | component | Link | TruCMMS Component |  | 1 |
 | value | Float |  |  | 1 |
 | total_value | Float |  |  | 1 |
@@ -563,6 +586,7 @@ Tipo: documento. Identidad: `field:reading_key`.
 | payload_hash | Data |  |  | 1 |
 | recorded_by | Link | User |  | 1 |
 | recorded_on | Datetime |  |  | 1 |
+| measurement_point | Link | TruCMMS Measurement Point |  | 1 |
 
 Roles definidos: TruCMMS Dispatcher: read, select, report; TruCMMS Supervisor: read, select, report; TruCMMS Technician: read, select, report; System Manager: read, select, report; VB Maintenance Manager: read, select, report; VB Maintenance User: read, select, report. Los hooks pueden restringir más estos permisos.
 
@@ -711,6 +735,24 @@ Tipo: documento. Identidad: `hash`.
 | reason | Small Text |  | 1 |  |
 
 Roles definidos: System Manager: read, select, create, write; TruCMMS Supervisor: read, select, create, write; TruCMMS Dispatcher: read, select; TruCMMS Technician: read, select. Los hooks pueden restringir más estos permisos.
+
+## TruCMMS Scope Revision
+
+Tipo: documento. Identidad: `hash`.
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| work_order | Link | TruCMMS Maintenance Work Order | 1 | 1 |
+| company | Link | Company | 1 | 1 |
+| site | Link | TruCMMS Site | 1 | 1 |
+| request_key | Data |  |  |  |
+| payload_hash | Data |  |  |  |
+| snapshot | Long Text |  |  | 1 |
+| reason | Small Text |  |  | 1 |
+| recorded_by | Link | User |  | 1 |
+| recorded_on | Datetime |  |  | 1 |
+
+Roles definidos: System Manager: read, select; TruCMMS Supervisor: read, select; TruCMMS Dispatcher: read, select; TruCMMS Technician: read, select; TruCMMS Requester: read, select. Los hooks pueden restringir más estos permisos.
 
 ## TruCMMS Site
 
@@ -892,6 +934,40 @@ Tipo: documento. Identidad: `format:EXE-{YYYY}-{#####}`.
 | pm_measurements | Table | TruCMMS PM Measurement Result |  |  |
 
 Roles definidos: TruCMMS Technician: read, create, write; TruCMMS Supervisor: read; TruCMMS Dispatcher: read; System Manager: read, report, export; TruCMMS Requester: read. Los hooks pueden restringir más estos permisos.
+
+## TruCMMS Work Reading
+
+Tipo: documento. Identidad: `hash`.
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| work_order | Link | TruCMMS Maintenance Work Order | 1 | 1 |
+| company | Link | Company | 1 | 1 |
+| site | Link | TruCMMS Site | 1 | 1 |
+| target_id | Data |  |  | 1 |
+| meter | Link | TruCMMS Meter |  | 1 |
+| meter_reading | Link | TruCMMS Meter Reading |  | 1 |
+| recorded_by | Link | User |  | 1 |
+| recorded_on | Datetime |  |  | 1 |
+
+Roles definidos: System Manager: read, select; TruCMMS Supervisor: read, select; TruCMMS Dispatcher: read, select; TruCMMS Technician: read, select; TruCMMS Requester: read, select. Los hooks pueden restringir más estos permisos.
+
+## TruCMMS Work Target
+
+Tipo: tabla hija. Identidad: `hash`.
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| target_id | Data |  |  | 1 |
+| kind | Select | Equipment<br>Component<br>Location<br>Measurement Point<br>Reference |  |  |
+| label | Data |  |  |  |
+| functional_location | Link | VB Equipment Location |  |  |
+| equipment | Link | VB Equipment |  |  |
+| component | Link | TruCMMS Component |  |  |
+| measurement_point | Link | TruCMMS Measurement Point |  |  |
+| context_snapshot | Long Text |  |  |  |
+
+Roles definidos: . Los hooks pueden restringir más estos permisos.
 
 ## VB Equipment
 

@@ -1,6 +1,6 @@
-# R4.0 — candidato local de alcance y mediciones
+# R4.0 — alcance y mediciones implementados
 
-Fecha: 2026-11-02. Entornos: DEV y TEST. Este documento complementa la línea base publicada `2c5f9ee`; no atribuye a esa revisión el código posterior. La publicación, CI independiente, recuperación del candidato y aceptación humana se registran por separado.
+Fecha: 2026-11-02. Entornos: DEV y TEST. Revisión publicada y aprobada en CI: `edd2353b2fd6e53528393762ababee8a4bfb9ae3`. Este documento complementa los contratos históricos de R1–R3. Publicación, CI, recuperación y aceptación humana se registran por separado.
 
 ## Comportamiento implementado
 
@@ -35,9 +35,15 @@ No se certifica en esta entrega la programación preventiva de instalaciones ind
 - Referencia de TEST: 514 documentos de TruCMMS, 8 adjuntos y conteos de documentos/movimientos nativos. DEV: cero documentos operativos. Comparación aditiva: valores originales intactos y campos históricos nuevos vacíos.
 - Primera batería específica: 12 pruebas aprobadas en 13,400 s.
 - Primera regresión: 429/430 aprobadas; el escenario sintético de cuatro sectores omitía ubicación para órdenes nuevas. Se adaptó la solicitud de prueba para indicarla, sin relajar la regla de autorización.
-- Se añadieron pruebas para cambios de sede/deshabilitación entre configuración y autorización, bloqueo de traslado de activos secundarios e historial de movimientos. La batería crece a 434 pruebas. Regresión final: en ejecución al preparar este registro; consultar el acta final antes de declararla aprobada.
+- Se añadieron pruebas para cambios de sede/deshabilitación entre configuración y autorización, bloqueo de traslado de activos secundarios e historial de movimientos. [CI independiente: 434/434 pruebas, 133.320 s](https://github.com/Dtrubart/TruCMMS/actions/runs/41559626517), incluida instalación limpia.
 - La corrida intermedia de 432 pruebas tuvo un fallo temporal en una prueba anterior de traslado: el instante del movimiento no era posterior a la instalación inicial. La prueba de permisos declara ahora una instalación sintética una hora antes; no se cambió la validación temporal productiva.
 - Verificación de Desk: sitio correcto, diálogo de alcance, contexto anterior y formulario de punto de medición; sin guardar documentos operativos. Capturas de escritorio/móvil y prueba interactiva del prototipo completadas.
-- CI remoto y recuperación poblada de este candidato: pendientes. La evidencia de recuperación de versiones anteriores no sustituye estas comprobaciones.
+- Última regresión local: 433/434 aprobadas en 483.188 s. El escenario de traslado con componentes falló por un movimiento no posterior al inicio de instalación; su repetición aislada pasó en 4.004 s. No se presenta esa corrida local como totalmente aprobada. Las 16 pruebas de alcance pasaron dentro de ella.
+- Recuperación/upgrade verificados: respaldo anterior restaurado en `restore-r4-scope.vanbags.localhost`, migrado a R4.0 y comparado contra los 514 documentos, ocho adjuntos y conteos nativos originales. DEV y TEST no fueron reemplazados. La recuperación de nuevos registros operativos R4 multipunto/lecturas vinculadas sigue siendo una puerta separada pendiente.
+- Política DEV/TEST: `R4.0-work-scope`. Huella común: `6b0aad4adce55e8f604dd51ec9f6ca577b2502e77c4fc4607aebbac523ce317e`. Los 276 archivos del paquete coinciden entre publicación y fuente activa. No se generaron registros R4 operativos en DEV/TEST.
+
+## Pendientes antes del cierre ampliado
+
+Recuperación poblada con las nuevas revisiones/puntos/lecturas R4; revisión humana del prototipo y posteriores incrementos del layout; aceptación operativa. R4 global sigue abierto. Se conserva evidencia de la intermitencia temporal local sin atribuirle una causa de infraestructura no demostrada.
 
 Herramientas locales: `docker/development/r4-scope-preserve.py`, `r4-scope-check.py` y `verify-r4-scope-ui.mjs` en el workspace de desarrollo. Los respaldos, configuraciones y registros crudos quedan fuera de la publicación documental.

@@ -1,6 +1,6 @@
 # Servicios publicados de la revisión verificada
 
-Fuente: `2c5f9ee59b25bbe5a820869c530e3165cd0c49ba`.
+Fuente: `edd2353b2fd6e53528393762ababee8a4bfb9ae3`.
 Registro extraído de decoradores frappe.whitelist sin ejecutar código. No sustituye controles de rol, estado, alcance ni contratos detallados. Las firmas son Python; serialización/valores API siguen Frappe.
 
 ## vanbags_maintenance.adjustments
@@ -128,6 +128,12 @@ Registro extraído de decoradores frappe.whitelist sin ejecutar código. No sust
 ## vanbags_maintenance.work_orders
 
 - `vanbags_maintenance.work_orders.from_request(request)` — ['POST']
+
+## vanbags_maintenance.work_scope
+
+- `vanbags_maintenance.work_scope.configure(order, scope_location, targets, reason, key)` — ['POST']
+- `vanbags_maintenance.work_scope.record_reading(order, target_id, meter, value, actual_on, key, reason)` — ['POST']
+- `vanbags_maintenance.work_scope.overview(order)` — ['GET']
 
 ## vanbags_maintenance.work_views
 

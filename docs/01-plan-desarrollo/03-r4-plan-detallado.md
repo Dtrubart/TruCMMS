@@ -4,7 +4,7 @@ Dirección acordada con el usuario. Los criterios orientan el detalle de impleme
 
 | Incremento | Entregables y criterio | Estado |
 | --- | --- | --- |
-| **R4.0 Alcance y puntos** | Ubicación de alcance; activos opcionales; múltiples áreas/activos/componentes/puntos. Una intervención o ronda mantiene trazabilidad individual sin activos ficticios | Implementado en DEV/TEST; regresión final y puertas de publicación/recuperación en validación. [Detalle](../02-version-actual/06-r4-alcance-local.md) |
+| **R4.0 Alcance y puntos** | Ubicación de alcance; activos opcionales; múltiples áreas/activos/componentes/puntos. Una intervención o ronda mantiene trazabilidad individual sin activos ficticios | Implementado DEV/TEST y publicado; CI 434 aprobadas; recuperación/upgrade anterior verificada. Pendiente recuperación poblada del nuevo historial y revisión humana. [Detalle](../02-version-actual/06-r4-alcance-local.md) |
 | **R4.1 Disponibilidad** | Calendarios, turnos/patrones, ausencias y capacidad; identificar disponibilidad, carga y conflictos | Ventanas explícitas verificadas; recurrencia/generación pendientes |
 | **R4.2 Competencias** | Habilidades, certificados, vigencias y requisitos; elegibilidad y excepciones auditadas | Pendiente; reutilizar equipos/disciplinas |
 | **R4.3 Procedimientos y formatos** | Plantillas versionadas, editor, recorridos, mediciones, condiciones/evidencias; adaptación sin código y ejecución con versión conservada | Pendiente |

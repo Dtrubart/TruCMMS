@@ -1,6 +1,6 @@
 # Roadmap maestro
 
-Corte: 2026-11-01. No se calcula un porcentaje global: cada entrega tiene alcance y evidencias propios.
+Corte: 2026-11-02. No se calcula un porcentaje global: cada entrega tiene alcance y evidencias propios.
 
 | Entrega | Objetivo | Estado |
 | --- | --- | --- |
@@ -8,13 +8,13 @@ Corte: 2026-11-01. No se calcula un porcentaje global: cada entrega tiene alcanc
 | **R1** | Correctivo completo, organización, activos, equipos y ejecución | Cerrado técnicamente en DEV/TEST |
 | **R2** | Procedimientos, preventivos, medidores, componentes e inspecciones | Cerrado técnicamente para su alcance |
 | **R3** | Recursos, compras, entrega, devoluciones y costos nativos | Cerrado técnicamente; aceptación humana/producción separadas |
-| **R4** | Operación avanzada, multipunto, plantillas y optimización | En desarrollo: capacidad inicial R4.1 verificada, R4.0 en curso |
+| **R4** | Operación avanzada, multipunto, plantillas y optimización | En desarrollo: capacidad inicial R4.1 y base R4.0 verificadas; recuperación de nuevo historial, prototipo y demás incrementos pendientes |
 | **R5** | Confiabilidad, análisis y predicción de fallas | Planificado; requiere diseño y datos consistentes |
 | **R6** | Móvil offline | Diferido a esta entrega: sincronización, conflictos y protección local |
 
 ## Secuencia actual
 
-1. Estabilizar R4.0 y su compatibilidad con órdenes/lecturas existentes.
+1. Completar recuperación del nuevo historial R4.0 y revisión del prototipo; la compatibilidad anterior y CI están verificadas.
 2. Completar calendarios de R4.1 y competencias R4.2.
 3. Construir recorridos/formatos R4.3 y documentación/controles R4.4.
 4. Desarrollar la experiencia R4.7 transversalmente, comenzando por el prototipo.

@@ -7,9 +7,9 @@ Actualización: **2026-11-02**. TruCMMS es la app Frappe/ERPNext; VanBags es el 
 | **1. Plan de implementación y desarrollo** | Qué se construirá, secuencia, decisiones y trabajo en curso | [Plan](01-plan-desarrollo/README.md) |
 | **2. Versión actual implementada** | Qué está publicado y verificado, cómo funciona y sus límites | [Versión actual](02-version-actual/README.md) |
 
-La línea base de aplicación de la rama 2 es `2c5f9ee59b25bbe5a820869c530e3165cd0c49ba`, con **418 pruebas CI aprobadas**. Incluye R0–R3 y la primera entrega de capacidad de R4.1. No equivale a aceptación humana ni a producción.
+La línea base de aplicación de la rama 2 es `edd2353b2fd6e53528393762ababee8a4bfb9ae3`, con **434 pruebas CI aprobadas**. Incluye R0–R3, la primera entrega de capacidad de R4.1 y el modelo R4.0 de alcance/puntos/mediciones. No equivale a aceptación humana ni a producción.
 
-**R4.0 no está incluido en esa línea base publicada.** Su implementación posterior en DEV/TEST y sus puertas pendientes se registran en el [candidato local R4.0](02-version-actual/06-r4-alcance-local.md). El nuevo layout completo sigue en propuesta visual. Un despliegue local no equivale a CI remoto aprobado ni a aceptación productiva.
+La implementación, evidencia local, CI y puertas pendientes de R4.0 se registran en el [detalle R4.0](02-version-actual/06-r4-alcance-local.md). El nuevo layout completo sigue en propuesta visual. R4 global no está cerrado.
 
 Los archivos antiguos de documentación conservan su alcance histórico. Estos índices determinan vigencia y separan propuesta, desarrollo, verificación y aceptación operativa.
 
