@@ -21,6 +21,8 @@ DEV/TEST: política `R4.0-work-scope`; huella `6b0aad4adce55e8f604dd51ec9f6ca577
 
 CI limpio: 434/434 aprobadas. Última regresión local: 433/434, 483.188 s; el único fallo fue `test_equipment_transfer_carries_components_and_meter_scope`, por un instante de movimiento no posterior a la instalación. Su repetición aislada pasó en 4.004 s. Se conserva esta diferencia; no se declara que la corrida local completa haya terminado sin errores. Recuperación de respaldo anterior y migración aislada: ver el [registro R4.0](06-r4-alcance-local.md).
 
+La [recuperación poblada del nuevo historial R4.0](07-r4-recuperacion-poblada.md) está verificada: 542 documentos CMMS, nueve adjuntos, puntos/revisiones/lecturas y corrección conservados; reintentos sin duplicación y permisos backend/HTTP comprobados. Se completó sin cambios del producto ni repetición de CI.
+
 ## Interfaz y concurrencia
 
 R3: proyección, compra/salida, conciliación, costos, CSV, técnico asignado/no asignado, impresión y móvil. R4.1: página/lista, siete días, Sin configurar, permisos, escritorio/móvil y ausencia de errores JavaScript. TEST no recibió transacciones operativas de estas comprobaciones.

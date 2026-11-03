@@ -12,6 +12,7 @@ La línea base publicada incluye R0–R3, la primera capacidad R4.1 y el [modelo
 | [Operación/configuración](04-operacion-y-configuracion.md) | Instalación, actualización y recuperación |
 | [Evidencias y límites](05-validacion-y-limitaciones.md) | Revisiones, pruebas y límites prácticos |
 | [Detalle R4.0](06-r4-alcance-local.md) | Implementación DEV/TEST, preservación, evidencias y pendientes |
+| [Recuperación poblada R4.0](07-r4-recuperacion-poblada.md) | Restauración del nuevo historial, integridad, reintentos y permisos |
 | [Referencias técnicas](referencia-tecnica/README.md) | Contratos, diccionario y servicios |
 
 Si el entorno contiene experimentos posteriores, esta rama sigue describiendo la revisión verificada. Los pendientes se mantienen en el [plan](../01-plan-desarrollo/03-r4-plan-detallado.md). No se garantiza que cualquier archivo local posterior coincida con esta base.
