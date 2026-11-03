@@ -176,10 +176,15 @@ def lock_equipment(name):
 
 def no_open_work(doc,when=None):
     rows=teams.locked_sql("SELECT name FROM `tabTruCMMS Maintenance Work Order` WHERE equipment=%s AND status NOT IN ('Closed','Cancelled') LIMIT 1 FOR UPDATE",(doc.name,))
+    if not rows and frappe.db.table_exists('TruCMMS Work Target'):
+        rows=teams.locked_sql("SELECT work.name FROM `tabTruCMMS Maintenance Work Order` work INNER JOIN `tabTruCMMS Work Target` point ON point.parent=work.name AND point.parenttype='TruCMMS Maintenance Work Order' AND point.parentfield='work_targets' WHERE point.equipment=%s AND work.status NOT IN ('Closed','Cancelled') LIMIT 1 FOR UPDATE",(doc.name,))
     if rows:frappe.throw('Close or cancel open work orders before relocating/removing this equipment.')
     if when:
         for dt in ('TruCMMS Maintenance Work Order','TruCMMS Maintenance Request'):
-            latest=teams.locked_sql(f'SELECT modified FROM `tab{dt}` WHERE equipment=%s ORDER BY modified DESC LIMIT 1 FOR UPDATE',(doc.name,),as_dict=True)
+            if dt=='TruCMMS Maintenance Work Order' and frappe.db.table_exists('TruCMMS Work Target'):
+                latest=teams.locked_sql("SELECT work.modified FROM `tabTruCMMS Maintenance Work Order` work WHERE work.equipment=%s OR EXISTS (SELECT 1 FROM `tabTruCMMS Work Target` point WHERE point.parent=work.name AND point.parenttype='TruCMMS Maintenance Work Order' AND point.parentfield='work_targets' AND point.equipment=%s) ORDER BY work.modified DESC LIMIT 1 FOR UPDATE",(doc.name,doc.name),as_dict=True)
+            else:
+                latest=teams.locked_sql(f'SELECT modified FROM `tab{dt}` WHERE equipment=%s ORDER BY modified DESC LIMIT 1 FOR UPDATE',(doc.name,),as_dict=True)
             if latest and when<get_datetime(latest[0].modified):frappe.throw('Movement cannot be backdated across existing work activity.')
 
 def event(doc,action,reason,when,before):

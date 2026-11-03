@@ -52,6 +52,8 @@ class TestAssets(IntegrationTestCase):
         with self.assertRaises(frappe.ValidationError):a.replace(self.eq.name,self.spare.name,'Invalid replacement')
         self.eq.reload();self.assertEqual(self.eq.location,self.locations[0]);self.assertTrue(a.current(self.eq))
     def test_cross_site_transfer_requires_both_scopes(self):
+        # Permission behavior must not depend on host-clock adjustments during WSL tests.
+        frappe.db.set_value(a.INSTALL,a.current(self.eq).name,'effective_from',add_to_date(now_datetime(),hours=-1))
         frappe.set_user(self.user)
         with self.assertRaises(frappe.PermissionError):a.place(self.eq.name,SITE_A2,self.locations[2],'Target denied')
         grant_scope(self.user,site=SITE_A2);result=a.place(self.eq.name,SITE_A2,self.locations[2],'Authorized transfer');self.assertEqual(result['site'],SITE_A2)

@@ -97,3 +97,18 @@ class TestWorkScope(PreventiveCase):
         frappe.set_user('Administrator');point.disabled=1;point.save()
         frappe.set_user(self.users['supervisor'])
         with self.assertRaises(frappe.ValidationError):apply_workflow(order.reload().as_dict(),'Authorize')
+    def test_secondary_equipment_cannot_move_while_work_is_open(self):
+        from vanbags_maintenance import assets
+        order=self.make();self.configure(order,[dict(kind='Location',functional_location=self.location.name),dict(kind='Equipment',equipment=self.eq.name)])
+        self.assertFalse(order.equipment)
+        frappe.set_user('Administrator')
+        with self.assertRaisesRegex(frappe.ValidationError,'Close or cancel open work orders'):
+            assets.place(self.eq.name,SITE_A,None,'Attempt secondary equipment relocation')
+    def test_secondary_work_history_blocks_backdated_movement(self):
+        from vanbags_maintenance import assets,work_orders
+        order=self.make();self.configure(order,[dict(kind='Equipment',equipment=self.eq.name)])
+        frappe.set_user('Administrator')
+        # Isolate the historical movement guard from workflow execution tests.
+        frappe.db.set_value(work_orders.DT,order.name,'status','Closed')
+        with self.assertRaisesRegex(frappe.ValidationError,'Movement cannot be backdated'):
+            assets.place(self.eq.name,SITE_A,None,'Backdated secondary relocation',now_datetime()-timedelta(minutes=30))

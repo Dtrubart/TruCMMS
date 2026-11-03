@@ -11,6 +11,7 @@ Fecha: 2026-11-02. Entornos: DEV y TEST. Este documento complementa la línea ba
 - Los medidores de R2 admiten un punto de instalaciones sin equipo ficticio. Conservan unidades y semántica acumulativa/condición/tasa, correcciones, reinicios y épocas. Equipo/componente y punto de instalaciones son asociaciones excluyentes.
 - Durante la ejecución asignada se registra una lectura mediante el servicio de R2 y se vincula a la orden y al punto. Una repetición con la misma clave no duplica el registro ni permite atribuirlo a otro punto.
 - Los registros anteriores conservan su contrato anterior y sus campos originales; la migración no inventa ubicaciones, puntos ni mediciones históricas. Un borrador anterior puede adoptar el nuevo contrato mediante configuración explícita.
+- Un activo secundario de una orden abierta también bloquea su traslado/remoción/reemplazo. La comprobación de movimientos retroactivos incluye el historial de participación secundaria en órdenes cerradas.
 
 ## Acceso en Desk
 
@@ -34,7 +35,8 @@ No se certifica en esta entrega la programación preventiva de instalaciones ind
 - Referencia de TEST: 514 documentos de TruCMMS, 8 adjuntos y conteos de documentos/movimientos nativos. DEV: cero documentos operativos. Comparación aditiva: valores originales intactos y campos históricos nuevos vacíos.
 - Primera batería específica: 12 pruebas aprobadas en 13,400 s.
 - Primera regresión: 429/430 aprobadas; el escenario sintético de cuatro sectores omitía ubicación para órdenes nuevas. Se adaptó la solicitud de prueba para indicarla, sin relajar la regla de autorización.
-- Se añadieron dos pruebas para cambios de sede/deshabilitación entre configuración y autorización. Regresión final: en ejecución al preparar este registro; consultar el acta final antes de declararla aprobada.
+- Se añadieron pruebas para cambios de sede/deshabilitación entre configuración y autorización, bloqueo de traslado de activos secundarios e historial de movimientos. La batería crece a 434 pruebas. Regresión final: en ejecución al preparar este registro; consultar el acta final antes de declararla aprobada.
+- La corrida intermedia de 432 pruebas tuvo un fallo temporal en una prueba anterior de traslado: el instante del movimiento no era posterior a la instalación inicial. La prueba de permisos declara ahora una instalación sintética una hora antes; no se cambió la validación temporal productiva.
 - Verificación de Desk: sitio correcto, diálogo de alcance, contexto anterior y formulario de punto de medición; sin guardar documentos operativos. Capturas de escritorio/móvil y prueba interactiva del prototipo completadas.
 - CI remoto y recuperación poblada de este candidato: pendientes. La evidencia de recuperación de versiones anteriores no sustituye estas comprobaciones.
 
