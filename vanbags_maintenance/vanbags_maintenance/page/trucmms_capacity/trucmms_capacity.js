@@ -1,7 +1,7 @@
 frappe.pages['trucmms-capacity'].on_page_load=function(wrapper){
  const page=frappe.ui.make_app_page({parent:wrapper,title:__('Capacidad y disponibilidad'),single_column:true});
  const root=$('<div class="capacity-view" style="padding:16px"></div>').appendTo(page.body);
- $('<p>').text(__('La capacidad usa ventanas de trabajo explícitas y descuenta ausencias. Sin calendario se muestra «Sin configurar». La carga considera asignaciones activas; esta consulta no asigna ni autoriza trabajos.')).appendTo(root);
+ $('<p>').text(__('La capacidad usa ventanas explícitas o generadas desde calendarios y descuenta ausencias. Un día generado sin turnos tiene 0 horas; un día sin configuración muestra «Sin configurar». La carga considera asignaciones activas; esta consulta no asigna ni autoriza trabajos.')).appendTo(root);
  const status=$('<p role="status"></p>').appendTo(root),results=$('<div style="overflow-x:auto"></div>').appendTo(root);
  const company=page.add_field({fieldname:'company',label:__('Empresa'),fieldtype:'Link',options:'Company',reqd:1});
  const site=page.add_field({fieldname:'site',label:__('Sede'),fieldtype:'Link',options:'TruCMMS Site',reqd:1,get_query:()=>({filters:{company:company.get_value()}})});

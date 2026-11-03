@@ -10,7 +10,7 @@ GROUPS=[
  ('Planes y rutinas',{'TruCMMS Dispatcher','TruCMMS Supervisor','TruCMMS Technician','System Manager'},[
   ('Procedimientos','DocType','TruCMMS Job Plan'),('Planes preventivos','DocType','TruCMMS PM Plan'),('Programación preventiva','Page','trucmms-preventive'),('Medidores','DocType','TruCMMS Meter'),('Puntos de medición','DocType','TruCMMS Measurement Point'),('Hallazgos de inspección','DocType','TruCMMS Inspection Finding')]),
  ('Recursos y servicios',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
-  ('Equipos de mantenimiento','DocType','TruCMMS Maintenance Team'),('Capacidad y disponibilidad','Page','trucmms-capacity'),('Ventanas y ausencias','DocType','TruCMMS Resource Window')]),
+  ('Equipos de mantenimiento','DocType','TruCMMS Maintenance Team'),('Capacidad y disponibilidad','Page','trucmms-capacity'),('Calendarios semanales','DocType','TruCMMS Resource Calendar'),('Calendarios por técnico','DocType','TruCMMS Calendar Assignment'),('Ventanas y ausencias','DocType','TruCMMS Resource Window')]),
  ('Repuestos y costos',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
   ('Proyección de materiales','Page','trucmms-material-planning'),('Estimaciones por orden','DocType','TruCMMS Material Estimate'),('Vales recibidos','DocType','TruCMMS Material Acknowledgment'),('Almacenes por sede','DocType','TruCMMS Site Warehouse')]),
  ('Análisis',{'VB Maintenance Manager','TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
@@ -18,6 +18,7 @@ GROUPS=[
  ('Configuración',{'VB Maintenance Manager','System Manager'},[
   ('Empresas','DocType','Company'),('Sedes','DocType','TruCMMS Site'),('Categorías de equipos','DocType','VB Equipment Category'),('Perfiles técnicos','DocType','TruCMMS Equipment Profile'),('Criticidad','DocType','TruCMMS Criticality'),('Disciplinas','DocType','TruCMMS Discipline')])]
 CONTEXTUAL={'TruCMMS Team Membership','TruCMMS Team Site Authorization','TruCMMS Work Execution','TruCMMS Work Event','TruCMMS Work Cycle','TruCMMS Work Allocation','TruCMMS Team Assignment','TruCMMS Execution Adjustment','TruCMMS Job Plan Revision','TruCMMS PM Occurrence','TruCMMS PM Event','TruCMMS Meter Reading','TruCMMS Meter Epoch','TruCMMS Component Installation'}
+CONTEXTUAL.add('TruCMMS Calendar Generation')
 MANAGED={target for _,_,entries in GROUPS for _,_,target in entries}|CONTEXTUAL|{'TruCMMS','trucmms-start'}
 
 LEGACY_LABELS={'TruCMMS': ['Home'], 'VB Equipment': ['Equipment'], 'VB Equipment Category': ['Equipment Categories'], 'VB Equipment Location': ['Functional Locations'], 'TruCMMS Site': ['Sites'], 'TruCMMS Maintenance Request': ['Maintenance Requests'], 'TruCMMS Maintenance Work Order': ['Maintenance Work Orders'], 'TruCMMS Work Execution': ['Work Execution'], 'TruCMMS Work Register': ['TruCMMS Work Register'], 'TruCMMS Equipment History': ['TruCMMS Equipment History'], 'TruCMMS Maintenance Team': ['Maintenance Team'], 'TruCMMS Discipline': ['Discipline'], 'TruCMMS Team Membership': ['Team Membership'], 'TruCMMS Team Site Authorization': ['Team Site Authorization'], 'TruCMMS Equipment Profile': ['TruCMMS Equipment Profile'], 'TruCMMS Criticality': ['TruCMMS Criticality'], 'TruCMMS Installation Register': ['TruCMMS Installation Register'], 'trucmms-work': ['Work Views']}

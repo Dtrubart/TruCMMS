@@ -1,0 +1,113 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Calendar Assignment",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "fields": [
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "Company"
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Site"
+  },
+  {
+   "fieldname": "technician",
+   "label": "T\u00e9cnico",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "in_list_view": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "calendar",
+   "label": "Calendario",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "in_list_view": 1,
+   "options": "TruCMMS Resource Calendar"
+  },
+  {
+   "fieldname": "from_date",
+   "label": "Desde (inclusive)",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "to_date",
+   "label": "Hasta (inclusive)",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Detener futuras generaciones",
+   "fieldtype": "Check"
+  },
+  {
+   "fieldname": "reason",
+   "label": "Motivo",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "calendar_snapshot",
+   "label": "Patr\u00f3n conservado",
+   "fieldtype": "Long Text",
+   "read_only": 1,
+   "hidden": 1
+  }
+ ],
+ "field_order": [
+  "company",
+  "site",
+  "technician",
+  "calendar",
+  "from_date",
+  "to_date",
+  "disabled",
+  "reason",
+  "calendar_snapshot"
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  }
+ ],
+ "track_changes": 1
+}

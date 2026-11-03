@@ -9,6 +9,12 @@
         // The technical module name remains stable. Contextual revisions have no
         // top-level sidebar link, so native module fallback would select the old
         // module sidebar. Run after native refresh using its standard setup API.
+        if (['Form', 'List'].includes(route[0]) && ['TruCMMS Resource Calendar','TruCMMS Calendar Assignment','TruCMMS Calendar Generation'].includes(route[1])) {
+            queueMicrotask(() => {
+                const current=frappe.get_route()||[];
+                if(current[0]===route[0]&&current[1]===route[1]&&frappe.app?.sidebar&&frappe.boot?.workspace_sidebar_item?.trucmms&&frappe.app.sidebar.sidebar_title!=='TruCMMS')frappe.app.sidebar.setup('TruCMMS');
+            });
+        }
         if (['Form', 'List'].includes(route[0]) &&
             ['TruCMMS Measurement Point','TruCMMS Scope Revision','TruCMMS Work Reading','TruCMMS Resource Window','TruCMMS Site Warehouse','TruCMMS Job Plan', 'TruCMMS Job Plan Revision','TruCMMS PM Plan','TruCMMS PM Occurrence','TruCMMS Meter','TruCMMS Meter Reading','TruCMMS Meter Epoch','TruCMMS Component','TruCMMS Component Installation','TruCMMS Inspection Finding','TruCMMS PM Event'].includes(route[1])) {
             queueMicrotask(() => {

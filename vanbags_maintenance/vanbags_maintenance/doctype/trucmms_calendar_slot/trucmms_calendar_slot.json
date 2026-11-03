@@ -1,0 +1,45 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Calendar Slot",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "fields": [
+  {
+   "fieldname": "weekday",
+   "label": "D\u00eda",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "in_list_view": 1,
+   "options": "Monday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nSunday"
+  },
+  {
+   "fieldname": "starts_at",
+   "label": "Inicio (hora de sede)",
+   "fieldtype": "Time",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "ends_at",
+   "label": "Fin (hora de sede)",
+   "fieldtype": "Time",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "next_day",
+   "label": "Termina al d\u00eda siguiente",
+   "fieldtype": "Check",
+   "in_list_view": 1
+  }
+ ],
+ "field_order": [
+  "weekday",
+  "starts_at",
+  "ends_at",
+  "next_day"
+ ],
+ "permissions": [],
+ "istable": 1
+}

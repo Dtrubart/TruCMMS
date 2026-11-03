@@ -35,6 +35,8 @@ def query(user=None):
 
 
 def validate(doc):
+    from vanbags_maintenance.resource_calendars import guard_window
+    guard_window(doc,doc.get_doc_before_save())
     if not teams.manager():frappe.throw('Supervisor required to configure availability.',frappe.PermissionError)
     org.validate_context(doc);allowed(doc)
     site=frappe.get_doc('TruCMMS Site',doc.site)
@@ -122,21 +124,24 @@ def overview(company,site,technician,from_date,to_date):
     visible=set(frappe.get_list(wo.DT,filters={'name':['in',[r.name for r in orders]]},pluck='name',limit_page_length=0)) if orders else set()
     load=[(utc(r.scheduled_start),utc(r.scheduled_end)) for r in orders if r.scheduled_start and r.scheduled_end]
     unscheduled=[r.name for r in orders if not r.scheduled_start and r.name in visible]
+    from vanbags_maintenance.resource_calendars import coverage
+    configured_days=coverage(company,site,technician,first,last)
     days=[]
     for offset in range((last-first).days+1):
         day=first+timedelta(days=offset);start,end=boundary(day),boundary(day+timedelta(days=1))
         shifts=clipped(working,start,end);available=subtract(shifts,clipped(unavailable,start,end))
         scheduled=clipped(load,start,end);inside=intersect(scheduled,available)
         hours=lambda value:round(value/3600,4)
-        capacity=hours(seconds(available)) if shifts else None
-        days.append(dict(date=str(day),configured=bool(shifts),available_hours=capacity,scheduled_hours=hours(seconds(scheduled)),
+        configured=bool(shifts) or day in configured_days
+        capacity=hours(seconds(available)) if configured else None
+        days.append(dict(date=str(day),configured=configured,available_hours=capacity,scheduled_hours=hours(seconds(scheduled)),
             free_hours=max(0,round(capacity-hours(seconds(inside)),4)) if capacity is not None else None,
-            overload_hours=hours(max(0,seconds(inside)-seconds(available))) if shifts else None,
+            overload_hours=hours(max(0,seconds(inside)-seconds(available))) if configured else None,
             overlap_hours=hours(seconds(scheduled)-seconds(merged(scheduled))),
-            outside_hours=hours(seconds(scheduled)-seconds(inside)) if shifts else None))
+            outside_hours=hours(seconds(scheduled)-seconds(inside)) if configured else None))
     return dict(company=company,site=site,technician=technician,time_zone=frappe.db.get_value('TruCMMS Site',site,'time_zone'),days=days,
         visible_orders=sorted(visible),unscheduled_orders=unscheduled,
-        basis='Explicit working windows minus absences. Scheduled load includes all active allocations, including other sites without exposing their identifiers. No automatic assignment or eligibility override.')
+        basis='Explicit or generated working windows minus absences. Generated calendar coverage distinguishes zero hours from unconfigured days. Scheduled load includes all active allocations, including other sites without exposing their identifiers. No automatic assignment or eligibility override.')
 
 
 def validate_share(doc,method=None):

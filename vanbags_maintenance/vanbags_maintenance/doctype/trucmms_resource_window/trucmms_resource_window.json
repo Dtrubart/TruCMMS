@@ -69,6 +69,29 @@
    "options": null,
    "reqd": 1,
    "in_list_view": 0
+  },
+  {
+   "fieldname": "calendar_assignment",
+   "label": "Asignaci\u00f3n de calendario",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "TruCMMS Calendar Assignment"
+  },
+  {
+   "fieldname": "calendar_generation",
+   "label": "Generaci\u00f3n",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "TruCMMS Calendar Generation"
+  },
+  {
+   "fieldname": "calendar_key",
+   "label": "Identidad de origen",
+   "fieldtype": "Data",
+   "length": 64,
+   "unique": 1,
+   "read_only": 1,
+   "hidden": 1
   }
  ],
  "field_order": [
@@ -79,7 +102,10 @@
   "starts_on",
   "ends_on",
   "disabled",
-  "reason"
+  "reason",
+  "calendar_assignment",
+  "calendar_generation",
+  "calendar_key"
  ],
  "permissions": [
   {

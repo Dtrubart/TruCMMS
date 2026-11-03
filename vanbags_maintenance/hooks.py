@@ -434,3 +434,13 @@ for dt,query in [('TruCMMS Scope Revision','revision_query'),('TruCMMS Work Read
 doc_events['DocShare']['validate'].append('vanbags_maintenance.work_scope.validate_share')
 
 app_include_js.append("/assets/vanbags_maintenance/js/work_scope_forms.js")
+
+# R4.1 reusable weekly calendars; generated windows retain controlled provenance.
+after_install='vanbags_maintenance.resource_calendars.setup'
+after_migrate='vanbags_maintenance.resource_calendars.setup'
+for dt,query in [('TruCMMS Resource Calendar','calendar_query'),('TruCMMS Calendar Assignment','assignment_query'),('TruCMMS Calendar Generation','generation_query')]:
+    has_permission[dt]='vanbags_maintenance.resource_calendars.permission'
+    permission_query_conditions[dt]='vanbags_maintenance.resource_calendars.'+query
+doc_events['DocShare']['validate'].append('vanbags_maintenance.resource_calendars.validate_share')
+permission_query_conditions['TruCMMS Calendar Slot']='vanbags_maintenance.resource_calendars.slot_query'
+app_include_js.append('/assets/vanbags_maintenance/js/resource_calendar_forms.js')

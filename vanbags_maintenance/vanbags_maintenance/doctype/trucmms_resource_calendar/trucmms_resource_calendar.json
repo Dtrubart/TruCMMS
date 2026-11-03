@@ -1,0 +1,108 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Resource Calendar",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "fields": [
+  {
+   "fieldname": "code",
+   "label": "C\u00f3digo",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "length": 64
+  },
+  {
+   "fieldname": "calendar_name",
+   "label": "Calendario",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "Company"
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Site"
+  },
+  {
+   "fieldname": "holiday_list",
+   "label": "Feriados nativos",
+   "fieldtype": "Link",
+   "options": "Holiday List"
+  },
+  {
+   "fieldname": "dst_occurrence",
+   "label": "Hora repetida por cambio horario",
+   "fieldtype": "Select",
+   "default": "First",
+   "reqd": 1,
+   "options": "First\nSecond"
+  },
+  {
+   "fieldname": "slots",
+   "label": "Turnos semanales",
+   "fieldtype": "Table",
+   "reqd": 1,
+   "options": "TruCMMS Calendar Slot"
+  },
+  {
+   "fieldname": "disabled",
+   "label": "Deshabilitado para nuevas asignaciones",
+   "fieldtype": "Check"
+  }
+ ],
+ "field_order": [
+  "code",
+  "calendar_name",
+  "company",
+  "site",
+  "holiday_list",
+  "dst_occurrence",
+  "slots",
+  "disabled"
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  }
+ ],
+ "title_field": "calendar_name",
+ "search_fields": "code,calendar_name",
+ "show_title_field_in_link": 1,
+ "track_changes": 1
+}

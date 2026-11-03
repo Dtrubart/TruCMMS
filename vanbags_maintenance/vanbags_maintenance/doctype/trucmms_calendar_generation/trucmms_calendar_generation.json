@@ -1,0 +1,145 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Calendar Generation",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "fields": [
+  {
+   "fieldname": "company",
+   "label": "Empresa",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "Company"
+  },
+  {
+   "fieldname": "site",
+   "label": "Sede",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "options": "TruCMMS Site"
+  },
+  {
+   "fieldname": "technician",
+   "label": "T\u00e9cnico",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "assignment",
+   "label": "Asignaci\u00f3n",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "read_only": 1,
+   "options": "TruCMMS Calendar Assignment"
+  },
+  {
+   "fieldname": "from_date",
+   "label": "Desde",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "to_date",
+   "label": "Hasta",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "window_count",
+   "label": "Ventanas generadas",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Motivo",
+   "fieldtype": "Small Text",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_by",
+   "label": "Generado por",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "recorded_on",
+   "label": "Generado el",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "generation_key",
+   "label": "Identidad de generaci\u00f3n",
+   "fieldtype": "Data",
+   "length": 64,
+   "unique": 1,
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "snapshot",
+   "label": "Referencia conservada",
+   "fieldtype": "Long Text",
+   "read_only": 1,
+   "hidden": 1
+  }
+ ],
+ "field_order": [
+  "company",
+  "site",
+  "technician",
+  "assignment",
+  "from_date",
+  "to_date",
+  "window_count",
+  "reason",
+  "recorded_by",
+  "recorded_on",
+  "generation_key",
+  "snapshot"
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "select": 1,
+   "create": 0,
+   "write": 0
+  }
+ ],
+ "track_changes": 1
+}
