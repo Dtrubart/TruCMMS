@@ -1,6 +1,6 @@
 # Servicios publicados de la revisión verificada
 
-Fuente: `edd2353b2fd6e53528393762ababee8a4bfb9ae3`.
+Fuente: `fbca17e584159990bd16a2853228242b2f2454fa`.
 Registro extraído de decoradores frappe.whitelist sin ejecutar código. No sustituye controles de rol, estado, alcance ni contratos detallados. Las firmas son Python; serialización/valores API siguen Frappe.
 
 ## vanbags_maintenance.adjustments
@@ -95,6 +95,10 @@ Registro extraído de decoradores frappe.whitelist sin ejecutar código. No sust
 - `vanbags_maintenance.preventive.run_plan(plan, reason)` — ['POST']
 - `vanbags_maintenance.preventive.schedule(from_date, to_date, company=None, site=None, equipment=None, plan=None)` — ['GET', 'POST']
 - `vanbags_maintenance.preventive.compliance(from_date, to_date, company=None, site=None, equipment=None, plan=None)` — ['GET', 'POST']
+
+## vanbags_maintenance.resource_calendars
+
+- `vanbags_maintenance.resource_calendars.generate(assignment, from_date, to_date, reason)` — ['POST']
 
 ## vanbags_maintenance.resource_costs
 

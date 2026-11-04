@@ -11,9 +11,9 @@
 | Logística | Site Warehouse, Material Estimate, Material Request con fuentes de demanda |
 | Movimiento | Stock Entry nativo y Material Acknowledgment inmutable |
 | Costos | Libro de stock; líneas Purchase Invoice/Timesheet vinculadas a orden |
-| Capacidad | Resource Window; consulta sobre asignaciones |
+| Capacidad | Resource Calendar/Calendar Slot → Calendar Assignment → Calendar Generation → Resource Window; consulta sobre asignaciones de trabajo |
 
-El [diccionario](referencia-tecnica/DICCIONARIO-DOCTYPES.md) y [registro de servicios](referencia-tecnica/SERVICIOS-PUBLICADOS.md) se generan desde la revisión publicada `edd2353b2fd6e53528393762ababee8a4bfb9ae3`: 49 DocTypes y 65 servicios, sin ejecutar su código ni incluir datos operativos.
+El [diccionario](referencia-tecnica/DICCIONARIO-DOCTYPES.md) y [registro de servicios](referencia-tecnica/SERVICIOS-PUBLICADOS.md) se generan desde la revisión publicada `fbca17e584159990bd16a2853228242b2f2454fa`: 53 DocTypes y 66 servicios, sin ejecutar su código ni incluir datos operativos.
 
 ## Roles e integridad
 

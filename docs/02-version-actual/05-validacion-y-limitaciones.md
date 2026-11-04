@@ -6,6 +6,7 @@
 | R3 | `7666406fcb90c60a6bec5ae2aaba5956bc5ecd93` | [407 pruebas, 246.974 s](https://github.com/Dtrubart/TruCMMS/actions/runs/41155848864), concurrencia y recuperación poblada |
 | R4.1 inicial | `2c5f9ee59b25bbe5a820869c530e3165cd0c49ba` | [418 pruebas, 183.267 s](https://github.com/Dtrubart/TruCMMS/actions/runs/41181723132), instalación limpia y regresión |
 | R4.0 alcance | `edd2353b2fd6e53528393762ababee8a4bfb9ae3` | [434 pruebas, 133.320 s](https://github.com/Dtrubart/TruCMMS/actions/runs/41559626517), instalación limpia, permisos e integración |
+| R4.1 calendarios | `fbca17e584159990bd16a2853228242b2f2454fa` | [450 pruebas, 278.874 s](https://github.com/Dtrubart/TruCMMS/actions/runs/41579331440), tres carreras independientes y recuperación poblada |
 
 Las 11 pruebas específicas de capacidad (8.455 s) se solapan con la suite ampliada; no se suman como pruebas únicas.
 
@@ -24,6 +25,10 @@ CI limpio: 434/434 aprobadas. Última regresión local: 433/434, 483.188 s; el �
 La [recuperación poblada del nuevo historial R4.0](07-r4-recuperacion-poblada.md) está verificada: 542 documentos CMMS, nueve adjuntos, puntos/revisiones/lecturas y corrección conservados; reintentos sin duplicación y permisos backend/HTTP comprobados. Se completó sin cambios del producto ni repetición de CI.
 
 ## Interfaz y concurrencia
+
+Estado al 2026-11-03: política `R4.1-resource-calendars`, huella `26ea8177c4070cb7427149d5cb65e8cb6efd4ef879849e6b6e48b18a548dd6a7`, 291 archivos de paquete idénticos entre runtime y publicación. La [entrega de calendarios](08-r4-calendarios.md) añade 16 pruebas a la suite, formularios nativos y comprobaciones de concurrencia/recuperación. El respaldo del nuevo caso recuperó 559 documentos CMMS y nueve adjuntos con igual capacidad, excepciones y permisos. Dos conflictos transitorios requirieron reintento; no se promete éxito simultáneo sin reintentar.
+
+La comparación de TEST distingue 509 documentos iniciales idénticos, cuatro transiciones de órdenes corroboradas por Version nativo y una actualización exclusiva de marca de evaluación, junto con tres documentos adicionales de actividad concurrente. Los contextos, ocho adjuntos originales y conteos nativos quedaron conservados. No se presenta ese entorno activo como una comparación de inmovilidad absoluta.
 
 R3: proyección, compra/salida, conciliación, costos, CSV, técnico asignado/no asignado, impresión y móvil. R4.1: página/lista, siete días, Sin configurar, permisos, escritorio/móvil y ausencia de errores JavaScript. TEST no recibió transacciones operativas de estas comprobaciones.
 

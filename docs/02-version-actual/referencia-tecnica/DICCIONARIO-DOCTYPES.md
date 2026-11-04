@@ -1,6 +1,6 @@
 # Diccionario de DocTypes de la versión verificada
 
-Fuente: `edd2353b2fd6e53528393762ababee8a4bfb9ae3`. Metadatos propios; no contiene datos operativos. Los campos custom en documentos nativos se explican en el contrato R3.
+Fuente: `fbca17e584159990bd16a2853228242b2f2454fa`. Metadatos propios; no contiene datos operativos. Los campos custom en documentos nativos se explican en el contrato R3.
 
 ## TruCMMS Asset Event
 
@@ -50,6 +50,58 @@ Tipo: tabla hija. Identidad: `hash`.
 | value | Small Text |  | 1 |  |
 | value_type | Data |  |  | 1 |
 | unit | Data |  |  | 1 |
+
+Roles definidos: . Los hooks pueden restringir más estos permisos.
+
+## TruCMMS Calendar Assignment
+
+Tipo: documento. Identidad: `hash`.
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| company | Link | Company | 1 |  |
+| site | Link | TruCMMS Site | 1 |  |
+| technician | Link | User | 1 |  |
+| calendar | Link | TruCMMS Resource Calendar | 1 |  |
+| from_date | Date |  | 1 |  |
+| to_date | Date |  | 1 |  |
+| disabled | Check |  |  |  |
+| reason | Small Text |  | 1 |  |
+| calendar_snapshot | Long Text |  |  | 1 |
+
+Roles definidos: System Manager: read, select, create, write; TruCMMS Supervisor: read, select, create, write; TruCMMS Dispatcher: read, select; TruCMMS Technician: read, select. Los hooks pueden restringir más estos permisos.
+
+## TruCMMS Calendar Generation
+
+Tipo: documento. Identidad: `hash`.
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| company | Link | Company | 1 |  |
+| site | Link | TruCMMS Site | 1 |  |
+| technician | Link | User | 1 | 1 |
+| assignment | Link | TruCMMS Calendar Assignment | 1 | 1 |
+| from_date | Date |  | 1 | 1 |
+| to_date | Date |  | 1 | 1 |
+| window_count | Int |  |  | 1 |
+| reason | Small Text |  | 1 | 1 |
+| recorded_by | Link | User | 1 | 1 |
+| recorded_on | Datetime |  | 1 | 1 |
+| generation_key | Data |  |  | 1 |
+| snapshot | Long Text |  |  | 1 |
+
+Roles definidos: System Manager: read, select; TruCMMS Supervisor: read, select; TruCMMS Dispatcher: read, select; TruCMMS Technician: read, select. Los hooks pueden restringir más estos permisos.
+
+## TruCMMS Calendar Slot
+
+Tipo: tabla hija. Identidad: `hash`.
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| weekday | Select | Monday<br>Tuesday<br>Wednesday<br>Thursday<br>Friday<br>Saturday<br>Sunday | 1 |  |
+| starts_at | Time |  | 1 |  |
+| ends_at | Time |  | 1 |  |
+| next_day | Check |  |  |  |
 
 Roles definidos: . Los hooks pueden restringir más estos permisos.
 
@@ -719,6 +771,23 @@ Tipo: documento. Identidad: `field:code`.
 
 Roles definidos: TruCMMS Dispatcher: read, select, create, write, report; TruCMMS Supervisor: read, select, create, write, report; TruCMMS Technician: read, select, report; System Manager: read, select, create, write, report. Los hooks pueden restringir más estos permisos.
 
+## TruCMMS Resource Calendar
+
+Tipo: documento. Identidad: `hash`.
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| code | Data |  | 1 |  |
+| calendar_name | Data |  | 1 |  |
+| company | Link | Company | 1 |  |
+| site | Link | TruCMMS Site | 1 |  |
+| holiday_list | Link | Holiday List |  |  |
+| dst_occurrence | Select | First<br>Second | 1 |  |
+| slots | Table | TruCMMS Calendar Slot | 1 |  |
+| disabled | Check |  |  |  |
+
+Roles definidos: System Manager: read, select, create, write; TruCMMS Supervisor: read, select, create, write; TruCMMS Dispatcher: read, select; TruCMMS Technician: read, select. Los hooks pueden restringir más estos permisos.
+
 ## TruCMMS Resource Window
 
 Tipo: documento. Identidad: `hash`.
@@ -733,6 +802,9 @@ Tipo: documento. Identidad: `hash`.
 | ends_on | Datetime |  | 1 |  |
 | disabled | Check |  | 0 |  |
 | reason | Small Text |  | 1 |  |
+| calendar_assignment | Link | TruCMMS Calendar Assignment |  | 1 |
+| calendar_generation | Link | TruCMMS Calendar Generation |  | 1 |
+| calendar_key | Data |  |  | 1 |
 
 Roles definidos: System Manager: read, select, create, write; TruCMMS Supervisor: read, select, create, write; TruCMMS Dispatcher: read, select; TruCMMS Technician: read, select. Los hooks pueden restringir más estos permisos.
 

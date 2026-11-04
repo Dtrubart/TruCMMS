@@ -32,9 +32,9 @@ Hay restricciones de liberación y excepciones auditadas. Automatización revali
 
 ## Lecturas actuales
 
-Configurar medidor del equipo/componente, unidad y semántica. Lecturas finitas/cronológicas; acumulativos no disminuyen sin reinicio/reemplazo explícito. Corregir la última lectura conserva original y momento. Historial desde el medidor.
+Configurar medidor del equipo/componente o de un punto estable de instalaciones, unidad y semántica. Lecturas finitas/cronológicas; acumulativos no disminuyen sin reinicio/reemplazo explícito. Corregir la última lectura conserva original y momento. Historial desde el medidor.
 
-Todavía no existe el selector multipunto dentro de la orden ni el medidor de instalaciones sin equipo del diseño R4.0.
+En una orden guardada, menú Alcance: configurar ubicación y puntos antes de autorizar; consultar referencias históricas; registrar una lectura vinculada durante la ejecución asignada. Un punto de instalaciones no necesita un activo ficticio. El layout completo de cinco pantallas permanece como propuesta.
 
 ## Recursos/compras
 
@@ -57,6 +57,10 @@ Solicitar no descuenta stock. Confirmar recogida completa se hace por vale; una 
 
 Vincular orden en líneas no inventariables de Purchase Invoice y líneas de Timesheet de empleado. Consultar Costos vinculados: valoración neta de inventario + servicios netos + costo de horas nativas, en moneda de empresa. No suma de nuevo tiempos de ejecución técnica. Falta de permisos produce un total explícitamente incompleto.
 
-## Capacidad inicial
+## Capacidad y calendarios
 
 Supervisor define Ventanas y ausencias por persona/sede, con motivo; turno nocturno termina al día siguiente. Capacidad y disponibilidad consulta hasta 31 días. Disponible descuenta ausencias; Programado incluye participantes activos; Libre es saldo neto, no bloques continuos garantizados. Informa solapamientos, sobrecarga y trabajo fuera de disponibilidad. Sin calendario: Sin configurar. No autoriza ni asigna trabajo.
+
+Para un patrón recurrente, Recursos y servicios → Calendarios semanales: elegir empresa/sede, turnos por día y, opcionalmente, lista nativa de feriados con permiso de lectura. Indicar expresamente si un turno termina al día siguiente. Calendarios por técnico: elegir calendario, persona y vigencia; guardar y usar Calendario → Generar disponibilidad para un periodo de hasta 31 días. El historial conserva cada generación.
+
+Un día generado sin turnos muestra 0 horas. Para una excepción sobre una ventana generada, deshabilitarla con nuevo motivo y crear una ventana explícita de reemplazo, o registrar una ausencia. Detener futuras generaciones en la asignación conserva las ventanas ya existentes. Repetir el mismo periodo devuelve lo generado; un periodo parcialmente solapado se rechaza.

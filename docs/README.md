@@ -1,13 +1,13 @@
 # TruCMMS — documentación consolidada
 
-Actualización: **2026-11-02**. TruCMMS es la app Frappe/ERPNext; VanBags es el negocio de ejemplo.
+Actualización: **2026-11-03**. TruCMMS es la app Frappe/ERPNext; VanBags es el negocio de ejemplo.
 
 | Rama | Contenido | Entrada |
 | --- | --- | --- |
 | **1. Plan de implementación y desarrollo** | Qué se construirá, secuencia, decisiones y trabajo en curso | [Plan](01-plan-desarrollo/README.md) |
 | **2. Versión actual implementada** | Qué está publicado y verificado, cómo funciona y sus límites | [Versión actual](02-version-actual/README.md) |
 
-La línea base de aplicación de la rama 2 es `edd2353b2fd6e53528393762ababee8a4bfb9ae3`, con **434 pruebas CI aprobadas**. Incluye R0–R3, la primera entrega de capacidad de R4.1 y el modelo R4.0 de alcance/puntos/mediciones. No equivale a aceptación humana ni a producción.
+La línea base de aplicación de la rama 2 es `fbca17e584159990bd16a2853228242b2f2454fa`, con **450 pruebas CI aprobadas**. Incluye R0–R3, el modelo R4.0 de alcance/puntos/mediciones y los calendarios semanales de R4.1. No equivale a aceptación humana ni a producción.
 
 La implementación, evidencia local, CI y puertas pendientes de R4.0 se registran en el [detalle R4.0](02-version-actual/06-r4-alcance-local.md). El nuevo layout completo sigue en propuesta visual. R4 global no está cerrado.
 

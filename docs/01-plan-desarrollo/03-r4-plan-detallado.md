@@ -5,7 +5,7 @@ Dirección acordada con el usuario. Los criterios orientan el detalle de impleme
 | Incremento | Entregables y criterio | Estado |
 | --- | --- | --- |
 | **R4.0 Alcance y puntos** | Ubicación de alcance; activos opcionales; múltiples áreas/activos/componentes/puntos. Una intervención o ronda mantiene trazabilidad individual sin activos ficticios | Base técnica verificada: DEV/TEST, CI 434, upgrade anterior y recuperación poblada del nuevo historial. Revisión humana del prototipo separada. [Detalle](../02-version-actual/06-r4-alcance-local.md) |
-| **R4.1 Disponibilidad** | Calendarios, turnos/patrones, ausencias y capacidad; identificar disponibilidad, carga y conflictos | Ventanas explícitas verificadas; recurrencia/generación pendientes |
+| **R4.1 Disponibilidad** | Calendarios, turnos/patrones, ausencias y capacidad; identificar disponibilidad, carga y conflictos | Base semanal verificada en DEV/TEST: 450 pruebas CI, tres carreras independientes y recuperación poblada de 559 documentos/nueve adjuntos. Aceptación operativa separada. [Detalle y límites](../02-version-actual/08-r4-calendarios.md) |
 | **R4.2 Competencias** | Habilidades, certificados, vigencias y requisitos; elegibilidad y excepciones auditadas | Pendiente; reutilizar equipos/disciplinas |
 | **R4.3 Procedimientos y formatos** | Plantillas versionadas, editor, recorridos, mediciones, condiciones/evidencias; adaptación sin código y ejecución con versión conservada | Pendiente |
 | **R4.4 Preparación documental** | Aplicabilidad, vigencias, revisiones, permisos/referencias y bloqueos; indicar y validar qué falta para avanzar | Pendiente |

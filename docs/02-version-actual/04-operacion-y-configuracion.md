@@ -12,7 +12,7 @@ El Docker trabajado es de desarrollo; DEV/TEST son sitios distintos. Los comando
 4. Política de aceptación y procedimientos.
 5. Preventivo: revisión aprobada, plan, medidor/reglas y automatización explícita si aplica.
 6. Logística: Item/UOM/Warehouse, vínculo de sede, roles nativos y configuración Company/fiscal/contable para transacciones reales.
-7. Capacidad: ventanas explícitas; no se siembra jornada predeterminada.
+7. Capacidad: ventanas explícitas o calendario semanal y asignación por técnico; generación manual acotada y feriados nativos con permisos apropiados. No se siembra jornada predeterminada.
 
 Procurement complejo usa workflows nativos; operación sencilla puede configurar un circuito corto y recepción manual externa. No se omiten validaciones de integridad del ERP.
 
@@ -22,7 +22,7 @@ Identificar revisión/dependencias/sitio; conservar paquete previo y respaldo co
 
 El respaldo incluye base, archivos públicos/privados y configuración necesaria para recuperar secretos/cifrado. Custodiar fuera de Git/retención automática. Restaurar en sitio nuevo y comparar documentos, vínculos, roles/permisos, archivos por hash y reportes. No sobrescribir recuperaciones ni bajar código contra una base modificada sin ensayo.
 
-La recuperación poblada más reciente corresponde a R3. R4.1 inicial tiene respaldo/preservación comprobados, no una recuperación completa nueva atribuida a R4.
+R4.0 y los calendarios R4.1 tienen recuperaciones pobladas propias verificadas. Las pruebas de calendarios restauran patrones, generaciones, ventanas deshabilitadas, reemplazos y ausencias, comparando también el resultado de capacidad; ver su [acta](08-r4-calendarios.md). Las evidencias anteriores no sustituyen las de documentos nuevos.
 
 ## Producción pendiente
 

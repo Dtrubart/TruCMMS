@@ -1,6 +1,6 @@
 # Referencias técnicas de la revisión publicada
 
-Fuente de aplicación: `edd2353b2fd6e53528393762ababee8a4bfb9ae3`. Contratos recuperados de la revisión fijada en Git. Conservan sus títulos/contextos históricos; [alcance](../01-version-y-alcance.md) y [evidencia actual](../05-validacion-y-limitaciones.md) determinan vigencia y límites.
+Fuente de aplicación: `fbca17e584159990bd16a2853228242b2f2454fa`. Contratos recuperados de la revisión fijada en Git. Conservan sus títulos/contextos históricos; [alcance](../01-version-y-alcance.md) y [evidencia actual](../05-validacion-y-limitaciones.md) determinan vigencia y límites.
 
 - [ASSETS-D1](ASSETS-D1.md)
 - [CLOSURE](CLOSURE.md)
@@ -17,6 +17,6 @@ Fuente de aplicación: `edd2353b2fd6e53528393762ababee8a4bfb9ae3`. Contratos rec
 - [WORK-CONTRACT-C1](WORK-CONTRACT-C1.md)
 - [WORK-ORDERS](WORK-ORDERS.md)
 - [WORK-VIEWS-E1](WORK-VIEWS-E1.md)
+- [R4-RESOURCE-CALENDARS](R4-RESOURCE-CALENDARS.md)
 - [Diccionario de DocTypes](DICCIONARIO-DOCTYPES.md)
 - [Servicios publicados](SERVICIOS-PUBLICADOS.md)
-- [Alcance, puntos y lecturas R4.0](../06-r4-alcance-local.md)
