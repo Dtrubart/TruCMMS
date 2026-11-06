@@ -38,4 +38,4 @@ R1–R3 tienen cierres técnicos para sus alcances. R4 no está cerrado; aceptac
 
 ## Incremento local ENT-002 — 2026-11-05
 
-Arbol funcional autorizado por sede, cambios de padre/estado con vista previa y eventos inmutables. Conserva IDs y Company/Site. Politica local `R4.1-location-hierarchy`; 54 DocTypes y 70 servicios publicados en el paquete. Revisión de trabajo no publicada sobre la base indicada arriba; ver [verificaciones y limites](09-jerarquia-funcional-ENT002.md).
+Arbol funcional autorizado por sede, cambios de padre/estado con vista previa y eventos inmutables. Conserva IDs y Company/Site. Politica local `R4.1-location-hierarchy`; 54 DocTypes y 70 servicios publicados en el paquete. Incremento publicado en la rama de desarrollo sobre la base indicada arriba, con CI en seguimiento; ver [verificaciones y limites](09-jerarquia-funcional-ENT002.md).

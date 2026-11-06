@@ -92,7 +92,7 @@ frappe.pages['trucmms-locations'].on_page_load = function (wrapper) {
      return [...pages[parent], ...(data.more ? [{value: pagerPrefix + parent, title: __('Cargar más'), expandable: 0, page_parent: parent, next: (offsets[parent] || 0) + data.limit}] : [])];
     }
    }
-   tree = new LocationTree({parent: browser, label: site.get_value(), root_value: '__trucmms_root__', expandable: true, with_skeleton: false,
+   tree = new LocationTree({parent: browser, label: site.get_value(), root_value: '__trucmms_root__', args: {doctype: 'VB Equipment Location'}, expandable: true, with_skeleton: false,
     on_click(node) {
      if (request !== sequence || node.is_root) return;
      if (Object.hasOwn(node.data, 'page_parent')) {

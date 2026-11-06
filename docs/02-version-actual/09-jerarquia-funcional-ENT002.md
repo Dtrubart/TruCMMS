@@ -1,6 +1,6 @@
 # ENT-002 — árbol funcional e historial
 
-Fecha: 2026-11-05. Desarrollo local autorizado mediante [ENT-001](../01-plan-desarrollo/08-jerarquia-y-contexto-ENT001.md). No sustituye la revisión publicada `fbca17e584159990bd16a2853228242b2f2454fa`; amplía esa base en el árbol de trabajo, sin commit/push todavía.
+Fecha: 2026-11-05. Desarrollo local autorizado mediante [ENT-001](../01-plan-desarrollo/08-jerarquia-y-contexto-ENT001.md). Amplía la base `fbca17e584159990bd16a2853228242b2f2454fa`. El primer commit ENT-002 es `36e8e48e64f7b71b07e7db61d0e46e2009f452d0`, publicado en `codex/foundation-verification`; ver la reactivación posterior y su corrección visual al final.
 
 ## Acceso
 
@@ -46,7 +46,7 @@ Mutaciones estructurales usan bloqueo de Company compartido con operaciones de i
 | Recuperación poblada | Verificada en restore-ent002: 57 tablas / 1.404 filas comparadas y 700 hashes de archivos; jerarquía e historial inmutable recuperados; scheduler pausado |
 | Migración DEV | Completada; página, nuevo DocType e índice comprobados en DEV/TEST |
 
-La suite completa de 463 no se presenta como una ejecución de los 466 casos ahora presentes: los tres casos adicionales se verificaron en el bloque dirigido de 16. CI remota de este incremento y aceptación humana permanecen pendientes. La evidencia CI anterior de 450 pruebas conserva su alcance histórico.
+La suite completa de 463 no se presenta como una ejecución de los 466 casos ahora presentes: los tres casos adicionales se verificaron en el bloque dirigido de 16. La aceptación humana permanece pendiente; el estado de CI remoto se registra en el seguimiento posterior. La evidencia CI anterior de 450 pruebas conserva su alcance histórico.
 
 Helpers reproducibles, fuera del paquete de la app: `D:/Projects/VanBags-ERP/docker/development/verify-ent002-ui.mjs`, `ent002-concurrency-check.py`, `ent002-recovery-check.py`. Evidencia UI: `D:/Projects/VanBags-ERP/logs/ent002-ui-results.json`, capturas desktop/mobile. Logs de integración en el contenedor: `/tmp/trucmms-ent002-regression.log` y `/tmp/trucmms-ent002-final-targeted.log`.
 
@@ -66,8 +66,14 @@ Para actualizar otra instalación, respaldar base/configuración/adjuntos, sincr
 
 La comparación inicial detectó IDs/timestamps de filas Has Role regeneradas durante migración y archivos extraídos bajo un prefijo `sites/test.vanbags.localhost/`. Se contrastaron las concesiones efectivas (parent/parenttype/parentfield/role) y se normalizó la ubicación de archivos dentro del sitio aislado, conservando la copia extraída y rechazando sobrescrituras diferentes. La comparación final es equivalencia con SOURCE tras migración, excluyendo las identidades sintéticas del ensayo y Deployment por sitio; las rutas anterior/posterior del movimiento sintético y su inmutabilidad se verificaron por separado. No se afirma igualdad de IDs de metadatos regenerables. Evidencia saneada: `D:/Projects/VanBags-ERP/logs/ent002-recovery-result.json`.
 
-### Identidad final de entrega local
+### Identidad al cierre local del 2026-11-05
 
 DEV/TEST: política `R4.1-location-hierarchy`; huella `c47efbfcd206e06207042b19201a77fa03ac62297d774ecfc8486c39fb1d12d6`. Publicación y fuente activa: 294 archivos de paquete coincidentes, 54 DocTypes y 70 servicios. `default_site` permanece vacío; fixtures sintéticos del ensayo eliminados de DEV/TEST. El sitio restore-ent002 se conserva aislado con scheduler pausado.
 
 Evidencias saneadas: `D:/Projects/VanBags-ERP/logs/ent002-tests-result.json`, `ent002-ui-results.json`, `ent002-final-result.json` y `ent002-recovery-result.json`. No contienen credenciales ni configuración del sitio.
+
+## Reactivación y revisión visual — 2026-11-06
+
+Servicios DEV/TEST saludables tras reinicio. Se detectó que la integración con frappe.ui.Tree omitía `args.doctype`: la prueba previa comprobaba el contenedor sin exigir sus nodos. Se corrigió ese argumento y se reforzó el helper para esperar una ubicación real, comprobar su identidad y abrirla desde el árbol. Esa prueba, búsqueda, ficha y móvil de 390 px pasaron sin errores JavaScript observados ni cambios de datos operativos. La evidencia anterior no acreditaba por sí sola el renderizado de nodos.
+
+Huella actual DEV/TEST: `d2647db466d3c1c2da03546a643a9717c2f544c4d0af73ad8e2d57ee3218b327`; se conserva política, esquema y 294 archivos. No se repitieron migraciones ni la suite backend por esta corrección de interfaz. La suite completa del candidato se ejecuta en GitHub CI; su resultado todavía no se presume aprobado.

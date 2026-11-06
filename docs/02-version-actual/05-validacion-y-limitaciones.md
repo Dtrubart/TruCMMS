@@ -54,4 +54,4 @@ Los logs crudos, capturas, manifiestos y respaldos se custodian fuera del paquet
 
 ## Entrega local ENT-002 — 2026-11-05
 
-[Árbol funcional e historial](09-jerarquia-funcional-ENT002.md): DEV/TEST migrados, 463 pruebas de regresión y 16 dirigidas finales; carrera entre conexiones, UI desktop/móvil y recuperación poblada verificadas. Es entrega de trabajo sin commit/push ni CI remota nueva. La evidencia previa de 450 pruebas no se reasigna a este incremento.
+[Árbol funcional e historial](09-jerarquia-funcional-ENT002.md): DEV/TEST migrados, 463 pruebas de regresión y 16 dirigidas finales; carrera entre conexiones, UI desktop/móvil y recuperación poblada verificadas. El cierre local del 2026-11-05 no tenía publicación; el 2026-11-06 se publicó el primer commit y se inició CI remota. Consultar el acta para la corrección visual y resultado posterior. La evidencia previa de 450 pruebas no se reasigna a este incremento.

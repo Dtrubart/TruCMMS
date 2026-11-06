@@ -1,6 +1,6 @@
 # TruCMMS — documentación consolidada
 
-Actualización: **2026-11-05**. TruCMMS es la app Frappe/ERPNext; VanBags es el negocio de ejemplo.
+Actualización: **2026-11-06**. TruCMMS es la app Frappe/ERPNext; VanBags es el negocio de ejemplo.
 
 | Rama | Contenido | Entrada |
 | --- | --- | --- |
@@ -21,4 +21,4 @@ La exportación consolidada contiene este índice, ambas ramas, contratos técni
 
 ## Incremento local posterior
 
-[ENT-002: arbol funcional e historial](02-version-actual/09-jerarquia-funcional-ENT002.md), sobre la base anterior, autorizado mediante [ENT-001](01-plan-desarrollo/08-jerarquia-y-contexto-ENT001.md). Codigo en arbol de trabajo, sin commit/push; CI anterior no acredita automaticamente este incremento. Consultar su acta para estado de despliegue, recuperacion y pruebas locales.
+[ENT-002: arbol funcional e historial](02-version-actual/09-jerarquia-funcional-ENT002.md), sobre la base anterior, autorizado mediante [ENT-001](01-plan-desarrollo/08-jerarquia-y-contexto-ENT001.md). Primer commit ENT-002 publicado en la rama de desarrollo; corrección visual y CI en verificación. La CI anterior no acredita automáticamente este incremento. Consultar su acta para estado de despliegue, recuperacion y pruebas locales.
