@@ -21,4 +21,18 @@ class VBEquipmentLocation(Document):
 			)
 
 	def validate(self):
+		from vanbags_maintenance import location_hierarchy
 		validate_context(self)
+		location_hierarchy.validate(self)
+
+	def after_insert(self):
+		from vanbags_maintenance import location_hierarchy
+		location_hierarchy.after_insert(self)
+
+	def on_update(self):
+		from vanbags_maintenance import location_hierarchy
+		location_hierarchy.on_update(self)
+
+	def on_trash(self):
+		from vanbags_maintenance import location_hierarchy
+		location_hierarchy.prevent_delete(self)

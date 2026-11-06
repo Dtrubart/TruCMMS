@@ -35,3 +35,7 @@ Las órdenes nuevas requieren ubicación de alcance y puntos antes de autorizar.
 No están entregados el nuevo layout, constructor general de formatos, calificaciones/certificados, optimización asistida, coordinación avanzada ni gobierno documental R4. Los calendarios tienen patrones semanales y generación manual de hasta 31 días; ciclos rotativos multisemana y reemplazo masivo de turnos quedan fuera de esta entrega. Predicción R5 y offline R6 son futuros.
 
 R1–R3 tienen cierres técnicos para sus alcances. R4 no está cerrado; aceptación humana y producción siguen pendientes.
+
+## Incremento local ENT-002 — 2026-11-05
+
+Arbol funcional autorizado por sede, cambios de padre/estado con vista previa y eventos inmutables. Conserva IDs y Company/Site. Politica local `R4.1-location-hierarchy`; 54 DocTypes y 70 servicios publicados en el paquete. Revisión de trabajo no publicada sobre la base indicada arriba; ver [verificaciones y limites](09-jerarquia-funcional-ENT002.md).

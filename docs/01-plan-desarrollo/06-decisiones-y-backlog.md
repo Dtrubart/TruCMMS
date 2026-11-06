@@ -19,4 +19,6 @@ Configurabilidad mediante plantillas guiadas con límites soportados. Orden con 
 - Objetivos/restricciones de optimización, desplazamientos y preparación de recursos.
 - Volúmenes, dispositivos y criterios cuantitativos del piloto R4.
 
-R4.0 está en desarrollo local. R4.1 necesita recurrencia/generación. Competencias, formatos, documentación avanzada y optimización siguen pendientes. Tener código o aprobar el diseño no basta para registrarlos como entregados.
+Actualización 2026-11-05: R4.0 y la base semanal de R4.1 cuentan con entrega técnica documentada. ENT-001/002 fue autorizado para jerarquía funcional y navegación; regiones y concesiones heredadas siguen pendientes. Competencias, formatos, documentación avanzada y optimización siguen pendientes. Tener código o aprobar el diseño no basta para registrarlos como entregados.
+
+Contrato del primer bloque: [ENT-001/002](08-jerarquia-y-contexto-ENT001.md).

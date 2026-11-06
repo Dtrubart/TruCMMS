@@ -761,8 +761,8 @@ class IntegrationTestVBEquipment(IntegrationTestCase):
 		})
 		equipment.insert()
 
-		location.disabled = 1
-		location.save()
+		# Pre-policy disabled placement: historical equipment edits must still work.
+		frappe.db.set_value("VB Equipment Location", location.name, "disabled", 1)
 
 		equipment.reload()
 		equipment.equipment_name = "History Loc Updated"

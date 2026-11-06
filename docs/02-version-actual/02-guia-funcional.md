@@ -64,3 +64,7 @@ Supervisor define Ventanas y ausencias por persona/sede, con motivo; turno noctu
 Para un patrón recurrente, Recursos y servicios → Calendarios semanales: elegir empresa/sede, turnos por día y, opcionalmente, lista nativa de feriados con permiso de lectura. Indicar expresamente si un turno termina al día siguiente. Calendarios por técnico: elegir calendario, persona y vigencia; guardar y usar Calendario → Generar disponibilidad para un periodo de hasta 31 días. El historial conserva cada generación.
 
 Un día generado sin turnos muestra 0 horas. Para una excepción sobre una ventana generada, deshabilitarla con nuevo motivo y crear una ventana explícita de reemplazo, o registrar una ausencia. Detener futuras generaciones en la asignación conserva las ventanas ya existentes. Repetir el mismo periodo devuelve lo generado; un periodo parcialmente solapado se rechaza.
+
+## Árbol de ubicaciones
+
+TruCMMS → Activos → Árbol de ubicaciones. Elegir sede, expandir/buscar y abrir ficha o listas relacionadas. Usuarios con escritura pueden usar vista previa y motivo para cambiar padre o estado. [Guía y límites ENT-002](09-jerarquia-funcional-ENT002.md).

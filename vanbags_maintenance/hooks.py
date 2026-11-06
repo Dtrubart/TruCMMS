@@ -444,3 +444,11 @@ for dt,query in [('TruCMMS Resource Calendar','calendar_query'),('TruCMMS Calend
 doc_events['DocShare']['validate'].append('vanbags_maintenance.resource_calendars.validate_share')
 permission_query_conditions['TruCMMS Calendar Slot']='vanbags_maintenance.resource_calendars.slot_query'
 app_include_js.append('/assets/vanbags_maintenance/js/resource_calendar_forms.js')
+
+# ENT-002: scoped functional-location tree; identity and Company/Site remain unchanged.
+after_install='vanbags_maintenance.location_hierarchy.setup'
+after_migrate='vanbags_maintenance.location_hierarchy.setup'
+has_permission['TruCMMS Location Event']='vanbags_maintenance.location_hierarchy.event_permission'
+permission_query_conditions['TruCMMS Location Event']='vanbags_maintenance.location_hierarchy.event_query'
+doc_events['DocShare']['validate'].append('vanbags_maintenance.location_hierarchy.event_share')
+app_include_js.append('/assets/vanbags_maintenance/js/location_hierarchy_forms.js')

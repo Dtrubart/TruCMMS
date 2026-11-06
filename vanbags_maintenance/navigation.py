@@ -6,7 +6,7 @@ GROUPS=[
  ('Operación',{'TruCMMS Requester','TruCMMS Dispatcher','TruCMMS Supervisor','TruCMMS Technician','System Manager'},[
   ('Solicitudes','DocType','TruCMMS Maintenance Request'),('Órdenes de trabajo','DocType',wo.DT),('Vistas de trabajo','Page','trucmms-work')]),
  ('Activos',{'VB Maintenance User','VB Maintenance Manager','TruCMMS Dispatcher','TruCMMS Supervisor','TruCMMS Technician','System Manager'},[
-  ('Equipos físicos','DocType','VB Equipment'),('Componentes','DocType','TruCMMS Component'),('Ubicaciones funcionales','DocType','VB Equipment Location'),('Instalaciones y reemplazos','Report','TruCMMS Installation Register')]),
+  ('Equipos físicos','DocType','VB Equipment'),('Componentes','DocType','TruCMMS Component'),('Arbol de ubicaciones','Page','trucmms-locations'),('Ubicaciones funcionales','DocType','VB Equipment Location'),('Instalaciones y reemplazos','Report','TruCMMS Installation Register')]),
  ('Planes y rutinas',{'TruCMMS Dispatcher','TruCMMS Supervisor','TruCMMS Technician','System Manager'},[
   ('Procedimientos','DocType','TruCMMS Job Plan'),('Planes preventivos','DocType','TruCMMS PM Plan'),('Programación preventiva','Page','trucmms-preventive'),('Medidores','DocType','TruCMMS Meter'),('Puntos de medición','DocType','TruCMMS Measurement Point'),('Hallazgos de inspección','DocType','TruCMMS Inspection Finding')]),
  ('Recursos y servicios',{'TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
@@ -34,6 +34,7 @@ def authorized(doctype,ptype='read'):
     return bool(frappe.has_permission(doctype,ptype))
 
 def allowed_link(kind,target):
+    if target=='trucmms-locations':return authorized('VB Equipment Location')
     if target=='TruCMMS Site Warehouse' and not authorized('Warehouse'):return False
     if target=='trucmms-material-planning':return authorized('TruCMMS PM Plan')
     if kind=='DocType':return authorized(target)

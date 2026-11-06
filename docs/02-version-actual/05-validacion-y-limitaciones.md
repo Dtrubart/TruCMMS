@@ -51,3 +51,7 @@ Piloto sintético y restauración en destino nuevo: documentos CMMS/nativos, can
 - Sin offline, predicción ni certificación/calibración especializada.
 
 Los logs crudos, capturas, manifiestos y respaldos se custodian fuera del paquete de análisis. La exportación aporta contratos, resultados y enlaces CI; excluye bases, contraseñas, `.env`, configuraciones secretas y datos operativos de clientes.
+
+## Entrega local ENT-002 — 2026-11-05
+
+[Árbol funcional e historial](09-jerarquia-funcional-ENT002.md): DEV/TEST migrados, 463 pruebas de regresión y 16 dirigidas finales; carrera entre conexiones, UI desktop/móvil y recuperación poblada verificadas. Es entrega de trabajo sin commit/push ni CI remota nueva. La evidencia previa de 450 pruebas no se reasigna a este incremento.

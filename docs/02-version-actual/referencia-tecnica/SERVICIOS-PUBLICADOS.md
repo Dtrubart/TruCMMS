@@ -143,3 +143,14 @@ Registro extraído de decoradores frappe.whitelist sin ejecutar código. No sust
 
 - `vanbags_maintenance.work_views.get_work(filters=None)` — ['GET', 'POST']
 - `vanbags_maintenance.work_views.execution_order_query(doctype, txt, searchfield, start, page_len, filters=None)` — según configuración Frappe
+
+## Ampliacion local ENT-002 — vanbags_maintenance.location_hierarchy
+
+Inventario actual de trabajo: 70 servicios publicados.
+
+- `children(site, parent=None, start=0, search=None, company=None)` — GET; consulta autorizada, paginas de 50.
+- `details(name)` — GET; ficha, ruta e historial acotado.
+- `preview(name, action, parent=None)` — POST; escritura requerida, devuelve impacto y token.
+- `change(name, action, token, reason, parent=None)` — POST; revalida token/alcance, cambio atomico e historial.
+
+Acciones: Reparent, Deactivate, Reactivate. El token detecta obsolescencia; no es una credencial y no reemplaza permisos. No admite fecha efectiva enviada por cliente.

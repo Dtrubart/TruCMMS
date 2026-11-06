@@ -33,3 +33,7 @@ Solicitante reporta/consulta su proceso y acepta cuando corresponde. Despachador
 Material Request conserva origen/sede/orden, identidad/huella/motivo y fuentes. Stock Entry conserva orden/sede, salida original e identidad; devoluciones apuntan a la línea emitida. Líneas de Purchase Invoice no inventariables y Timesheet tienen vínculo de orden. Ver [contrato R3](referencia-tecnica/R3-STANDARD-HANDOFF.md).
 
 El [contrato R4.0](06-r4-alcance-local.md) describe puntos, revisiones, lecturas y bloqueo de movimientos de activos secundarios. El nuevo layout completo y la ejecución por actividad configurable permanecen en el plan.
+
+## Jerarquía funcional ENT-002
+
+VB Equipment Location conserva identidad y Company/Site. Padre/estado se cambian mediante servicio con escritura nativa, vista previa vigente y motivo; historial TruCMMS Location Event inmutable y no compartible. No se agregan permisos regionales. [Contrato y evidencias](09-jerarquia-funcional-ENT002.md).

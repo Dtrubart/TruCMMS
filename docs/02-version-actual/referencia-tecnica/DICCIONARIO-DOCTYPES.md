@@ -1096,3 +1096,19 @@ Tipo: documento. Identidad: `format:{location_name}`.
 | single_equipment | Check |  |  |  |
 
 Roles definidos: VB Maintenance User: read, report; VB Maintenance Manager: read, create, write, report; System Manager: read, create, write, delete, report, export, share, print; TruCMMS Requester: read, select; TruCMMS Dispatcher: read, select; TruCMMS Supervisor: read, select; TruCMMS Technician: read, select. Los hooks pueden restringir más estos permisos.
+
+## Ampliacion local ENT-002 — TruCMMS Location Event
+
+Se agrega un documento: inventario actual de trabajo, 54 DocTypes. Identidad `hash`, sin renombrado; historial creado exclusivamente por servicio/controlador. Lectura por rol y Company/Site, sin escritura, eliminacion, importacion, exportacion o share ordinarios.
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| location | Link | VB Equipment Location | 1 | 1 |
+| company | Link | Company | 1 | 1 |
+| site | Link | TruCMMS Site | 1 | 1 |
+| action | Data |  | 1 | 1 |
+| reason | Small Text |  | 1 | 1 |
+| effective_on | Datetime |  | 1 | 1 |
+| recorded_by | Link | User | 1 | 1 |
+| before_snapshot | JSON |  | 1 | 1 |
+| after_snapshot | JSON |  | 1 | 1 |

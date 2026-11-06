@@ -1,0 +1,162 @@
+{
+ "doctype": "DocType",
+ "name": "TruCMMS Location Event",
+ "module": "Vanbags Maintenance",
+ "autoname": "hash",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "fields": [
+  {
+   "fieldname": "location",
+   "label": "Location",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "read_only": 1,
+   "options": "VB Equipment Location"
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "read_only": 1,
+   "options": "Company"
+  },
+  {
+   "fieldname": "site",
+   "label": "Site",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "read_only": 1,
+   "options": "TruCMMS Site"
+  },
+  {
+   "fieldname": "action",
+   "label": "Action",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Reason",
+   "fieldtype": "Small Text",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "effective_on",
+   "label": "Effective On",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "recorded_by",
+   "label": "Recorded By",
+   "fieldtype": "Link",
+   "reqd": 1,
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "before_snapshot",
+   "label": "Before Snapshot",
+   "fieldtype": "JSON",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "after_snapshot",
+   "label": "After Snapshot",
+   "fieldtype": "JSON",
+   "reqd": 1,
+   "read_only": 1
+  }
+ ],
+ "field_order": [
+  "location",
+  "company",
+  "site",
+  "action",
+  "reason",
+  "effective_on",
+  "recorded_by",
+  "before_snapshot",
+  "after_snapshot"
+ ],
+ "permissions": [
+  {
+   "role": "VB Maintenance User",
+   "read": 1,
+   "create": 0,
+   "write": 0,
+   "delete": 0,
+   "export": 0,
+   "share": 0,
+   "import": 0
+  },
+  {
+   "role": "VB Maintenance Manager",
+   "read": 1,
+   "create": 0,
+   "write": 0,
+   "delete": 0,
+   "export": 0,
+   "share": 0,
+   "import": 0
+  },
+  {
+   "role": "TruCMMS Requester",
+   "read": 1,
+   "create": 0,
+   "write": 0,
+   "delete": 0,
+   "export": 0,
+   "share": 0,
+   "import": 0
+  },
+  {
+   "role": "TruCMMS Dispatcher",
+   "read": 1,
+   "create": 0,
+   "write": 0,
+   "delete": 0,
+   "export": 0,
+   "share": 0,
+   "import": 0
+  },
+  {
+   "role": "TruCMMS Supervisor",
+   "read": 1,
+   "create": 0,
+   "write": 0,
+   "delete": 0,
+   "export": 0,
+   "share": 0,
+   "import": 0
+  },
+  {
+   "role": "TruCMMS Technician",
+   "read": 1,
+   "create": 0,
+   "write": 0,
+   "delete": 0,
+   "export": 0,
+   "share": 0,
+   "import": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 0,
+   "write": 0,
+   "delete": 0,
+   "export": 0,
+   "share": 0,
+   "import": 0
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC"
+}
