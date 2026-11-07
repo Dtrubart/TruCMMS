@@ -1,6 +1,6 @@
 # Servicios publicados de la revisión verificada
 
-Fuente: `0ca852328ccbd3f2c2bb7201ddab34656d079b83`.
+Fuente: `60cd0649700edf6c9b924fd7b9c4a76585b34d6f`.
 Registro extraído de decoradores frappe.whitelist sin ejecutar código. No sustituye controles de rol, estado, alcance ni contratos detallados. Las firmas son Python; serialización/valores API siguen Frappe.
 
 ## vanbags_maintenance.adjustments
@@ -146,7 +146,7 @@ Registro extraído de decoradores frappe.whitelist sin ejecutar código. No sust
 
 ## Ampliación ENT-002 — vanbags_maintenance.location_hierarchy
 
-Inventario actual verificado: 70 servicios publicados.
+Inventario de ENT-002: 70 servicios antes de ENT-003.
 
 - `children(site, parent=None, start=0, search=None, company=None)` — GET; consulta autorizada, paginas de 50.
 - `details(name)` — GET; ficha, ruta e historial acotado.

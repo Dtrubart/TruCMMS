@@ -28,3 +28,7 @@ Las afirmaciones sobre ausencia se limitan al código y documentación inspeccio
 ## Seguimiento ENT-001/002 autorizado
 
 ENT-FIND-001: contrato inicial registrado, decisiones regionales futuras separadas. ENT-FIND-002/003: se entrega árbol propio autorizado y cambios con eventos/efecto inmediato, conservando IDs. ENT-FIND-006: mejora parcial por sede, sin contexto global. ENT-FIND-007/010: controles acotados y pruebas locales añadidos; escala empresarial y concesiones regionales siguen pendientes. [Evidencia posterior](../../../02-version-actual/09-jerarquia-funcional-ENT002.md). La rotación de credenciales continúa pendiente.
+
+## Seguimiento ENT-003 autorizado
+
+ENT-FIND-004: organización opcional y pertenencia primaria implementadas con Company inmutable e historial. Se añadieron controles para títulos de Unit/Site y pruebas de lector parcial, sin grants regionales. ENT-FIND-005/006/007/010 conservan el trabajo pendiente de resolver común, contexto global, escala y concesiones regionales. [Evidencias posteriores](../../../02-version-actual/10-organizacion-operativa-ENT003.md).

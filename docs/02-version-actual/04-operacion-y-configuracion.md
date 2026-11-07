@@ -29,3 +29,7 @@ R4.0 y los calendarios R4.1 tienen recuperaciones pobladas propias verificadas. 
 Acordar infraestructura, TLS/exposición, cuentas, custodia/retención, RPO/RTO, capacidad/monitoreo/responsables y aceptación humana. CI y demo sintética no son aprobación productiva. Credenciales permanecen fuera de la documentación exportable.
 
 Referencia: [operaciones](referencia-tecnica/OPERATIONS-R1.md). Su contexto histórico de R1 no sustituye la [evidencia actual](05-validacion-y-limitaciones.md).
+
+## Migración ENT-003
+
+Respaldar base/configuración/adjuntos, sincronizar paquete y ejecutar `bench --site SITIO migrate` sobre el sitio explícito. La actualización crea dos DocTypes, un vínculo opcional en Site e índices; no asigna unidades a sedes existentes ni altera grants. Se verificó preservación en DEV/TEST y restauración poblada aislada. El override de títulos protege Unit/Site y delega los demás tipos al comportamiento nativo. [Acta de entrega](10-organizacion-operativa-ENT003.md).

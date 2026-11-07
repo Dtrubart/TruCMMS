@@ -68,3 +68,12 @@ Un día generado sin turnos muestra 0 horas. Para una excepción sobre una venta
 ## Árbol de ubicaciones
 
 TruCMMS → Activos → Árbol de ubicaciones. Elegir sede, expandir/buscar y abrir ficha o listas relacionadas. Usuarios con escritura pueden usar vista previa y motivo para cambiar padre o estado. [Guía y límites ENT-002](09-jerarquia-funcional-ENT002.md).
+
+## Organización operativa opcional
+
+1. Como administrador, abrir Configuración → Estructura operativa y seleccionar Company.
+2. Crear unidad raíz o hija con código y nombre; tipo opcional, sin niveles geográficos obligatorios.
+3. En la ficha de una sede, usar Asignar unidad operativa, motivo, vista previa y confirmación. Vacío desvincula la sede.
+4. Consultar el árbol y el historial de agrupación. Los lectores ven solo las ramas/sedes que ya puedan consultar.
+
+Las sedes existentes no requieren este paso. No cambia equipos, almacenes, permisos ni trabajo autorizado. [Reglas y evidencias ENT-003](10-organizacion-operativa-ENT003.md).

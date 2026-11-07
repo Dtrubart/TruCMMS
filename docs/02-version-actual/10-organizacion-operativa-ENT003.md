@@ -1,6 +1,6 @@
 # ENT-003 — organización operativa opcional
 
-Fecha de entrega: 2026-11-06. [Contrato autorizado](../01-plan-desarrollo/09-organizacion-operativa-ENT003.md). Incremento sobre ENT-002; aceptación humana separada.
+Implementación iniciada: 2026-11-06. Cierre técnico: 2026-11-07. [Contrato autorizado](../01-plan-desarrollo/09-organizacion-operativa-ENT003.md). Incremento sobre ENT-002; aceptación humana separada.
 
 ## Uso
 
@@ -35,14 +35,14 @@ El historial administrativo global es solo para administrador porque sus snapsho
 | Preservación de migración DEV | 57 tablas comparadas, 46 filas de referencia, sin cambios en registros/grants/ledger existentes |
 | Preservación de migración TEST | 57 tablas comparadas, 710 filas de referencia, sin cambios; ningún agrupamiento automático |
 | Regresión local | 485 pruebas, 605,552 s, OK, antes del último control de títulos/renombrado |
-| Bloque dirigido final | 20 pruebas, 7,264 s, OK; lectura por sede, revocación, títulos, cruces, identidad, historia, obsolescencia, profundidad y paginación |
+| Bloque dirigido final | 20 pruebas, 6,808 s, OK; lectura por sede, revocación, títulos, cruces, identidad, historia, obsolescencia, profundidad y paginación |
 | Concurrencia | Dos conexiones por caso: un reparentado y una pertenencia ganadores; competidores rechazados, sin ciclo y un solo evento de pertenencia |
 | Interfaz | Árbol real con administrador/lector, vista previa y confirmación en sede, rama/sede ajena oculta, APIs de detalle/título ajenos rechazadas, móvil 390 px; sin errores JS observados |
 | Respaldo previo | DEV/TEST con base, configuración y adjuntos públicos/privados |
 | Recuperación poblada | restore-ent003: 59 tablas, 1.421 filas y 717 archivos coincidentes; pertenencia/rutas restauradas, historia inmutable y scheduler pausado |
-| CI de instalación limpia | Pendiente de registrar para el candidato final |
+| CI de instalación limpia | [486 pruebas, 262,084 s, OK](https://github.com/Dtrubart/TruCMMS/actions/runs/42341253571); revisión `60cd0649700edf6c9b924fd7b9c4a76585b34d6f` |
 
-La suite local de 485 y el bloque final de 20 no se suman como pruebas distintas. El candidato final contiene 486 casos backend. No se repite la suite completa local por cambios acotados verificados de nuevo en el bloque dirigido; la CI del candidato final verificará el conjunto completo.
+La suite local de 485 y el bloque final de 20 no se suman como pruebas distintas. El candidato final contiene 486 casos backend. No se repite la suite completa local por cambios acotados verificados de nuevo en el bloque dirigido; la CI del candidato final verificó el conjunto completo de 486 casos.
 
 Los ensayos visuales y de concurrencia usan identidades sintéticas en TEST, retiradas después de cada ensayo; no modifican sedes operativas existentes. Los eventos de autenticación nativos pueden registrar actividad del usuario sintético.
 
@@ -56,8 +56,16 @@ No incluye concesiones regionales, filtros globales persistentes, agregados regi
 
 ## Identidad y evidencia de despliegue
 
-DEV/TEST: política `R4.1-operating-units`, huella `947759a23eff5a8cd3c52e30f8f0698d2e29deb49880d7e9f1b03669b4caeeba`. Paquete: 306 archivos propios. Índice único Company/código comprobado, pertenencia opcional y fixtures sintéticos retirados de ambos entornos. Se mantiene selección de sitio por hostname (`default_site` vacío).
+DEV/TEST: política `R4.1-operating-units`, huella `40c240c3a0c3d307080832acf2813c9a0d82d17037b396c82d604e4d8b5af91a`. Paquete: 306 archivos propios. Índice único Company/código comprobado, pertenencia opcional y fixtures sintéticos retirados de ambos entornos. Se mantiene selección de sitio por hostname (`default_site` vacío).
 
 La recuperación se comparó con un manifiesto previo al respaldo; solo Deployment por sitio y los IDs/timestamps regenerables de filas Has Role se excluyen de la comparación física. Las concesiones efectivas de rol sí se compararon. La configuración y respaldos permanecen privados. Evidencias saneadas en `D:/Projects/VanBags-ERP/logs/`: `ent003-final-result.json`, `ent003-recovery-result.json`, `ent003-concurrency-result.json`, `ent003-ui-results.json`.
 
 Pruebas visuales reproducibles: [fixture](../../scripts/ent003-ui-fixture.py), [ensayo](../../scripts/verify-ent003-ui.mjs) e [instrucciones](../../scripts/README.md). El workflow remoto no ejecuta Playwright; la comprobación visual se hizo localmente.
+
+La revisión final amplía el control de títulos también a Site, conservando permisos por Company/Site incluso si se conoce su identificador. El ensayo visual comprueba ambos rechazos (Unit/Site); no se alteran los títulos de otros DocTypes ERPNext.
+
+## Cierre técnico y publicación — 2026-11-07
+
+Revisión funcional `60cd0649700edf6c9b924fd7b9c4a76585b34d6f`, publicada en `codex/foundation-verification`. [CI 42341253571](https://github.com/Dtrubart/TruCMMS/actions/runs/42341253571): instalación limpia y 486 pruebas backend aprobadas, 262,084 s. El ensayo visual se ejecutó localmente; no se atribuye a GitHub CI. El commit posterior de documentación no cambia el paquete funcional.
+
+DEV/TEST activos y con la misma huella; respaldo, migración preservada, concurrencia y recuperación poblada verificados. La aceptación humana, configuración de unidades reales y ENT-004/005 siguen pendientes. Evidencia CI saneada: `D:/Projects/VanBags-ERP/logs/ent003-ci-result-2026-11-07.json`.

@@ -37,3 +37,9 @@ El [contrato R4.0](06-r4-alcance-local.md) describe puntos, revisiones, lecturas
 ## Jerarquía funcional ENT-002
 
 VB Equipment Location conserva identidad y Company/Site. Padre/estado se cambian mediante servicio con escritura nativa, vista previa vigente y motivo; historial TruCMMS Location Event inmutable y no compartible. No se agregan permisos regionales. [Contrato y evidencias](09-jerarquia-funcional-ENT002.md).
+
+## Organización ENT-003
+
+Company → Operating Unit (padre opcional en la misma Company); Site → Operating Unit opcional como pertenencia primaria actual. No equivale a ubicación física, composición de equipos ni cobertura de personal.
+
+System Manager/Administrator configura; los roles CMMS leen ancestros de sedes autorizadas. No se crean concesiones regionales. Organization Event conserva estados/rutas con fecha y actor, inmutable y solo administrativo. Los títulos de Unit y Site también verifican lectura antes de devolverse por el endpoint nativo. [Detalle](10-organizacion-operativa-ENT003.md).

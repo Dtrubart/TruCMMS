@@ -59,3 +59,7 @@ Los logs crudos, capturas, manifiestos y respaldos se custodian fuera del paquet
 ## Cierre remoto ENT-002 — 2026-11-06
 
 Revisión `0ca852328ccbd3f2c2bb7201ddab34656d079b83`: [instalación limpia y 466 pruebas backend aprobadas](https://github.com/Dtrubart/TruCMMS/actions/runs/42172126883), 167,137 s. La prueba visual reforzada se verificó localmente; la aceptación humana y producción siguen pendientes. La ampliación no autoriza regiones ni permisos heredados. [Detalle de entrega](09-jerarquia-funcional-ENT002.md).
+
+## Cierre ENT-003 — 2026-11-07
+
+Revisión `60cd0649700edf6c9b924fd7b9c4a76585b34d6f`: [instalación limpia y 486 pruebas backend](https://github.com/Dtrubart/TruCMMS/actions/runs/42341253571), 262,084 s. Además: preservación de 57 tablas anteriores por entorno, dos carreras con conexiones independientes, UI administrador/lector y recuperación poblada de 59 tablas / 1.421 filas / 717 archivos. La aceptación humana no se presume realizada. [Acta ENT-003](10-organizacion-operativa-ENT003.md).

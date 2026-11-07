@@ -22,3 +22,7 @@ Configurabilidad mediante plantillas guiadas con límites soportados. Orden con 
 Actualización 2026-11-05: R4.0 y la base semanal de R4.1 cuentan con entrega técnica documentada. ENT-001/002 fue autorizado para jerarquía funcional y navegación; regiones y concesiones heredadas siguen pendientes. Competencias, formatos, documentación avanzada y optimización siguen pendientes. Tener código o aprobar el diseño no basta para registrarlos como entregados.
 
 Contrato del primer bloque: [ENT-001/002](08-jerarquia-y-contexto-ENT001.md).
+
+## Actualización ENT-003
+
+El propietario autorizó organización administrativa opcional. Se conserva una Company por unidad/sede y una pertenencia primaria opcional; configuración por administrador, sin grants regionales. Implementación y pruebas en [acta ENT-003](../02-version-actual/10-organizacion-operativa-ENT003.md). ENT-004/005 requieren aprobación posterior; no se alteran R5/R6.

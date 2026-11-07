@@ -1,6 +1,6 @@
 # Diccionario de DocTypes de la versión verificada
 
-Fuente: `0ca852328ccbd3f2c2bb7201ddab34656d079b83`. Metadatos propios; no contiene datos operativos. Los campos custom en documentos nativos se explican en el contrato R3.
+Fuente: `60cd0649700edf6c9b924fd7b9c4a76585b34d6f`. Metadatos propios; no contiene datos operativos. Los campos custom en documentos nativos se explican en el contrato R3.
 
 ## TruCMMS Asset Event
 
@@ -1099,7 +1099,7 @@ Roles definidos: VB Maintenance User: read, report; VB Maintenance Manager: read
 
 ## Ampliación ENT-002 — TruCMMS Location Event
 
-Se agrega un documento: inventario actual verificado, 54 DocTypes. Identidad `hash`, sin renombrado; historial creado exclusivamente por servicio/controlador. Lectura por rol y Company/Site, sin escritura, eliminacion, importacion, exportacion o share ordinarios.
+Se agrega un documento: inventario de ENT-002, 54 DocTypes antes de ENT-003. Identidad `hash`, sin renombrado; historial creado exclusivamente por servicio/controlador. Lectura por rol y Company/Site, sin escritura, eliminacion, importacion, exportacion o share ordinarios.
 
 | Campo | Tipo | Opciones | Obligatorio | Solo lectura |
 | --- | --- | --- | --- | --- |
