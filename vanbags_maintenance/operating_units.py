@@ -103,11 +103,11 @@ def event_query(user=None):
 @frappe.whitelist(methods=['GET', 'POST'])
 def link_title(doctype, docname):
     # Native get_link_title reads the title without checking the document scope.
-    # Protect new organization metadata; retain native behavior for other types.
-    if doctype == UNIT:
-        doc = frappe.get_doc(UNIT, h.text(docname, 'Operating Unit'))
+    # Protect organization and Site labels; retain native behavior for other types.
+    if doctype in (UNIT, SITE):
+        doc = frappe.get_doc(doctype, h.text(docname, 'document'))
         doc.check_permission('read')
-        return doc.unit_name
+        return doc.unit_name if doctype == UNIT else doc.site_name
     from frappe.desk.search import get_link_title
     return get_link_title(doctype, docname)
 

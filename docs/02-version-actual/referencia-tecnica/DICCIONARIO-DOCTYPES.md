@@ -1112,3 +1112,34 @@ Se agrega un documento: inventario actual verificado, 54 DocTypes. Identidad `ha
 | recorded_by | Link | User | 1 | 1 |
 | before_snapshot | JSON |  | 1 | 1 |
 | after_snapshot | JSON |  | 1 | 1 |
+
+## ENT-003 — TruCMMS Operating Unit
+
+Identidad hash, sin renombrado. Datos y acceso según [contrato ENT-003](../10-organizacion-operativa-ENT003.md).
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| company | Link | Company | 1 | 0 |
+| unit_code | Data |  | 1 | 0 |
+| unit_name | Data |  | 1 | 0 |
+| unit_type | Data |  | 0 | 0 |
+| parent_unit | Link | TruCMMS Operating Unit | 0 | 0 |
+| disabled | Check |  | 0 | 0 |
+
+## ENT-003 — TruCMMS Organization Event
+
+Identidad hash, sin renombrado. Datos y acceso según [contrato ENT-003](../10-organizacion-operativa-ENT003.md).
+
+| Campo | Tipo | Opciones | Obligatorio | Solo lectura |
+| --- | --- | --- | --- | --- |
+| company | Link | Company | 1 | 1 |
+| operating_unit | Link | TruCMMS Operating Unit | 0 | 1 |
+| site | Link | TruCMMS Site | 0 | 1 |
+| action | Data |  | 1 | 1 |
+| reason | Small Text |  | 1 | 1 |
+| effective_on | Datetime |  | 1 | 1 |
+| recorded_by | Link | User | 1 | 1 |
+| before_snapshot | JSON |  | 1 | 1 |
+| after_snapshot | JSON |  | 1 | 1 |
+
+Campo adicional ENT-003 en TruCMMS Site: `operating_unit`, Link opcional a TruCMMS Operating Unit. La Company y el código del sitio no cambian; la asignación existente pasa por el servicio controlado. Inventario total: 56 DocTypes propios.

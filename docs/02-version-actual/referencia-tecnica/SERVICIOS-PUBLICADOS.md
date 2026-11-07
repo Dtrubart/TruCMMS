@@ -154,3 +154,15 @@ Inventario actual verificado: 70 servicios publicados.
 - `change(name, action, token, reason, parent=None)` — POST; revalida token/alcance, cambio atomico e historial.
 
 Acciones: Reparent, Deactivate, Reactivate. El token detecta obsolescencia; no es una credencial y no reemplaza permisos. No admite fecha efectiva enviada por cliente.
+
+## ENT-003 — vanbags_maintenance.operating_units
+
+- `preview_unit(name, action, parent=None)` — POST, administrador; impacto/token.
+- `change_unit(name, action, token, reason, parent=None)` — POST, administrador; cambio e historial atómicos.
+- `preview_site(site, unit=None)` — POST, administrador; pertenencia opcional.
+- `assign_site(site, token, reason, unit=None)` — POST, administrador; revalida e historiza.
+- `children(company, parent=None, start=0, search=None)` — GET; unidades visibles y paginación.
+- `details(name)` — GET; ruta actual y sedes directamente vinculadas autorizadas.
+- `link_title(doctype, docname)` — GET/POST; protege el título de Operating Unit/Site y delega otros tipos al comportamiento nativo. También sustituye `frappe.desk.search.get_link_title` para ese control.
+
+Inventario actual: 77 servicios. La pertenencia no crea User Permissions; roles/grants nativos de Company/Site siguen siendo autoridad de acceso.

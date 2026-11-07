@@ -54,6 +54,8 @@ try{
  assert.equal(forbidden.status(),403);
  const title=await reader.request.get(base+'/api/method/frappe.desk.search.get_link_title',{params:{doctype:'TruCMMS Operating Unit',docname:fixture.units[2]}});
  assert.equal(title.status(),403);
+ const siteTitle=await reader.request.get(base+'/api/method/frappe.desk.search.get_link_title',{params:{doctype:'TruCMMS Site',docname:fixture.sites[1]}});
+ assert.equal(siteTitle.status(),403);
  checks.push('scoped reader sees only authorized branch/site; direct foreign-unit and native link-title APIs denied');
  await reader.screenshot({path:path.join(artifacts,'ent003-organization-reader-desktop.png'),fullPage:true});
  await reader.setViewportSize({width:390,height:844});await reader.mouse.click(375,350);await reader.waitForTimeout(350);

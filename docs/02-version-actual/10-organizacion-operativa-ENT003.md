@@ -26,7 +26,7 @@ Nuevos DocTypes: **TruCMMS Operating Unit** y **TruCMMS Organization Event**. Ca
 
 System Manager/Administrator configura, respetando permisos nativos de Company/documento. Los roles CMMS consultan únicamente unidades ascendientes de sus sedes autorizadas y sedes directamente vinculadas que ya puedan leer. No se generan User Permissions ni concesiones de acceso regional. Compartir no amplía visibilidad.
 
-El historial administrativo global es solo para administrador porque sus snapshots pueden contener otras sedes. Eventos creados por servidor, inmutables y no compartibles. La búsqueda de títulos nativa se adapta exclusivamente para Operating Unit: exige permiso de lectura del registro antes de devolver su etiqueta; los demás DocTypes conservan el comportamiento nativo.
+El historial administrativo global es solo para administrador porque sus snapshots pueden contener otras sedes. Eventos creados por servidor, inmutables y no compartibles. La búsqueda de títulos nativa se adapta para Operating Unit y Site: exige permiso de lectura del registro antes de devolver su etiqueta; los demás DocTypes conservan el comportamiento nativo.
 
 ## Verificación
 
@@ -39,7 +39,7 @@ El historial administrativo global es solo para administrador porque sus snapsho
 | Concurrencia | Dos conexiones por caso: un reparentado y una pertenencia ganadores; competidores rechazados, sin ciclo y un solo evento de pertenencia |
 | Interfaz | Árbol real con administrador/lector, vista previa y confirmación en sede, rama/sede ajena oculta, APIs de detalle/título ajenos rechazadas, móvil 390 px; sin errores JS observados |
 | Respaldo previo | DEV/TEST con base, configuración y adjuntos públicos/privados |
-| Recuperación poblada | En verificación sobre sitio aislado; resultado pendiente de registrar |
+| Recuperación poblada | restore-ent003: 59 tablas, 1.421 filas y 717 archivos coincidentes; pertenencia/rutas restauradas, historia inmutable y scheduler pausado |
 | CI de instalación limpia | Pendiente de registrar para el candidato final |
 
 La suite local de 485 y el bloque final de 20 no se suman como pruebas distintas. El candidato final contiene 486 casos backend. No se repite la suite completa local por cambios acotados verificados de nuevo en el bloque dirigido; la CI del candidato final verificará el conjunto completo.
@@ -53,3 +53,11 @@ Helpers locales en `D:/Projects/VanBags-ERP/docker/development/`: `ent003-preser
 64 niveles, 5.000 unidades por Company, páginas de 50 y máximo 10.000 sedes afectadas por cambio estructural. La proyección de lectura admite hasta 10.000 sedes autorizadas vinculadas por usuario; no hay caché global de visibilidad. Los límites son conservadores, sin certificación de escala empresarial.
 
 No incluye concesiones regionales, filtros globales persistentes, agregados regionales completos, relaciones genéricas de equipos ni reportes generales «a fecha». ENT-004/005 y la aceptación humana siguen pendientes. Predicción R5 y offline R6 permanecen separados.
+
+## Identidad y evidencia de despliegue
+
+DEV/TEST: política `R4.1-operating-units`, huella `947759a23eff5a8cd3c52e30f8f0698d2e29deb49880d7e9f1b03669b4caeeba`. Paquete: 306 archivos propios. Índice único Company/código comprobado, pertenencia opcional y fixtures sintéticos retirados de ambos entornos. Se mantiene selección de sitio por hostname (`default_site` vacío).
+
+La recuperación se comparó con un manifiesto previo al respaldo; solo Deployment por sitio y los IDs/timestamps regenerables de filas Has Role se excluyen de la comparación física. Las concesiones efectivas de rol sí se compararon. La configuración y respaldos permanecen privados. Evidencias saneadas en `D:/Projects/VanBags-ERP/logs/`: `ent003-final-result.json`, `ent003-recovery-result.json`, `ent003-concurrency-result.json`, `ent003-ui-results.json`.
+
+Pruebas visuales reproducibles: [fixture](../../scripts/ent003-ui-fixture.py), [ensayo](../../scripts/verify-ent003-ui.mjs) e [instrucciones](../../scripts/README.md). El workflow remoto no ejecuta Playwright; la comprobación visual se hizo localmente.

@@ -79,7 +79,9 @@ class TestOperatingUnits(IntegrationTestCase):
         frappe.set_user(self.reader)
         self.assertEqual(u.link_title(u.UNIT,self.child.name),self.child.unit_name)
         with self.assertRaises(frappe.PermissionError):u.link_title(u.UNIT,self.other.name)
+        with self.assertRaises(frappe.PermissionError):u.link_title(u.SITE,SITE_A2)
         self.assertEqual(u.link_title(u.SITE,SITE_A),frappe.db.get_value(u.SITE,SITE_A,'site_name'))
+        self.assertEqual(u.link_title('Company',COMPANY_A),COMPANY_A)
 
     def test_membership_changes_have_old_and_new_paths(self):
         self.assign(SITE_A,self.child.name)
