@@ -452,3 +452,16 @@ has_permission['TruCMMS Location Event']='vanbags_maintenance.location_hierarchy
 permission_query_conditions['TruCMMS Location Event']='vanbags_maintenance.location_hierarchy.event_query'
 doc_events['DocShare']['validate'].append('vanbags_maintenance.location_hierarchy.event_share')
 app_include_js.append('/assets/vanbags_maintenance/js/location_hierarchy_forms.js')
+
+# ENT-003 administrative membership is optional and never grants site access.
+after_install='vanbags_maintenance.operating_units.setup'
+after_migrate='vanbags_maintenance.operating_units.setup'
+has_permission['TruCMMS Operating Unit']='vanbags_maintenance.operating_units.permission'
+permission_query_conditions['TruCMMS Operating Unit']='vanbags_maintenance.operating_units.query'
+has_permission['TruCMMS Organization Event']='vanbags_maintenance.operating_units.event_permission'
+permission_query_conditions['TruCMMS Organization Event']='vanbags_maintenance.operating_units.event_query'
+doc_events['DocShare']['validate'].append('vanbags_maintenance.operating_units.validate_share')
+app_include_js.append('/assets/vanbags_maintenance/js/operating_unit_forms.js')
+override_whitelisted_methods={
+    'frappe.desk.search.get_link_title':'vanbags_maintenance.operating_units.link_title'
+}

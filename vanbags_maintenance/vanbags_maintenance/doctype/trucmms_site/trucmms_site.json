@@ -14,7 +14,8 @@
   "company",
   "disabled",
   "time_zone",
-  "acceptance_policy"
+  "acceptance_policy",
+  "operating_unit"
  ],
  "fields": [
   {
@@ -61,6 +62,16 @@
    "default": "By Origin",
    "description": "Default for new/adopted/reopened C orders. Existing order policy snapshots are unchanged.",
    "options": "By Origin\nRequired\nNot Required"
+  },
+  {
+   "fieldname": "operating_unit",
+   "label": "Operating Unit",
+   "fieldtype": "Link",
+   "reqd": 0,
+   "read_only_depends_on": "eval:!doc.__islocal",
+   "link_filters": "[[\"company\",\"=\",\"eval:doc.company\"],[\"disabled\",\"=\",0]]",
+   "description": "Optional administrative membership. Does not grant access or move equipment.",
+   "options": "TruCMMS Operating Unit"
   }
  ],
  "permissions": [

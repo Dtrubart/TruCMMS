@@ -19,3 +19,5 @@ La línea base publicada incluye R0–R3, los [calendarios semanales R4.1](08-r4
 Si el entorno contiene experimentos posteriores, esta rama sigue describiendo la revisión verificada. Los pendientes se mantienen en el [plan](../01-plan-desarrollo/03-r4-plan-detallado.md). No se garantiza que cualquier archivo local posterior coincida con esta base.
 
 - [Jerarquia funcional ENT-002](09-jerarquia-funcional-ENT002.md): entrega local y evidencias separadas de CI/publicacion.
+
+- [ENT-003 organización operativa](10-organizacion-operativa-ENT003.md): contrato, implementación y evidencias del siguiente bloque autorizado.

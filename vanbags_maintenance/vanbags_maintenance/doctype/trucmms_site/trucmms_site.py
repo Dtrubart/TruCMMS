@@ -21,3 +21,9 @@ class TruCMMSSite(Document):
         old=self.get_doc_before_save()
         if old and old.site_code!=self.site_code:
             frappe.throw("Site Code cannot be changed after creation.")
+        from vanbags_maintenance.operating_units import validate_site
+        validate_site(self)
+
+    def after_insert(self):
+        from vanbags_maintenance.operating_units import site_created
+        site_created(self)

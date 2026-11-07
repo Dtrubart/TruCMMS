@@ -16,7 +16,7 @@ GROUPS=[
  ('Análisis',{'VB Maintenance Manager','TruCMMS Dispatcher','TruCMMS Supervisor','System Manager'},[
   ('Registro de trabajo','Report','TruCMMS Work Register'),('Historial de equipos','Report','TruCMMS Equipment History')]),
  ('Configuración',{'VB Maintenance Manager','System Manager'},[
-  ('Empresas','DocType','Company'),('Sedes','DocType','TruCMMS Site'),('Categorías de equipos','DocType','VB Equipment Category'),('Perfiles técnicos','DocType','TruCMMS Equipment Profile'),('Criticidad','DocType','TruCMMS Criticality'),('Disciplinas','DocType','TruCMMS Discipline')])]
+  ('Empresas','DocType','Company'),('Sedes','DocType','TruCMMS Site'),('Estructura operativa','Page','trucmms-organization'),('Categorías de equipos','DocType','VB Equipment Category'),('Perfiles técnicos','DocType','TruCMMS Equipment Profile'),('Criticidad','DocType','TruCMMS Criticality'),('Disciplinas','DocType','TruCMMS Discipline')])]
 CONTEXTUAL={'TruCMMS Team Membership','TruCMMS Team Site Authorization','TruCMMS Work Execution','TruCMMS Work Event','TruCMMS Work Cycle','TruCMMS Work Allocation','TruCMMS Team Assignment','TruCMMS Execution Adjustment','TruCMMS Job Plan Revision','TruCMMS PM Occurrence','TruCMMS PM Event','TruCMMS Meter Reading','TruCMMS Meter Epoch','TruCMMS Component Installation'}
 CONTEXTUAL.add('TruCMMS Calendar Generation')
 MANAGED={target for _,_,entries in GROUPS for _,_,target in entries}|CONTEXTUAL|{'TruCMMS','trucmms-start'}
@@ -34,6 +34,7 @@ def authorized(doctype,ptype='read'):
     return bool(frappe.has_permission(doctype,ptype))
 
 def allowed_link(kind,target):
+    if target=='trucmms-organization':return authorized('TruCMMS Operating Unit')
     if target=='trucmms-locations':return authorized('VB Equipment Location')
     if target=='TruCMMS Site Warehouse' and not authorized('Warehouse'):return False
     if target=='trucmms-material-planning':return authorized('TruCMMS PM Plan')

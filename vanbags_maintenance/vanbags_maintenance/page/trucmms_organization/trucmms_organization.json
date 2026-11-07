@@ -1,0 +1,31 @@
+{
+ "doctype": "Page",
+ "name": "trucmms-organization",
+ "page_name": "trucmms-organization",
+ "title": "Estructura operativa",
+ "module": "Vanbags Maintenance",
+ "standard": "Yes",
+ "roles": [
+  {
+   "role": "VB Maintenance User"
+  },
+  {
+   "role": "VB Maintenance Manager"
+  },
+  {
+   "role": "TruCMMS Requester"
+  },
+  {
+   "role": "TruCMMS Dispatcher"
+  },
+  {
+   "role": "TruCMMS Supervisor"
+  },
+  {
+   "role": "TruCMMS Technician"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
+}

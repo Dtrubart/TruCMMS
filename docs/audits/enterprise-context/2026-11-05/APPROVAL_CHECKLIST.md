@@ -19,7 +19,7 @@ Actualización 2026-11-05: el propietario autorizó comenzar ENT-PROP-001 y ENT-
 | --- | --- | --- |
 | ENT-PROP-001 | Aprobado para el primer bloque | Aprobar primero: contrato y decisiones |
 | ENT-PROP-002 | Aprobado con adyacencia e IDs actuales | Primer desarrollo: ubicaciones y navegación de árbol seguras |
-| ENT-PROP-003 | Aprobar / ajustar / diferir | Después: organización opcional por Company |
+| ENT-PROP-003 | Aprobado para organización opcional el 2026-11-06 | Después: organización opcional por Company |
 | ENT-PROP-004 | Aprobar / ajustar / diferir | Resolver ámbitos; grants regionales requieren política específica |
 | ENT-PROP-005 | Aprobar / ajustar / diferir | Contexto común; posible entrega inicial solo Company/Site |
 | ENT-PROP-006 | Aprobar / ajustar / diferir | Puerta de pruebas y escala de los paquetes autorizados |
@@ -37,3 +37,5 @@ Una autorización de análisis/diseño no autoriza automáticamente migraciones,
 - [Brechas y riesgos](GAP_AND_RISK_REGISTER.md)
 - [Alcance de cada propuesta](PROPOSED_CHANGE_PACKAGE.md)
 - [Secuencia, pruebas y migración](IMPLEMENTATION_PLAN.md)
+
+El propietario autorizó ENT-003 al pedir el siguiente paso. Se registra en [su contrato](../../../01-plan-desarrollo/09-organizacion-operativa-ENT003.md); ENT-004 a 007 siguen pendientes.

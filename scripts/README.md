@@ -24,3 +24,19 @@ El sitio debe contener al menos una ubicación raíz activa para consultar. El s
 Genera dos capturas y un resumen JSON. `test-results/` está excluido de Git porque las capturas pueden mostrar información del sitio. No publicar capturas o logs sin revisar su contenido.
 
 Esta prueba local complementa la suite backend de GitHub CI; el workflow actual no ejecuta Playwright. La presencia del contenedor `.tree` por sí sola no acredita que se hayan renderizado sus nodos.
+
+## Organización operativa ENT-003
+
+`ent003-ui-fixture.py` crea una región, dos distritos, dos sedes y un lector restringido, exclusivamente en `test.vanbags.localhost` o `test_site` con `allow_tests` activo. Requiere la Company de pruebas preparada por las pruebas de integración. No usar datos de sedes operativas existentes.
+
+Ejecutar con el Python del Bench desde su carpeta `sites`, o configurar `TRUCMMS_SITES_DIR`. `TRUCMMS_TEST_SITE` selecciona uno de los sitios de prueba admitidos. `TRUCMMS_ORG_FIXTURE_FILE` debe apuntar a un archivo privado fuera del repositorio: guarda las identidades y contraseña sintéticas, con permisos 0600.
+
+```text
+python /ruta/al/repositorio/scripts/ent003-ui-fixture.py seed
+node scripts/verify-ent003-ui.mjs
+python /ruta/al/repositorio/scripts/ent003-ui-fixture.py clean
+```
+
+Para Node, el archivo de fixture debe ser accesible por su sistema de archivos. Se usan las mismas variables privadas de autenticación/navegador del ensayo ENT-002. La carpeta de resultados predeterminada es `test-results/ent003`.
+
+La comprobación exige nodos reales, confirma una pertenencia en una sede sintética y la restaura, verifica que el lector no vea la rama/sede ajena y comprueba rechazos de detalle y título por API. `clean` retira únicamente las identidades de ese fixture; la actividad de autenticación nativa puede conservar su auditoría. No ejecutar el ensayo si una ejecución anterior dejó una fixture sin revisar.

@@ -19,3 +19,5 @@ Al 2026-11-01, R4.0 tiene cambios locales en desarrollo, sin entrega verificada.
 ## Actualización 2026-11-05
 
 [Contrato ENT-001/002](08-jerarquia-y-contexto-ENT001.md): primer bloque aprobado de árbol funcional e historial. Agrupaciones y permisos regionales pendientes. La base R4.0/R4.1 ya tiene evidencia posterior a la nota histórica del 2026-11-01; consultar la rama 2.
+
+- [ENT-003 organización opcional](09-organizacion-operativa-ENT003.md): contrato, implementación y evidencias del siguiente bloque autorizado.
