@@ -1,6 +1,6 @@
 # Servicios publicados de la revisión verificada
 
-Fuente: `fbca17e584159990bd16a2853228242b2f2454fa`.
+Fuente: `0ca852328ccbd3f2c2bb7201ddab34656d079b83`.
 Registro extraído de decoradores frappe.whitelist sin ejecutar código. No sustituye controles de rol, estado, alcance ni contratos detallados. Las firmas son Python; serialización/valores API siguen Frappe.
 
 ## vanbags_maintenance.adjustments
@@ -144,9 +144,9 @@ Registro extraído de decoradores frappe.whitelist sin ejecutar código. No sust
 - `vanbags_maintenance.work_views.get_work(filters=None)` — ['GET', 'POST']
 - `vanbags_maintenance.work_views.execution_order_query(doctype, txt, searchfield, start, page_len, filters=None)` — según configuración Frappe
 
-## Ampliacion local ENT-002 — vanbags_maintenance.location_hierarchy
+## Ampliación ENT-002 — vanbags_maintenance.location_hierarchy
 
-Inventario actual de trabajo: 70 servicios publicados.
+Inventario actual verificado: 70 servicios publicados.
 
 - `children(site, parent=None, start=0, search=None, company=None)` — GET; consulta autorizada, paginas de 50.
 - `details(name)` — GET; ficha, ruta e historial acotado.

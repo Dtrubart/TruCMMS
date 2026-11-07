@@ -57,3 +57,5 @@ jspm_packages/
 # Local Kilo configuration
 .kilo/
 .kilocodeignore
+# Local browser verification artifacts (may contain site data)
+/test-results/

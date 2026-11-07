@@ -76,4 +76,12 @@ Evidencias saneadas: `D:/Projects/VanBags-ERP/logs/ent002-tests-result.json`, `e
 
 Servicios DEV/TEST saludables tras reinicio. Se detectó que la integración con frappe.ui.Tree omitía `args.doctype`: la prueba previa comprobaba el contenedor sin exigir sus nodos. Se corrigió ese argumento y se reforzó el helper para esperar una ubicación real, comprobar su identidad y abrirla desde el árbol. Esa prueba, búsqueda, ficha y móvil de 390 px pasaron sin errores JavaScript observados ni cambios de datos operativos. La evidencia anterior no acreditaba por sí sola el renderizado de nodos.
 
-Huella actual DEV/TEST: `d2647db466d3c1c2da03546a643a9717c2f544c4d0af73ad8e2d57ee3218b327`; se conserva política, esquema y 294 archivos. No se repitieron migraciones ni la suite backend por esta corrección de interfaz. La suite completa del candidato se ejecuta en GitHub CI; su resultado todavía no se presume aprobado.
+Huella actual DEV/TEST: `d2647db466d3c1c2da03546a643a9717c2f544c4d0af73ad8e2d57ee3218b327`; se conserva política, esquema y 294 archivos. No se repitieron migraciones ni la suite backend local por esta corrección de interfaz. El candidato `0ca852328ccbd3f2c2bb7201ddab34656d079b83` pasó instalación limpia y [466 pruebas backend en GitHub CI](https://github.com/Dtrubart/TruCMMS/actions/runs/42172126883), 167,137 s.
+
+La prueba visual reforzada está versionada en [scripts/verify-ent002-ui.mjs](../../scripts/verify-ent002-ui.mjs), con [instrucciones](../../scripts/README.md). Fue ejecutada el 2026-11-06; el workflow CI de servidor no ejecuta Playwright.
+
+## Cierre de publicación y CI — 2026-11-06
+
+Revisión funcional verificada: `0ca852328ccbd3f2c2bb7201ddab34656d079b83`. GitHub CI: [42172126883](https://github.com/Dtrubart/TruCMMS/actions/runs/42172126883), resultado success, 466 pruebas / 167,137 s. La prueba visual portable se ejecutó localmente con nodos reales, ficha, búsqueda y móvil; no se atribuye su ejecución al workflow remoto.
+
+Fuente activa y publicación mantienen la huella `d2647db466d3c1c2da03546a643a9717c2f544c4d0af73ad8e2d57ee3218b327` y 294 archivos coincidentes. DEV/TEST saludables después del reinicio. El commit posterior de documentación y helper visual no cambia el paquete funcional. La aceptación humana sigue pendiente; ENT-003 a ENT-007 no se implementaron. Evidencia saneada local: `D:/Projects/VanBags-ERP/logs/ent002-ci-result-2026-11-06.json`.

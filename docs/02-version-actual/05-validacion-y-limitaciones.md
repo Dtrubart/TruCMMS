@@ -55,3 +55,7 @@ Los logs crudos, capturas, manifiestos y respaldos se custodian fuera del paquet
 ## Entrega local ENT-002 — 2026-11-05
 
 [Árbol funcional e historial](09-jerarquia-funcional-ENT002.md): DEV/TEST migrados, 463 pruebas de regresión y 16 dirigidas finales; carrera entre conexiones, UI desktop/móvil y recuperación poblada verificadas. El cierre local del 2026-11-05 no tenía publicación; el 2026-11-06 se publicó el primer commit y se inició CI remota. Consultar el acta para la corrección visual y resultado posterior. La evidencia previa de 450 pruebas no se reasigna a este incremento.
+
+## Cierre remoto ENT-002 — 2026-11-06
+
+Revisión `0ca852328ccbd3f2c2bb7201ddab34656d079b83`: [instalación limpia y 466 pruebas backend aprobadas](https://github.com/Dtrubart/TruCMMS/actions/runs/42172126883), 167,137 s. La prueba visual reforzada se verificó localmente; la aceptación humana y producción siguen pendientes. La ampliación no autoriza regiones ni permisos heredados. [Detalle de entrega](09-jerarquia-funcional-ENT002.md).

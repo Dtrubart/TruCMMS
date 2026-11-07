@@ -3,12 +3,12 @@
 | Elemento | Valor |
 | --- | --- |
 | Producto/app | TruCMMS / `vanbags_maintenance` |
-| Revisión verificada | `fbca17e584159990bd16a2853228242b2f2454fa` |
-| Política de despliegue | `R4.1-resource-calendars` |
+| Revisión verificada | `0ca852328ccbd3f2c2bb7201ddab34656d079b83` |
+| Política de despliegue | `R4.1-location-hierarchy` |
 | Rama de publicación | `codex/foundation-verification` |
 | Base técnica comprobada | Frappe 16.28.0, ERPNext 16.29.0, Python 3.14.7, Node 24.21.0 |
 | Entornos | DEV/TEST; no producción |
-| CI | 450 pruebas aprobadas; 278,874 s |
+| CI | [466 pruebas aprobadas; 167,137 s](https://github.com/Dtrubart/TruCMMS/actions/runs/42172126883) |
 
 ## Inventario funcional
 
@@ -38,4 +38,4 @@ R1–R3 tienen cierres técnicos para sus alcances. R4 no está cerrado; aceptac
 
 ## Incremento local ENT-002 — 2026-11-05
 
-Arbol funcional autorizado por sede, cambios de padre/estado con vista previa y eventos inmutables. Conserva IDs y Company/Site. Politica local `R4.1-location-hierarchy`; 54 DocTypes y 70 servicios publicados en el paquete. Incremento publicado en la rama de desarrollo sobre la base indicada arriba, con CI en seguimiento; ver [verificaciones y limites](09-jerarquia-funcional-ENT002.md).
+Arbol funcional autorizado por sede, cambios de padre/estado con vista previa y eventos inmutables. Conserva IDs y Company/Site. Politica local `R4.1-location-hierarchy`; 54 DocTypes y 70 servicios publicados en el paquete. Incremento publicado en la rama de desarrollo sobre la base indicada arriba, con CI aprobada; ver [verificaciones y limites](09-jerarquia-funcional-ENT002.md).
